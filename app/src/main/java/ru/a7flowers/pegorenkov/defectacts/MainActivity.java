@@ -28,6 +28,7 @@ import java.util.Locale;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.DeliveryAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveriesViewModel;
+import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 import ru.a7flowers.pegorenkov.defectacts.objects.Delivery;
 
 public class MainActivity extends AppCompatActivity implements DeliveryAdapter.OnDeliveryClickListener{
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements DeliveryAdapter.O
 
         rvDeliveries.setAdapter(adapter);
 
-        model = ViewModelProviders.of(this).get(DeliveriesViewModel.class);
+        model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DeliveriesViewModel.class);
 
         model.getDeliveries().observe(this, new Observer<List<Delivery>>() {
             @Override

@@ -9,22 +9,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ru.a7flowers.pegorenkov.defectacts.data.Repository;
 import ru.a7flowers.pegorenkov.defectacts.objects.Delivery;
 
 public class DeliveriesViewModel extends AndroidViewModel {
 
+    private Repository mRepository;
+
     private MutableLiveData<List<Delivery>> mDeliveries = new MutableLiveData<>();
 
-    public DeliveriesViewModel(@NonNull Application application) {
+    public DeliveriesViewModel(@NonNull Application application, Repository repository) {
         super(application);
 
-        List<Delivery> deliveries = new ArrayList<>();
+        mRepository = repository;
 
-        deliveries.add(new Delivery("1", "CTQ342342", new Date(), 23, true));
-        deliveries.add(new Delivery("1", "CTQ342342", new Date(), 23, false));
-        deliveries.add(new Delivery("1", "CTQ342342", new Date(), 23, true));
-
-        mDeliveries.postValue(deliveries);
+        mDeliveries.postValue(mRepository.getDeliveries());
     }
 
     public MutableLiveData<List<Delivery>> getDeliveries() {
