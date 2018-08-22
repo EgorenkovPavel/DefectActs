@@ -1,8 +1,11 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,12 +27,15 @@ import java.util.List;
 import java.util.Locale;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.DeliveryAdapter;
+import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveriesViewModel;
 import ru.a7flowers.pegorenkov.defectacts.objects.Delivery;
 
 public class MainActivity extends AppCompatActivity implements DeliveryAdapter.OnDeliveryClickListener{
 
     private RecyclerView rvDeliveries;
     private ArrayList<Delivery> items = new ArrayList<>();
+
+    private DeliveriesViewModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +54,20 @@ public class MainActivity extends AppCompatActivity implements DeliveryAdapter.O
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         rvDeliveries.addItemDecoration(itemDecor);
 
-        items.add(new Delivery("1", "CTQ342342", new Date(), 23, true));
-        items.add(new Delivery("1", "CTQ342342", new Date(), 23, false));
-        items.add(new Delivery("1", "CTQ342342", new Date(), 23, true));
 
-        DeliveryAdapter adapter = new DeliveryAdapter();
-        adapter.setItems(items);
+        final DeliveryAdapter adapter = new DeliveryAdapter();
         adapter.setOnItemClickListener(this);
 
         rvDeliveries.setAdapter(adapter);
+
+        model = ViewModelProviders.of(this).get(DeliveriesViewModel.class);
+
+        model.getDeliveries().observe(this, new Observer<List<Delivery>>() {
+            @Override
+            public void onChanged(@Nullable List<Delivery> deliveries) {
+                adapter.setItems(deliveries);
+            }
+        });
     }
 
     @Override
