@@ -38,8 +38,8 @@ public class DefectActivity extends AppCompatActivity {
         TextView tvReasons = findViewById(R.id.tvReasons);
         EditText etAmount = findViewById(R.id.etAmount);
         EditText etComment = findViewById(R.id.etComment);
-        Button btnInc = findViewById(R.id.btnInc);
-        Button btnDec = findViewById(R.id.btnDec);
+        ImageButton btnInc = findViewById(R.id.btnInc);
+        ImageButton btnDec = findViewById(R.id.btnDec);
         ImageButton ibPhoto = findViewById(R.id.ibPhoto);
         ImageButton ibNext = findViewById(R.id.ibNext);
         ImageButton ibBarcode = findViewById(R.id.ibBarcode);

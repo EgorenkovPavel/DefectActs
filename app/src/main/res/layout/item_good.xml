@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="88dp">
 
     <TextView
         android:id="@+id/tvSeries"
@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="5500152321321" />
@@ -19,9 +20,7 @@
         android:id="@+id/tvGood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintStart_toStartOf="@+id/tvSeries"
         app:layout_constraintTop_toBottomOf="@+id/tvSeries"
         tools:text="Rose" />
@@ -30,31 +29,42 @@
         android:id="@+id/tvSuplier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvSeries"
-        app:layout_constraintStart_toEndOf="@+id/tvSeries"
-        app:layout_constraintTop_toTopOf="@+id/tvSeries"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintStart_toStartOf="@+id/tvSeries"
+        app:layout_constraintTop_toBottomOf="@+id/tvGood"
         tools:text="OZ" />
 
     <TextView
         android:id="@+id/tvCountry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/tvSuplier"
-        app:layout_constraintTop_toBottomOf="@+id/tvSuplier"
+        android:layout_marginStart="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintStart_toEndOf="@+id/tvSuplier"
+        app:layout_constraintTop_toBottomOf="@+id/tvGood"
         tools:text="Italy" />
 
     <TextView
         android:id="@+id/tvQuantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/lblPiece"
+        app:layout_constraintEnd_toStartOf="@+id/lblPiece"
+        app:layout_constraintTop_toTopOf="@+id/lblPiece"
+        tools:text="25" />
+
+    <TextView
+        android:id="@+id/lblPiece"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
+        android:text="шт."
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="25" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

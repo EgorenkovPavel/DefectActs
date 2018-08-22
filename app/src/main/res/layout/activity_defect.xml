@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -26,33 +25,31 @@
     <Spinner
         android:id="@+id/sGoods"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/tvReasons"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="88dp"
+        android:background="@drawable/frame"
+        android:spinnerMode="dialog"
+        app:layout_constraintBottom_toTopOf="@+id/lblReasons"
+        app:layout_constraintEnd_toEndOf="@+id/lblGood"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
-        app:layout_constraintVertical_chainStyle="spread_inside" />
+        app:layout_constraintStart_toStartOf="@+id/lblGood"
+        app:layout_constraintTop_toBottomOf="@+id/lblGood"
+        app:layout_constraintVertical_chainStyle="spread" />
 
     <TextView
-        android:id="@+id/tvReasons"
+        android:id="@+id/lblReasons"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/etAmount"
+        android:text="Reasons"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toTopOf="@+id/tvReasons"
         app:layout_constraintEnd_toEndOf="@+id/sGoods"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/sGoods"
-        app:layout_constraintTop_toBottomOf="@+id/sGoods"
-        tools:text="Reasons" />
+        app:layout_constraintTop_toBottomOf="@+id/sGoods" />
 
     <EditText
         android:id="@+id/etComment"
-        style="@android:style/Widget.Material.EditText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
@@ -61,56 +58,34 @@
         android:background="@drawable/frame"
         android:ems="10"
         android:gravity="top|start"
+        android:hint="Comment"
         android:inputType="textMultiLine"
         android:padding="8dp"
         android:singleLine="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         app:layout_constraintBottom_toTopOf="@+id/ibPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAmount"
-        tools:text="Comment" />
+        app:layout_constraintTop_toBottomOf="@+id/etAmount" />
 
     <EditText
         android:id="@+id/etAmount"
         android:layout_width="68dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/frame"
         android:ems="10"
+        android:gravity="center"
         android:inputType="numberDecimal"
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/etComment"
-        app:layout_constraintEnd_toStartOf="@+id/btnDec"
+        app:layout_constraintEnd_toStartOf="@+id/btnInc"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnInc"
+        app:layout_constraintStart_toEndOf="@+id/btnDec"
         app:layout_constraintTop_toBottomOf="@+id/tvReasons"
         tools:text="12" />
-
-    <Button
-        android:id="@+id/btnInc"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
-        app:layout_constraintBottom_toBottomOf="@+id/etAmount"
-        app:layout_constraintEnd_toStartOf="@+id/etAmount"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/lblAmount"
-        app:layout_constraintTop_toTopOf="@+id/etAmount" />
-
-    <Button
-        android:id="@+id/btnDec"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="-"
-        app:layout_constraintBottom_toBottomOf="@+id/etAmount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/etAmount"
-        app:layout_constraintTop_toTopOf="@+id/etAmount" />
 
     <TextView
         android:id="@+id/lblAmount"
@@ -118,9 +93,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Amount"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintBottom_toBottomOf="@+id/etAmount"
-        app:layout_constraintEnd_toStartOf="@+id/btnInc"
+        app:layout_constraintEnd_toStartOf="@+id/btnDec"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/etAmount" />
 
@@ -129,6 +106,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:background="@android:color/background_light"
+        android:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ibBarcode"
         app:layout_constraintHorizontal_bias="0.5"
@@ -140,6 +118,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:background="@android:color/background_light"
+        android:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -151,10 +130,66 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:background="@android:color/background_light"
+        android:backgroundTint="@color/colorAccent"
+        android:tint="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ibNext"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ibPhoto"
-        app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+        app:srcCompat="@drawable/barcode_scan" />
+
+    <TextView
+        android:id="@+id/lblGood"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Good"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toTopOf="@+id/sGoods"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
+
+    <ImageButton
+        android:id="@+id/btnInc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/etAmount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/etAmount"
+        app:layout_constraintTop_toTopOf="@+id/etAmount"
+        app:srcCompat="@drawable/ic_add" />
+
+    <ImageButton
+        android:id="@+id/btnDec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/etAmount"
+        app:layout_constraintEnd_toStartOf="@+id/etAmount"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/lblAmount"
+        app:layout_constraintTop_toTopOf="@+id/etAmount"
+        app:srcCompat="@drawable/ic_remove" />
+
+    <TextView
+        android:id="@+id/tvReasons"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/frame"
+        android:padding="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        app:layout_constraintBottom_toTopOf="@+id/etAmount"
+        app:layout_constraintEnd_toEndOf="@+id/lblReasons"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/lblReasons"
+        app:layout_constraintTop_toBottomOf="@+id/lblReasons"
+        tools:text="Reasons" />
 
 </android.support.constraint.ConstraintLayout>
