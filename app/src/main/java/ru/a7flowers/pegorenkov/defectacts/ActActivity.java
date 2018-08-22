@@ -27,6 +27,8 @@ public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnD
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Intent i = getIntent();
         if(i.hasExtra(ACT_ID)){
             loadAct();
@@ -73,6 +75,7 @@ public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnD
 
     @Override
     public void onDefectClick(Defect defect) {
-
+        Intent i = new Intent(this, DefectActivity.class);
+        startActivity(i);
     }
 }
