@@ -6,6 +6,8 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.objects.Defect;
 import ru.a7flowers.pegorenkov.defectacts.objects.Delivery;
+import ru.a7flowers.pegorenkov.defectacts.objects.Good;
+import ru.a7flowers.pegorenkov.defectacts.objects.Reason;
 
 public class Repository {
 
@@ -45,5 +47,24 @@ public class Repository {
         defects.add(new Defect("1", "55000323423423", "Rose", "OZ", "Belgium", 43, 5));
 
         return defects;
+    }
+
+    public List<Good> getGoods(){
+        ArrayList<Good> mGoods = new ArrayList<>();
+        mGoods.add(new Good("1", "55000002123123", "Rose", "Boston", "Russia", 21));
+        mGoods.add(new Good("1", "55000002123123", "Rose", "Boston", "Russia", 22));
+        mGoods.add(new Good("1", "55000002123123", "Rose", "Boston", "Russia", 23));
+        mGoods.add(new Good("1", "55000002123123", "Rose", "Boston", "Russia", 24));
+
+        return mGoods;
+    }
+
+    public List<Reason> getReasons(){
+        ArrayList<Reason> reasons = new ArrayList<>();
+        reasons.add(new Reason("2", "reason1"));
+        reasons.add(new Reason("2", "reason2"));
+        reasons.add(new Reason("2", "reason3"));
+
+        return reasons;
     }
 }
