@@ -1,7 +1,10 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,13 +15,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.DefectsAdapter;
+import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ActViewModel;
+import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 import ru.a7flowers.pegorenkov.defectacts.objects.Defect;
 
 public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnDefectClickListener {
 
     public static final String ACT_ID = "ACT_ID";
+
+    private ActViewModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +63,19 @@ public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnD
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         rvDefects.addItemDecoration(itemDecoration);
 
-        ArrayList<Defect> defects = new ArrayList<>();
-        defects.add(new Defect("1", "55000323423423", "Rose", "OZ", "Belgium", 43, 5));
-        defects.add(new Defect("1", "55000323423423", "Rose", "OZ", "Belgium", 43, 5));
-        defects.add(new Defect("1", "55000323423423", "Rose", "OZ", "Belgium", 43, 5));
-
-        DefectsAdapter adapter = new DefectsAdapter();
+        final DefectsAdapter adapter = new DefectsAdapter();
         adapter.setOndefectClickListener(this);
-        adapter.setItems(defects);
 
         rvDefects.setAdapter(adapter);
+
+        model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(ActViewModel.class);
+        model.getDefects().observe(this, new Observer<List<Defect>>() {
+            @Override
+            public void onChanged(@Nullable List<Defect> defects) {
+                adapter.setItems(defects);
+            }
+        });
+
     }
 
     private void createAct() {

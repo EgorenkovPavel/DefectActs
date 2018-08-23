@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ru.a7flowers.pegorenkov.defectacts.objects.Defect;
 import ru.a7flowers.pegorenkov.defectacts.objects.Delivery;
 
 public class Repository {
@@ -35,5 +36,14 @@ public class Repository {
         deliveries.add(new Delivery("1", "CTQ342342", new Date(), 23, true));
 
         return deliveries;
+    }
+
+    public List<Defect> getDefects(){
+        ArrayList<Defect> defects = new ArrayList<>();
+        defects.add(new Defect("1", "55000323423423", "Rose", "OZ", "Belgium", 43, 5));
+        defects.add(new Defect("1", "55000323423423", "Rose", "OZ", "Belgium", 43, 5));
+        defects.add(new Defect("1", "55000323423423", "Rose", "OZ", "Belgium", 43, 5));
+
+        return defects;
     }
 }

@@ -44,7 +44,7 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
 
     @Override
     public int getItemCount() {
-        return mDefects.size();
+        return mDefects == null ? 0 : mDefects.size();
     }
 
     public void setItems(List<Defect> defects){
