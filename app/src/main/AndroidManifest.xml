@@ -19,24 +19,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ActActivity"
             android:label="@string/title_activity_act"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".DefectActivity"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".ActActivity" >
+            android:parentActivityName=".ActActivity"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActActivity" />
+        </activity>
+        <activity
+            android:name=".ReasonsActivity"
+            android:parentActivityName=".DefectActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DefectActivity" />
         </activity>
     </application>
 

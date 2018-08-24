@@ -1,62 +1,80 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
-import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DefectViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
+import ru.a7flowers.pegorenkov.defectacts.objects.Defect;
 import ru.a7flowers.pegorenkov.defectacts.objects.Good;
+import ru.a7flowers.pegorenkov.defectacts.objects.Reason;
 
 public class DefectActivity extends AppCompatActivity {
 
-    private Spinner sGoods;
+    public static final String DELIVERY_ID = "delivery_id";
+    public static final String DEFECT_KEY = "defect_key";
+
+    public static final int SELECT_REASON = 47;
+    public static final String SELECTED_REASONS = "selected_reasons";
 
     private DefectViewModel model;
 
+    private ArrayAdapter adapter;
+
+    private Spinner sGoods;
     private EditText etAmount;
     private TextView tvReasons;
+    private EditText etComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defect);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DefectViewModel.class);
 
         findViews();
 
         Intent i = getIntent();
+        if (i.hasExtra(DELIVERY_ID)){
+            String id = i.getStringExtra(DELIVERY_ID);
+            if(i.hasExtra(DEFECT_KEY)){
+                String key = i.getStringExtra(DEFECT_KEY);
+                model.start(id, key);
+            }else{
+                model.start(id);
+            }
 
-        final ArrayAdapter adapter = new GoodsAdapter(this);
+        }
+
+        adapter = new GoodsAdapter(this);
         sGoods.setAdapter(adapter);
 
-        model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DefectViewModel.class);
         model.getGoods().observe(this, new Observer<List<Good>>() {
             @Override
             public void onChanged(@Nullable List<Good> goods) {
@@ -64,29 +82,93 @@ public class DefectActivity extends AppCompatActivity {
                 adapter.addAll(goods);
             }
         });
-        model.getAmount().observe(this, new Observer<Integer>() {
+        model.getDefect().observe(this, new Observer<Defect>() {
             @Override
-            public void onChanged(@Nullable Integer value) {
-                etAmount.setText(value);
+            public void onChanged(@Nullable Defect defect) {
+                populateUI(defect);
             }
         });
+    }
+
+    private void populateUI(Defect defect){
+        etAmount.setText(String.valueOf(defect.getQuantity()));
+
+        int pos = adapter.getPosition(defect.getGood());
+        sGoods.setSelection(pos);
+
+        etComment.setText(defect.getComment());
+
+        String text = "";
+        for (Reason reason:defect.getReasons()) {
+            text+=reason.getTitle();
+        }
+        tvReasons.setText(text);
     }
 
     private void findViews() {
         sGoods = findViewById(R.id.sGoods);
         tvReasons = findViewById(R.id.tvReasons);
         etAmount = findViewById(R.id.etAmount);
-        EditText etComment = findViewById(R.id.etComment);
+        etComment = findViewById(R.id.etComment);
         ImageButton btnInc = findViewById(R.id.btnInc);
         ImageButton btnDec = findViewById(R.id.btnDec);
         ImageButton ibPhoto = findViewById(R.id.ibPhoto);
         ImageButton ibNext = findViewById(R.id.ibNext);
         ImageButton ibBarcode = findViewById(R.id.ibBarcode);
 
+        sGoods.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Good good = (Good) adapterView.getAdapter().getItem(i);
+                model.setGood(good);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         tvReasons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                chooseReason();
+            }
+        });
 
+        etAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = String.valueOf(etAmount.getText());
+                int value = text.isEmpty() ? 0 : Integer.valueOf(text);
+                model.setAmount(value);
+            }
+        });
+
+        etComment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                model.setComment(String.valueOf(etComment.getText()));
             }
         });
 
@@ -103,38 +185,40 @@ public class DefectActivity extends AppCompatActivity {
                 model.decAmount();
             }
         });
+
+        ibNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                model.saveDefect();
+            }
+        });
     }
 
     private void chooseReason(){
-//        mSelectedItems = new ArrayList();  // Where we track the selected items
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(R.string.pick_toppings)
-//              .setMultiChoiceItems(R.array.toppings, null,
-//                        new DialogInterface.OnMultiChoiceClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-//                                if (isChecked) {
-//                                    mSelectedItems.add(which);
-//                                } else if (mSelectedItems.contains(which)) {
-//                                    mSelectedItems.remove(Integer.valueOf(which));
-//                                }
-//                            }
-//                        })
-//                // Set the action buttons
-//                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int id) {
+        Intent i = new Intent(this, ReasonsActivity.class);
+        i.putExtra(SELECTED_REASONS, (Serializable) model.getDefect().getValue().getReasons());
+        startActivityForResult(i, SELECT_REASON);
+    }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
 //
-//                    }
-//                })
-//                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int id) {
-//                    }
-//                });
+//        String text = String.valueOf(etAmount.getText());
+//        int value = text.isEmpty() ? 0 : Integer.valueOf(text);
+//        model.setAmount(value);
 //
-//        Dialog dialog = builder.create();
-//        dialog.show();
+//        model.setComment(String.valueOf(etComment.getText()));
+//    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == SELECT_REASON && resultCode == RESULT_OK){
+            List<Reason> list = (List<Reason>) data.getExtras().get(SELECTED_REASONS);
+            model.setDefectReasons(list);
+        }
+
     }
 
     class GoodsAdapter extends ArrayAdapter<Good>{

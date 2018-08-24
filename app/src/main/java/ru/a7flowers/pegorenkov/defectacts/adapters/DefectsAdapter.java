@@ -11,6 +11,7 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
 import ru.a7flowers.pegorenkov.defectacts.objects.Defect;
+import ru.a7flowers.pegorenkov.defectacts.objects.Good;
 
 public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHolder> {
 
@@ -32,11 +33,12 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
     public void onBindViewHolder(@NonNull DefectHolder holder, int position) {
 
         Defect defect = mDefects.get(position);
+        Good good = defect.getGood();
 
-        holder.tvSeries.setText(defect.getSeries());
-        holder.tvGood.setText(defect.getGood());
-        holder.tvSuplier.setText(defect.getSupier());
-        holder.tvCountry.setText(defect.getCountry());
+        holder.tvSeries.setText(good.getSeries());
+        holder.tvGood.setText(good.getGood());
+        holder.tvSuplier.setText(good.getSupier());
+        holder.tvCountry.setText(good.getCountry());
         holder.tvQuantity.setText(String.valueOf(defect.getQuantity()));
         holder.tvPhotoQuantity.setText(String.valueOf(defect.getPhotoQuantity()));
 

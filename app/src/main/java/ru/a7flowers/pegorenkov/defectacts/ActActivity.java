@@ -32,24 +32,26 @@ public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(ActViewModel.class);
 
         Intent i = getIntent();
         if(i.hasExtra(ACT_ID)){
-            loadAct();
-        }else{
-            createAct();
+            String id = (String) i.getExtras().get(ACT_ID);
+            model.start(id);
         }
         
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(ActActivity.this, DefectActivity.class);
+                i.putExtra(DefectActivity.DELIVERY_ID, model.getDeliveryId());
+                startActivity(i);
             }
         });
 
@@ -68,7 +70,6 @@ public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnD
 
         rvDefects.setAdapter(adapter);
 
-        model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(ActViewModel.class);
         model.getDefects().observe(this, new Observer<List<Defect>>() {
             @Override
             public void onChanged(@Nullable List<Defect> defects) {
@@ -78,15 +79,11 @@ public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnD
 
     }
 
-    private void createAct() {
-    }
-
-    private void loadAct() {
-    }
-
     @Override
     public void onDefectClick(Defect defect) {
         Intent i = new Intent(this, DefectActivity.class);
+        i.putExtra(DefectActivity.DELIVERY_ID, model.getDeliveryId());
+        i.putExtra(DefectActivity.DEFECT_KEY, defect.getKey());
         startActivity(i);
     }
 }

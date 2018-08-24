@@ -1,39 +1,57 @@
 package ru.a7flowers.pegorenkov.defectacts.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Defect {
 
-    private String id;
-    private String series;
-    private String good;
-    private String supier;
-    private String country;
+    private String key;
+    private Good good;
+    private String comment = "";
     private int quantity;
     private int photoQuantity;
 
-    public Defect(String id, String series, String good, String supier, String country, int quantity, int photoQuantity) {
-        this.id = id;
-        this.series = series;
+    private List<Reason> reasons = new ArrayList<>();
+
+    public Defect(){};
+
+    public Defect(String key, Good good, int quantity, int photoQuantity) {
+        this.key = key;
         this.good = good;
-        this.supier = supier;
-        this.country = country;
         this.quantity = quantity;
         this.photoQuantity = photoQuantity;
     }
 
-    public String getSeries() {
-        return series;
+    public void setGood(Good good) {
+        this.good = good;
     }
 
-    public String getGood() {
+    public List<Reason> getReasons() {
+        return reasons;
+    }
+
+    public void setReasons(List<Reason> reasons) {
+        this.reasons = reasons;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Good getGood() {
         return good;
-    }
-
-    public String getSupier() {
-        return supier;
-    }
-
-    public String getCountry() {
-        return country;
     }
 
     public int getQuantity() {

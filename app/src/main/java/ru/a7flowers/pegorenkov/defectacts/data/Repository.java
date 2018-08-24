@@ -1,10 +1,12 @@
 package ru.a7flowers.pegorenkov.defectacts.data;
 
+import java.security.cert.CertPathValidatorException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.objects.Defect;
+import ru.a7flowers.pegorenkov.defectacts.objects.DefectAct;
 import ru.a7flowers.pegorenkov.defectacts.objects.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.objects.Good;
 import ru.a7flowers.pegorenkov.defectacts.objects.Reason;
@@ -13,17 +15,20 @@ public class Repository {
 
     private volatile static Repository INSTANCE = null;
 
-    private DataSource mLocalDataSource;
+    private NetworkDataSource mNetworkDataSource;
 
-    private Repository(NetworkDataSource localDataSource){
-        mLocalDataSource = localDataSource;
+    private List<Delivery> mDeliveries;
+    private List<Reason> mReasons;
+
+    private Repository(NetworkDataSource networkDataSource){
+        mNetworkDataSource = networkDataSource;
     }
 
-    public static Repository getInstance(NetworkDataSource localDataSource) {
+    public static Repository getInstance(NetworkDataSource networkDataSource) {
         if (INSTANCE == null) {
             synchronized (Repository.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new Repository(localDataSource);
+                    INSTANCE = new Repository(networkDataSource);
                 }
             }
         }
@@ -31,22 +36,31 @@ public class Repository {
     }
 
     public List<Delivery> getDeliveries(){
-        List<Delivery> deliveries = new ArrayList<>();
+        if(mDeliveries == null){
+//            mNetworkDataSource.getDeliveries();
+            mDeliveries = new ArrayList<>();
 
-        deliveries.add(new Delivery("1", "CTQ342342", new Date(), 23, true));
-        deliveries.add(new Delivery("1", "CTQ342342", new Date(), 23, false));
-        deliveries.add(new Delivery("1", "CTQ342342", new Date(), 23, true));
+            Delivery delivery1 = new Delivery("1", "CTQ342341", new Date());
+            delivery1.setGoods(getGoods());
+            mDeliveries.add(delivery1);
+            mDeliveries.add(new Delivery("2", "CTQ342342", new Date()));
+            mDeliveries.add(new Delivery("3", "CTQ342343", new Date()));
+        }
 
-        return deliveries;
+        return mDeliveries;
     }
 
-    public List<Defect> getDefects(){
-        ArrayList<Defect> defects = new ArrayList<>();
-        defects.add(new Defect("1", "55000323423423", "Rose", "OZ", "Belgium", 43, 5));
-        defects.add(new Defect("1", "55000323423423", "Rose", "OZ", "Belgium", 43, 5));
-        defects.add(new Defect("1", "55000323423423", "Rose", "OZ", "Belgium", 43, 5));
-
-        return defects;
+    public Delivery getDelivery(String id){
+        //TODO add callback
+        for (Delivery delivery:mDeliveries) {
+            if(delivery.getId().equals(id)){
+                if(delivery.getDefectAct() == null){
+                    delivery.setDefectAct(new DefectAct());
+                }
+                return delivery;
+            }
+        }
+        return null;
     }
 
     public List<Good> getGoods(){
@@ -60,11 +74,18 @@ public class Repository {
     }
 
     public List<Reason> getReasons(){
-        ArrayList<Reason> reasons = new ArrayList<>();
-        reasons.add(new Reason("2", "reason1"));
-        reasons.add(new Reason("2", "reason2"));
-        reasons.add(new Reason("2", "reason3"));
+        if(mReasons == null){
+//            mNetworkDataSource.getReasons();
+            mReasons = new ArrayList<>();
+            mReasons.add(new Reason("2", "reason1"));
+            mReasons.add(new Reason("2", "reason2"));
+            mReasons.add(new Reason("2", "reason3"));
+        }
 
-        return reasons;
+        return mReasons;
+    }
+
+    public void saveDefect(Delivery delivery, Defect defect){
+        delivery.getDefectAct().addDefect(defect);
     }
 }

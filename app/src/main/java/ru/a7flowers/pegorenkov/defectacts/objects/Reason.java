@@ -1,6 +1,11 @@
 package ru.a7flowers.pegorenkov.defectacts.objects;
 
-public class Reason {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class Reason implements Serializable{
 
     private String id;
     private String title;
@@ -13,4 +18,5 @@ public class Reason {
     public String getTitle() {
         return title;
     }
+
 }

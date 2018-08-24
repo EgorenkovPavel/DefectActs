@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements DeliveryAdapter.O
     @Override
     public void onDeliveryClick(Delivery delivery) {
         Intent i = new Intent(this, ActActivity.class);
-        i.putExtra(ActActivity.ACT_ID, delivery.getActId());
+        i.putExtra(ActActivity.ACT_ID, delivery.getId());
         startActivity(i);
     }
 
