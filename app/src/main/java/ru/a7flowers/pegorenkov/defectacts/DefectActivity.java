@@ -4,9 +4,14 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -23,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
@@ -34,6 +40,7 @@ import ru.a7flowers.pegorenkov.defectacts.objects.Reason;
 
 public class DefectActivity extends AppCompatActivity {
 
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int RC_BARCODE_CAPTURE = 9001;
     public static final String DELIVERY_ID = "delivery_id";
     public static final String DEFECT_KEY = "defect_key";
@@ -203,6 +210,18 @@ public class DefectActivity extends AppCompatActivity {
                 startActivityForResult(intent, RC_BARCODE_CAPTURE);
             }
         });
+
+        ibPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, generateFileUri());
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        });
     }
 
     private void chooseReason(){
@@ -230,10 +249,33 @@ public class DefectActivity extends AppCompatActivity {
 //                Toast.makeText(this, String.format(getString(R.string.barcode_error),
 //                        CommonStatusCodes.getStatusCodeString(resultCode)), Toast.LENGTH_LONG).show();
             }
+        }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
+            //Log.d(TAG, "Photo uri: " + data.getData());
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+
         }
         else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private Uri generateFileUri() {
+        File directory = new File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "MyFolder");
+        if (!directory.exists())
+            directory.mkdirs();
+
+        File file = new File(directory.getPath() + "/" + "photo_"
+                + System.currentTimeMillis() + ".jpg");
+
+        return GenericFileProvider.getUriForFile(this,
+                "ru.a7flowers.pegorenkov.defectacts.GenericFileProvider",
+                file);
+
+//        return Uri.fromFile(file);
     }
 
     class GoodsAdapter extends ArrayAdapter<Good>{
