@@ -8,15 +8,16 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
-import ru.a7flowers.pegorenkov.defectacts.objects.Defect;
-import ru.a7flowers.pegorenkov.defectacts.objects.Delivery;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
+import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 
 public class ActViewModel extends AndroidViewModel {
 
     private Repository mRepository;
 
     private Delivery mDelivery;
-    private MutableLiveData<List<Defect>> mDefects = new MutableLiveData<>();
+    private MutableLiveData<List<DefectGood>> mDefects = new MutableLiveData<>();
 
     public ActViewModel(@NonNull Application application, Repository repository) {
         super(application);
@@ -24,16 +25,16 @@ public class ActViewModel extends AndroidViewModel {
         mRepository = repository;
     }
 
-    public MutableLiveData<List<Defect>> getDefects() {
+    public MutableLiveData<List<DefectGood>> getDefects() {
         return mDefects;
     }
 
-    public void start(String id){
-        mDelivery = mRepository.getDelivery(id);
-        mDefects.postValue(mDelivery.getDefectAct().getDefects());
+    public void start(String deliveryId){
+        mDelivery = mRepository.getDelivery(deliveryId);
+        mDefects = mRepository.getDefectGoods(deliveryId);
     }
 
-    public String getDeliveryId(){
+    public int getDeliveryId(){
         return mDelivery.getId();
     }
 }

@@ -17,10 +17,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.ReasonsAdapter;
-import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DefectViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ReasonsViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
-import ru.a7flowers.pegorenkov.defectacts.objects.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 public class ReasonsActivity extends AppCompatActivity implements ReasonsAdapter.OnReasonClickListener {
 

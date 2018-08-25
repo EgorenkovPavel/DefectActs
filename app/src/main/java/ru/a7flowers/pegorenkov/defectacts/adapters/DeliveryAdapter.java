@@ -11,9 +11,8 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Locale;
 
-import ru.a7flowers.pegorenkov.defectacts.MainActivity;
 import ru.a7flowers.pegorenkov.defectacts.R;
-import ru.a7flowers.pegorenkov.defectacts.objects.Delivery;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 
 public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.DeliveryHolder>{
 

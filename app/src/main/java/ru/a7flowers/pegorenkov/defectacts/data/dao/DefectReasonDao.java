@@ -1,0 +1,16 @@
+package ru.a7flowers.pegorenkov.defectacts.data.dao;
+
+import android.arch.lifecycle.LiveData;
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Query;
+
+import java.util.List;
+
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
+
+@Dao
+public interface DefectReasonDao {
+
+    @Query("SELECT * FROM defectreasons WHERE defectId = :defectId")
+    LiveData<List<DefectReason>> loadReasons(int defectId);
+}

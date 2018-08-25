@@ -10,8 +10,7 @@ import android.widget.CheckBox;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
-import ru.a7flowers.pegorenkov.defectacts.objects.Defect;
-import ru.a7flowers.pegorenkov.defectacts.objects.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHolder> {
 

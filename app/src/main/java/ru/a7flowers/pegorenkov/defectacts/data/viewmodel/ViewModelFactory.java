@@ -5,6 +5,8 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
+import ru.a7flowers.pegorenkov.defectacts.data.AppDatabase;
+import ru.a7flowers.pegorenkov.defectacts.data.LocalDataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.NetworkDataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
 
@@ -21,7 +23,8 @@ public class ViewModelFactory extends ViewModelProvider.AndroidViewModelFactory 
             synchronized (ViewModelFactory.class) {
                 if (INSTANCE == null) {
                     INSTANCE = new ViewModelFactory(application,
-                            Repository.getInstance(NetworkDataSource.getInstance()));
+                            Repository.getInstance(NetworkDataSource.getInstance(),
+                            LocalDataSource.getInstance(AppDatabase.getInstance(application))));
                 }
             }
         }

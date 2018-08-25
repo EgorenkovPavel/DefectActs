@@ -5,14 +5,13 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
-import ru.a7flowers.pegorenkov.defectacts.objects.Defect;
-import ru.a7flowers.pegorenkov.defectacts.objects.Delivery;
-import ru.a7flowers.pegorenkov.defectacts.objects.Good;
-import ru.a7flowers.pegorenkov.defectacts.objects.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 public class DefectViewModel extends AndroidViewModel {
 
@@ -24,6 +23,7 @@ public class DefectViewModel extends AndroidViewModel {
 
     // For defect
     private MutableLiveData<Defect> mDefect = new MutableLiveData<>();
+    private String currentPhotoPath;
 
     public DefectViewModel(@NonNull Application application, Repository repository) {
         super(application);
@@ -41,11 +41,11 @@ public class DefectViewModel extends AndroidViewModel {
 
     public void start(String deliveryId, String defectKey){
         loadDelivery(deliveryId);
-        for (Defect defect:mDelivery.getDefectAct().getDefects()) {
-            if(defect.getKey().equals(defectKey)){
-                mDefect.setValue(defect);
-            }
-        }
+//        for (Defect defect:mDelivery.getDefectAct().getDefects()) {
+//            if(defect.getKey().equals(defectKey)){
+//                mDefect.setValue(defect);
+//            }
+//        }
     }
 
     public MutableLiveData<Defect> getDefect() {
@@ -54,7 +54,7 @@ public class DefectViewModel extends AndroidViewModel {
 
     private void loadDelivery(String deliveryId){
         mDelivery = mRepository.getDelivery(deliveryId);
-        mGoods.postValue(mDelivery.getGoods());
+        mGoods = mRepository.loadGoods(deliveryId);
     }
 
     public MutableLiveData<List<Good>> getGoods() {
@@ -62,41 +62,41 @@ public class DefectViewModel extends AndroidViewModel {
     }
 
     public void incAmount(){
-        Defect defect = mDefect.getValue();
-        int value = defect.getQuantity();
-        value++;
-        defect.setQuantity(value);
-        mDefect.postValue(defect);
+//        Defect defect = mDefect.getValue();
+//        int value = defect.getQuantity();
+//        value++;
+//        defect.setQuantity(value);
+//        mDefect.postValue(defect);
     }
 
     public void decAmount(){
-        Defect defect = mDefect.getValue();
-        int value = defect.getQuantity();
-        value = value == 0 ? 0 : --value;
-        defect.setQuantity(value);
-        mDefect.postValue(defect);
+//        Defect defect = mDefect.getValue();
+//        int value = defect.getQuantity();
+//        value = value == 0 ? 0 : --value;
+//        defect.setQuantity(value);
+//        mDefect.postValue(defect);
     }
 
     public void setGood(Good good){
-        mDefect.getValue().setGood(good);
+        //mDefect.getValue().setGood(good);
     }
 
     public void setAmount(int value){
-        if(mDefect.getValue() == null){
-            return;
-        }
-
-        if(mDefect.getValue().getQuantity() != value)
-            mDefect.getValue().setQuantity(value);
+//        if(mDefect.getValue() == null){
+//            return;
+//        }
+//
+//        if(mDefect.getValue().getQuantity() != value)
+//            mDefect.getValue().setQuantity(value);
     }
 
     public void setComment(String text){
-        if(mDefect.getValue() == null){
-            return;
-        }
-
-        if(!mDefect.getValue().getComment().equals(text))
-            mDefect.getValue().setComment(text);
+//        if(mDefect.getValue() == null){
+//            return;
+//        }
+//
+//        if(!mDefect.getValue().getComment().equals(text))
+//            mDefect.getValue().setComment(text);
     }
 
     public MutableLiveData<List<Reason>> getReasons() {
@@ -104,21 +104,28 @@ public class DefectViewModel extends AndroidViewModel {
     }
 
     public void setDefectReasons(List<Reason> defectReasons) {
-        mDefect.getValue().setReasons(defectReasons);
+        //mDefect.getValue().setReasons(defectReasons);
     }
 
     public void selectReason(Reason reason){
-        List<Reason> defectReasons = mDefect.getValue().getReasons();
-        if(defectReasons.contains(reason)){
-            defectReasons.remove(reason);
-        }else{
-            defectReasons.add(reason);
-        }
-        mDefect.getValue().setReasons(defectReasons);
+//        List<Reason> defectReasons = mDefect.getValue().getReasons();
+//        if(defectReasons.contains(reason)){
+//            defectReasons.remove(reason);
+//        }else{
+//            defectReasons.add(reason);
+//        }
+//        mDefect.getValue().setReasons(defectReasons);
     }
 
     public void saveDefect(){
         mRepository.saveDefect(mDelivery, mDefect.getValue());
         mDefect.postValue(new Defect());
+    }
+
+    public void setCurrentPhotoPath(String currentPhotoPath) {
+        this.currentPhotoPath = currentPhotoPath;
+    }
+
+    public void savePhoto() {
     }
 }

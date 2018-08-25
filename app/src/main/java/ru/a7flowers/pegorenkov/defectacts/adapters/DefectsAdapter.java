@@ -10,16 +10,17 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
-import ru.a7flowers.pegorenkov.defectacts.objects.Defect;
-import ru.a7flowers.pegorenkov.defectacts.objects.Good;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
+import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 
 public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHolder> {
 
-    private List<Defect> mDefects;
+    private List<DefectGood> mDefects;
     private OnDefectClickListener listener;
 
     public interface OnDefectClickListener{
-        void onDefectClick(Defect defect);
+        void onDefectClick(int defectId);
     }
 
     @NonNull
@@ -32,7 +33,7 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
     @Override
     public void onBindViewHolder(@NonNull DefectHolder holder, int position) {
 
-        Defect defect = mDefects.get(position);
+        DefectGood defect = mDefects.get(position);
         Good good = defect.getGood();
 
         holder.tvSeries.setText(good.getSeries());
@@ -49,7 +50,7 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
         return mDefects == null ? 0 : mDefects.size();
     }
 
-    public void setItems(List<Defect> defects){
+    public void setItems(List<DefectGood> defects){
         mDefects = defects;
         notifyDataSetChanged();
     }
@@ -82,7 +83,7 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
 
         @Override
         public void onClick(View view) {
-            listener.onDefectClick(mDefects.get(getAdapterPosition()));
+            listener.onDefectClick(mDefects.get(getAdapterPosition()).getId());
         }
     }
 

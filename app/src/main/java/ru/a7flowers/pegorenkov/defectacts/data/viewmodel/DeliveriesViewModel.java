@@ -5,12 +5,10 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
-import ru.a7flowers.pegorenkov.defectacts.objects.Delivery;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 
 public class DeliveriesViewModel extends AndroidViewModel {
 

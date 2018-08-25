@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
-import ru.a7flowers.pegorenkov.defectacts.objects.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 public class ReasonsViewModel extends AndroidViewModel {
 

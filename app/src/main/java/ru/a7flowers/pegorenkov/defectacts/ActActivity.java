@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,13 +13,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.DefectsAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ActViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
-import ru.a7flowers.pegorenkov.defectacts.objects.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 
 public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnDefectClickListener {
 
@@ -70,9 +69,9 @@ public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnD
 
         rvDefects.setAdapter(adapter);
 
-        model.getDefects().observe(this, new Observer<List<Defect>>() {
+        model.getDefects().observe(this, new Observer<List<DefectGood>>() {
             @Override
-            public void onChanged(@Nullable List<Defect> defects) {
+            public void onChanged(@Nullable List<DefectGood> defects) {
                 adapter.setItems(defects);
             }
         });
@@ -80,10 +79,10 @@ public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnD
     }
 
     @Override
-    public void onDefectClick(Defect defect) {
+    public void onDefectClick(int defectId) {
         Intent i = new Intent(this, DefectActivity.class);
         i.putExtra(DefectActivity.DELIVERY_ID, model.getDeliveryId());
-        i.putExtra(DefectActivity.DEFECT_KEY, defect.getKey());
+        i.putExtra(DefectActivity.DEFECT_KEY, defectId);
         startActivity(i);
     }
 }
