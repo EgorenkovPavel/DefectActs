@@ -34,5 +34,5 @@ dependencies {
 
     implementation "android.arch.lifecycle:extensions:1.1.1"
 
-//    implementation 'com.github.zxing:zxing:zxing-3.3.0'
+    implementation 'com.budiyev.android:code-scanner:1.9.2'
 }

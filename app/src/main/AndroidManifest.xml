@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.a7flowers.pegorenkov.defectacts">
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -38,6 +39,15 @@
         </activity>
         <activity
             android:name=".ReasonsActivity"
+            android:parentActivityName=".DefectActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DefectActivity" />
+        </activity>
+
+        <activity
+            android:name=".BarcodeScannerActivity"
             android:parentActivityName=".DefectActivity"
             android:theme="@style/AppTheme">
             <meta-data

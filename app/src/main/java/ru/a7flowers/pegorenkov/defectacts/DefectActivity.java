@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.List;
@@ -32,6 +34,7 @@ import ru.a7flowers.pegorenkov.defectacts.objects.Reason;
 
 public class DefectActivity extends AppCompatActivity {
 
+    private static final int RC_BARCODE_CAPTURE = 9001;
     public static final String DELIVERY_ID = "delivery_id";
     public static final String DEFECT_KEY = "defect_key";
 
@@ -192,6 +195,14 @@ public class DefectActivity extends AppCompatActivity {
                 model.saveDefect();
             }
         });
+
+        ibBarcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DefectActivity.this, BarcodeScannerActivity.class);
+                startActivityForResult(intent, RC_BARCODE_CAPTURE);
+            }
+        });
     }
 
     private void chooseReason(){
@@ -200,25 +211,29 @@ public class DefectActivity extends AppCompatActivity {
         startActivityForResult(i, SELECT_REASON);
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//
-//        String text = String.valueOf(etAmount.getText());
-//        int value = text.isEmpty() ? 0 : Integer.valueOf(text);
-//        model.setAmount(value);
-//
-//        model.setComment(String.valueOf(etComment.getText()));
-//    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode == SELECT_REASON && resultCode == RESULT_OK){
             List<Reason> list = (List<Reason>) data.getExtras().get(SELECTED_REASONS);
             model.setDefectReasons(list);
+        }else if (requestCode == RC_BARCODE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    String barcode = data.getStringExtra(BarcodeScannerActivity.BARCODE);
+                    Toast.makeText(this, barcode, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, R.string.barcode_failure, Toast.LENGTH_LONG).show();
+//                    Log.d(TAG, "No barcode captured, intent data is null");
+                }
+            } else {
+//                Toast.makeText(this, String.format(getString(R.string.barcode_error),
+//                        CommonStatusCodes.getStatusCodeString(resultCode)), Toast.LENGTH_LONG).show();
+            }
         }
-
+        else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     class GoodsAdapter extends ArrayAdapter<Good>{
