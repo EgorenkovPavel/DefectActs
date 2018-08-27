@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ActActivity"
+            android:name=".DeliveryActivity"
             android:label="@string/title_activity_act"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
@@ -33,11 +33,11 @@
         </activity>
         <activity
             android:name=".DefectActivity"
-            android:parentActivityName=".ActActivity"
+            android:parentActivityName=".DeliveryActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ActActivity" />
+                android:value=".DeliveryActivity" />
         </activity>
         <activity
             android:name=".ReasonsActivity"

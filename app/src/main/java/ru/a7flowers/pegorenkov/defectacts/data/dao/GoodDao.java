@@ -2,6 +2,8 @@ package ru.a7flowers.pegorenkov.defectacts.data.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import java.util.List;
@@ -13,4 +15,7 @@ public interface GoodDao {
 
     @Query("SELECT * FROM goods WHERE deliveryid = :deliveryId ")
     LiveData<List<Good>> loadGoods(int deliveryId);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertGood(Good good);
 }

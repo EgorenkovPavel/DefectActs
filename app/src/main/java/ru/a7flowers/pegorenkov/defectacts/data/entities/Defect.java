@@ -7,40 +7,42 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.io.Serializable;
+
+import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
+
 @Entity(tableName = "defects",
-foreignKeys = {@ForeignKey(entity = Good.class, parentColumns = "id", childColumns = "goodId"),
-        @ForeignKey(entity = DefectAct.class, parentColumns = "id", childColumns = "defectActId")},
-indices = {@Index("goodId"), @Index("defectActId")})
-public class Defect {
+foreignKeys = {@ForeignKey(entity = Delivery.class, parentColumns = "id", childColumns = "deliveryId")},
+indices = {@Index("deliveryId"), @Index("series")})
+public class Defect implements Serializable{
 
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "key")
     private String key;
-    @ColumnInfo(name = "goodId")
-    private int goodId;
+    @ColumnInfo(name = "series")
+    private String series;
     @ColumnInfo(name = "comment")
     private String comment = "";
     @ColumnInfo(name = "quantity")
     private int quantity;
     @ColumnInfo(name = "photoQuantity")
     private int photoQuantity;
-    @ColumnInfo(name = "defectActId")
-    private int defectActId;
+    @ColumnInfo(name = "deliveryId")
+    private int deliveryId;
 
-    public Defect(int id, String key, int goodId, int quantity, int photoQuantity, int defectActId, String comment) {
+    public Defect(int id, String key, String series, int quantity, int photoQuantity, int deliveryId, String comment) {
         this.id = id;
         this.key = key;
-        this.goodId = goodId;
+        this.series = series;
         this.quantity = quantity;
         this.photoQuantity = photoQuantity;
-        this.defectActId = defectActId;
+        this.deliveryId = deliveryId;
         this.comment = comment;
     }
 
     @Ignore
     public Defect(){};
-
 
     public String getKey() {
         return key;
@@ -50,8 +52,8 @@ public class Defect {
         return comment;
     }
 
-    public int getGood() {
-        return goodId;
+    public String getSeries() {
+        return series;
     }
 
     public int getQuantity() {
@@ -66,11 +68,30 @@ public class Defect {
         return id;
     }
 
-    public int getGoodId() {
-        return goodId;
+    public int getDeliveryId() {
+        return deliveryId;
     }
 
-    public int getDefectActId() {
-        return defectActId;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setSeries(String series) {
+        this.series = series;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    @Ignore
+    public Defect(DefectGood defectGood) {
+        this.id = defectGood.getId();
+        this.key = defectGood.getKey();
+        this.series = defectGood.getSeries();
+        this.quantity = defectGood.getQuantity();
+        this.photoQuantity = defectGood.getPhotoQuantity();
+        this.deliveryId = defectGood.getDeliveryId();
+        this.comment = defectGood.getComment();
     }
 }

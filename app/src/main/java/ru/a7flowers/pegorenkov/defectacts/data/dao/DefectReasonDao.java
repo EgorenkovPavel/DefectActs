@@ -7,10 +7,15 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 @Dao
 public interface DefectReasonDao {
 
-    @Query("SELECT * FROM defectreasons WHERE defectId = :defectId")
-    LiveData<List<DefectReason>> loadReasons(int defectId);
+    @Query("SELECT reasons.* " +
+            "FROM defectreasons as defectreasons " +
+            "INNER JOIN reasons as reasons " +
+            "ON defectreasons.reasonId = reasons.id " +
+            "WHERE defectreasons.defectId = :defectId")
+    List<Reason> loadReasons(int defectId);
 }

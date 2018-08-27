@@ -33,9 +33,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DefectViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
@@ -43,15 +44,15 @@ public class DefectActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int RC_BARCODE_CAPTURE = 9001;
-    public static final String DELIVERY_ID = "delivery_id";
-    public static final String DEFECT_KEY = "defect_key";
+    public static final String DELIVERY = "delivery_id";
+    public static final String DEFECT = "defect_key";
 
     public static final int SELECT_REASON = 47;
     public static final String SELECTED_REASONS = "selected_reasons";
 
     private DefectViewModel model;
 
-    private ArrayAdapter adapter;
+    private GoodsAdapter adapter;
 
     private Spinner sGoods;
     private EditText etAmount;
@@ -72,15 +73,14 @@ public class DefectActivity extends AppCompatActivity {
         findViews();
 
         Intent i = getIntent();
-        if (i.hasExtra(DELIVERY_ID)){
-            String id = i.getStringExtra(DELIVERY_ID);
-            if(i.hasExtra(DEFECT_KEY)){
-                String key = i.getStringExtra(DEFECT_KEY);
-                model.start(id, key);
+        if (i.hasExtra(DELIVERY)){
+            Delivery delivery = (Delivery) i.getSerializableExtra(DELIVERY);
+            if(i.hasExtra(DEFECT)){
+                Defect defect = (Defect) i.getSerializableExtra(DEFECT);
+                model.start(delivery, defect);
             }else{
-                model.start(id);
+                model.start(delivery);
             }
-
         }
 
         adapter = new GoodsAdapter(this);
@@ -90,30 +90,50 @@ public class DefectActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<Good> goods) {
                 adapter.clear();
-                adapter.addAll(goods);
+                if(goods != null) {
+                    adapter.addAll(goods);
+                    setCurrentSeries(model.getCurrentSeries());
+                }
             }
         });
-        model.getDefect().observe(this, new Observer<Defect>() {
+        model.getDefectAmount().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable Defect defect) {
-                populateUI(defect);
+            public void onChanged(@Nullable Integer value) {
+                etAmount.setText(String.valueOf(value));
+            }
+        });
+        model.getDefectComment().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String comment) {
+                etComment.setText(comment);
+            }
+        });
+        model.getDefectSeries().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String series) {
+                setCurrentSeries(series);
+            }
+        });
+        model.getDefectReasons().observe(this, new Observer<List<Reason>>() {
+            @Override
+            public void onChanged(@Nullable List<Reason> reasons) {
+                String text = "";
+                for (Reason reason:reasons) {
+                    text+=reason.getTitle();
+                }
+                tvReasons.setText(text);
             }
         });
     }
 
-    private void populateUI(Defect defect){
-        etAmount.setText(String.valueOf(defect.getQuantity()));
-
-        int pos = adapter.getPosition(defect.getGood());
-        sGoods.setSelection(pos);
-
-        etComment.setText(defect.getComment());
-
-        String text = "";
-//        for (Reason reason:defect.getReasons()) {
-//            text+=reason.getTitle();
-//        }
-        tvReasons.setText(text);
+    private void setCurrentSeries(String series){
+        for (int i = 0; i<adapter.getCount(); i++){
+            Good good = adapter.getItem(i);
+            if(good.getSeries().equals(series)){
+                sGoods.setSelection(i);
+                break;
+            }
+        }
     }
 
     private void findViews() {
@@ -259,7 +279,7 @@ public class DefectActivity extends AppCompatActivity {
 
     private void chooseReason(){
         Intent i = new Intent(this, ReasonsActivity.class);
-        //i.putExtra(SELECTED_REASONS, (Serializable) model.getDefect().getValue().getReasons());
+        i.putExtra(SELECTED_REASONS, (Serializable) model.getDefectReasonsList());
         startActivityForResult(i, SELECT_REASON);
     }
 
@@ -315,9 +335,9 @@ public class DefectActivity extends AppCompatActivity {
 
             tvSeries.setText(good.getSeries());
             tvGood.setText(good.getGood());
-            tvSuplier.setText(good.getSupier());
+            tvSuplier.setText(good.getSuplier());
             tvCounty.setText(good.getCountry());
-            tvAmount.setText(String.valueOf(good.getQuantity()));
+            tvAmount.setText(String.valueOf(good.getDeliveryQuantity()));
 
             return v;
         }

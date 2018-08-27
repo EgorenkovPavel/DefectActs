@@ -18,21 +18,21 @@ public class Good {
     @ColumnInfo(name = "good")
     private String good;
     @ColumnInfo(name = "suplier")
-    private String supier;
+    private String suplier;
     @ColumnInfo(name = "country")
     private String country;
-    @ColumnInfo(name = "quantity")
-    private int quantity;
+    @ColumnInfo(name = "deliveryQuantity")
+    private int deliveryQuantity;
     @ColumnInfo(name = "deliveryId")
     private int deliveryId;
 
-    public Good(int id, String series, String good, String supier, String country, int quantity, int deliveryId) {
+    public Good(int id, String series, String good, String suplier, String country, int deliveryQuantity, int deliveryId) {
         this.id = id;
         this.series = series;
         this.good = good;
-        this.supier = supier;
+        this.suplier = suplier;
         this.country = country;
-        this.quantity = quantity;
+        this.deliveryQuantity = deliveryQuantity;
         this.deliveryId = deliveryId;
     }
 
@@ -44,16 +44,16 @@ public class Good {
         return good;
     }
 
-    public String getSupier() {
-        return supier;
+    public String getSuplier() {
+        return suplier;
     }
 
     public String getCountry() {
         return country;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getDeliveryQuantity() {
+        return deliveryQuantity;
     }
 
     public int getId() {

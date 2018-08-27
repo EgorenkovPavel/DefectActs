@@ -6,20 +6,18 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-import ru.a7flowers.pegorenkov.defectacts.data.dao.DefectActDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.DefectDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.DefectReasonDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.DeliveryDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.GoodDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.ReasonDao;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectAct;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
-@Database(entities = {Delivery.class, DefectAct.class, Good.class, Defect.class, Reason.class, DefectReason.class}, version = 1, exportSchema = false)
+@Database(entities = {Delivery.class, Good.class, Defect.class, Reason.class, DefectReason.class}, version = 1, exportSchema = false)
 @TypeConverters({DataConverter.class})
 public abstract class AppDatabase extends RoomDatabase{
 
@@ -40,8 +38,6 @@ public abstract class AppDatabase extends RoomDatabase{
     }
 
     public abstract DeliveryDao deliveryDao();
-
-    public abstract DefectActDao defectActDao();
 
     public abstract GoodDao goodDao();
 

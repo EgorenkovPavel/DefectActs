@@ -16,16 +16,17 @@ import android.view.View;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.DefectsAdapter;
-import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ActViewModel;
-import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
+import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveryViewModel;
+import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 
-public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnDefectClickListener {
+public class DeliveryActivity extends AppCompatActivity implements DefectsAdapter.OnDefectClickListener {
 
-    public static final String ACT_ID = "ACT_ID";
+    public static final String DELIVERY = "delivery";
 
-    private ActViewModel model;
+    private DeliveryViewModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,20 +37,20 @@ public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnD
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(ActViewModel.class);
+        model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DeliveryViewModel.class);
 
         Intent i = getIntent();
-        if(i.hasExtra(ACT_ID)){
-            String id = (String) i.getExtras().get(ACT_ID);
-            model.start(id);
+        if(i.hasExtra(DELIVERY)){
+            Delivery delivery = (Delivery) i.getExtras().getSerializable(DELIVERY);
+            model.start(delivery);
         }
         
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ActActivity.this, DefectActivity.class);
-                i.putExtra(DefectActivity.DELIVERY_ID, model.getDeliveryId());
+                Intent i = new Intent(DeliveryActivity.this, DefectActivity.class);
+                i.putExtra(DefectActivity.DELIVERY, model.getDelivery());
                 startActivity(i);
             }
         });
@@ -79,10 +80,10 @@ public class ActActivity extends AppCompatActivity implements DefectsAdapter.OnD
     }
 
     @Override
-    public void onDefectClick(int defectId) {
+    public void onDefectClick(Defect defect) {
         Intent i = new Intent(this, DefectActivity.class);
-        i.putExtra(DefectActivity.DELIVERY_ID, model.getDeliveryId());
-        i.putExtra(DefectActivity.DEFECT_KEY, defectId);
+        i.putExtra(DefectActivity.DELIVERY, model.getDelivery());
+        i.putExtra(DefectActivity.DEFECT, defect);
         startActivity(i);
     }
 }

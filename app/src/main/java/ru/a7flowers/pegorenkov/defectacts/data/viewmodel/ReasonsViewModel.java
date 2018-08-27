@@ -2,6 +2,7 @@ package ru.a7flowers.pegorenkov.defectacts.data.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
@@ -15,7 +16,7 @@ public class ReasonsViewModel extends AndroidViewModel {
 
     private Repository mRepository;
 
-    private MutableLiveData<List<Reason>> mReasons = new MutableLiveData<>();
+    private LiveData<List<Reason>> mReasons;
     private MutableLiveData<List<Reason>> mDefectReasons = new MutableLiveData<>();
 
     public ReasonsViewModel(@NonNull Application application, Repository repository) {
@@ -23,7 +24,7 @@ public class ReasonsViewModel extends AndroidViewModel {
 
         mRepository = repository;
 
-        mReasons.postValue(repository.getReasons());
+        mReasons = repository.getReasons();
         mDefectReasons.postValue(new ArrayList<Reason>());
     }
 
@@ -41,7 +42,7 @@ public class ReasonsViewModel extends AndroidViewModel {
         mDefectReasons.postValue(defectReasons);
     }
 
-    public MutableLiveData<List<Reason>> getReasons() {
+    public LiveData<List<Reason>> getReasons() {
         return mReasons;
     }
 

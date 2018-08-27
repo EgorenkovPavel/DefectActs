@@ -1,27 +1,27 @@
 package ru.a7flowers.pegorenkov.defectacts.data;
 
-import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.LiveData;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
+import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectAct;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 
-public class Repository {
+public class Repository implements DataSource.LoadDeliveriesCallback, DataSource.LoadGoodsCallback, DataSource.LoadDefectsCallback, DataSource.LoadReasonsCallback {
 
     private volatile static Repository INSTANCE = null;
 
     private NetworkDataSource mNetworkDataSource;
     private LocalDataSource mLocalDataSource;
 
-    private List<Delivery> mDeliveries;
-    private List<Reason> mReasons;
+    private LiveData<List<Delivery>> mDeliveries;
+    private LiveData<List<Reason>> mReasons;
 
     private Repository(NetworkDataSource networkDataSource, LocalDataSource localDataSource){
         mNetworkDataSource = networkDataSource;
@@ -39,65 +39,117 @@ public class Repository {
         return INSTANCE;
     }
 
-    public List<Delivery> getDeliveries(){
+    // DELIVERY
+
+    public LiveData<List<Delivery>> getDeliveries(){
         if(mDeliveries == null){
-//            mNetworkDataSource.getDeliveries();
-            mDeliveries = new ArrayList<>();
-
-//            Delivery delivery1 = new Delivery("1", "CTQ342341", new Date());
-//            delivery1.setGoods(getGoods());
-//            mDeliveries.add(delivery1);
-//            mDeliveries.add(new Delivery("2", "CTQ342342", new Date()));
-//            mDeliveries.add(new Delivery("3", "CTQ342343", new Date()));
+            loadDeliveriesFromNetwork();
+            mDeliveries = mLocalDataSource.getDeliveries();
         }
-
         return mDeliveries;
     }
 
-    public Delivery getDelivery(String id){
-        //TODO live data
-//        for (Delivery delivery:mDeliveries) {
-//            if(delivery.getId().equals(id)){
-//                if(delivery.getDefectAct() == null){
-//                    delivery.setDefectAct(new DefectAct());
-//                }
-//                return delivery;
-//            }
-//        }
-        return null;
+    private void loadDeliveriesFromNetwork(){
+        mNetworkDataSource.loadDeliveries(this);
     }
 
-    public List<Good> getGoods(){
-        ArrayList<Good> mGoods = new ArrayList<>();
-//        mGoods.add(new Good("1", "55000002123123", "Rose", "Boston", "Russia", 21));
-//        mGoods.add(new Good("1", "55000002123123", "Rose", "Boston", "Russia", 22));
-//        mGoods.add(new Good("1", "55000002123123", "Rose", "Boston", "Russia", 23));
-//        mGoods.add(new Good("1", "55000002123123", "Rose", "Boston", "Russia", 24));
-
-        return mGoods;
+    public LiveData<Delivery> getDelivery(int deliveryId){
+        return mLocalDataSource.getDelivery(deliveryId);
     }
 
-    public List<Reason> getReasons(){
+    @Override
+    public void onDeliveriesLoaded(List<Delivery> deliveries) {
+        for (Delivery delivery:deliveries) {
+            mLocalDataSource.saveDelivery(delivery);
+        }
+    }
+
+    @Override
+    public void onDeliveryLoadFailed() {
+
+    }
+
+    // GOODS
+    public LiveData<List<Good>> loadGoods(int deliveryId) {
+        return mLocalDataSource.loadGoods(deliveryId);
+    }
+
+    // REASONS
+    public LiveData<List<Reason>> getReasons(){
         if(mReasons == null){
-//            mNetworkDataSource.getReasons();
-            mReasons = new ArrayList<>();
-//            mReasons.add(new Reason("2", "reason1"));
-//            mReasons.add(new Reason("2", "reason2"));
-//            mReasons.add(new Reason("2", "reason3"));
+            loadReasonsFromNetwork();
+            mReasons = mLocalDataSource.getReasons();
         }
 
         return mReasons;
     }
 
+    private void loadReasonsFromNetwork(){
+        mNetworkDataSource.loadReasons(this);
+    }
+
+    @Override
+    public void onReasonsLoaded(List<Reason> reasons) {
+        for (Reason reason:reasons) {
+            mLocalDataSource.saveReason(reason);
+        }
+    }
+
+    @Override
+    public void onReasonsLoadFailed() {
+
+    }
+
+    // DEFECT
     public void saveDefect(Delivery delivery, Defect defect){
         //delivery.getDefectAct().addDefect(defect);
     }
 
-    public MutableLiveData<List<DefectGood>> getDefectGoods(String deliveryId) {
-        return null;
+    public LiveData<List<DefectGood>> getDefectGoods(Delivery delivery) {
+        loadDeliveryGoodsFromNetwork(delivery);
+        loadDefectsFromNetwork(delivery);
+        return mLocalDataSource.getDefectGoods(delivery.getId());
     }
 
-    public MutableLiveData<List<Good>> loadGoods(String deliveryId) {
-        return null;
+    private void loadDeliveryGoodsFromNetwork(Delivery delivery){
+        mNetworkDataSource.loadGoods(delivery, this);
     }
+
+    @Override
+    public void onGoodsLoaded(List<Good> goods) {
+        for (Good good:goods) {
+            mLocalDataSource.saveGood(good);
+        }
+    }
+
+    @Override
+    public void onGoodsLoadFailed() {
+
+    }
+
+    private void loadDefectsFromNetwork(Delivery delivery){
+        mNetworkDataSource.loadDefects(delivery, this);
+    }
+
+    @Override
+    public void onDefectsLoaded(List<Defect> defects) {
+        for (Defect defect:defects) {
+            mLocalDataSource.saveDefect(defect);
+        }
+    }
+
+    @Override
+    public void onDefectsLoadFailed() {
+
+    }
+
+    public void getDefect(int defectId, LoadDefectCallback callback) {
+        mLocalDataSource.getDefectById(defectId, callback);
+    }
+
+    public void getDefectReasons(int defectId, LoadDefectReasonsCallback callback) {
+        mLocalDataSource.getDefectReasons(defectId, callback);
+    }
+
+
 }

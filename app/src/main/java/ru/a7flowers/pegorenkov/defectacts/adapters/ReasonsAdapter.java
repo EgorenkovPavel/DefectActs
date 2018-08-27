@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
@@ -16,6 +18,7 @@ public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHo
 
     private List<Reason> mReasons;
     private List<Reason> mSelectedReasons;
+    private Set<Integer> mSelectedReasonsIds = new HashSet<>();
 
     private OnReasonClickListener listener;
 
@@ -36,7 +39,7 @@ public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHo
         Reason reason = mReasons.get(position);
 
         holder.cbReason.setText(reason.getTitle());
-        holder.cbReason.setChecked(mSelectedReasons == null ? false : mSelectedReasons.contains(reason));
+        holder.cbReason.setChecked(mSelectedReasonsIds.contains(reason.getId()));
     }
 
     @Override
@@ -51,6 +54,11 @@ public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHo
 
     public void setSelectedItems(List<Reason> reasons){
         mSelectedReasons = reasons;
+
+        mSelectedReasonsIds.clear();
+        for (Reason reason:reasons) {
+            mSelectedReasonsIds.add(reason.getId());
+        }
         notifyDataSetChanged();
     }
 

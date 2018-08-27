@@ -15,6 +15,7 @@ import android.widget.Button;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.ReasonsAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ReasonsViewModel;
