@@ -18,12 +18,15 @@ public class Delivery implements Serializable{
     private String number;
     @ColumnInfo(name = "date")
     private Date date;
+    @ColumnInfo(name = "actExist")
+    private boolean actExist;
 
-    public Delivery(int id, String key, String number, Date date) {
+    public Delivery(int id, String key, String number, Date date, boolean actExist) {
         this.id = id;
         this.key = key;
         this.number = number;
         this.date = date;
+        this.actExist = actExist;
     }
 
     public int getId() {
@@ -43,6 +46,10 @@ public class Delivery implements Serializable{
     }
 
     public boolean isActExist() {
-        return false;
+        return actExist;
+    }
+
+    public void setActExist(boolean actExist) {
+        this.actExist = actExist;
     }
 }

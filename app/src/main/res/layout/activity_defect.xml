@@ -40,7 +40,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Reasons"
+        android:text="@string/reasons"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintBottom_toTopOf="@+id/tvReasons"
         app:layout_constraintEnd_toEndOf="@+id/sGoods"
@@ -58,7 +58,7 @@
         android:background="@drawable/frame"
         android:ems="10"
         android:gravity="top|start"
-        android:hint="Comment"
+        android:hint="@string/comment"
         android:inputType="textMultiLine"
         android:padding="8dp"
         android:singleLine="false"
@@ -92,7 +92,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Amount"
+        android:text="@string/amount"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintBottom_toBottomOf="@+id/etAmount"
         app:layout_constraintEnd_toStartOf="@+id/btnDec"
@@ -111,7 +111,8 @@
         app:layout_constraintEnd_toStartOf="@+id/ibBarcode"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        android:contentDescription="@string/photo" />
 
     <ImageButton
         android:id="@+id/ibNext"
@@ -123,7 +124,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ibBarcode"
-        app:srcCompat="@android:drawable/ic_menu_send" />
+        app:srcCompat="@android:drawable/ic_menu_send"
+        android:contentDescription="@string/next" />
 
     <ImageButton
         android:id="@+id/ibBarcode"
@@ -136,7 +138,8 @@
         app:layout_constraintEnd_toStartOf="@+id/ibNext"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ibPhoto"
-        app:srcCompat="@drawable/barcode_scan" />
+        app:srcCompat="@drawable/barcode_scan"
+        android:contentDescription="@string/barcode" />
 
     <TextView
         android:id="@+id/lblGood"
@@ -145,7 +148,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Good"
+        android:text="@string/good"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintBottom_toTopOf="@+id/sGoods"
         app:layout_constraintEnd_toEndOf="parent"
@@ -164,7 +167,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/etAmount"
         app:layout_constraintTop_toTopOf="@+id/etAmount"
-        app:srcCompat="@drawable/ic_add" />
+        app:srcCompat="@drawable/ic_add"
+        android:contentDescription="@string/increment" />
 
     <ImageButton
         android:id="@+id/btnDec"
@@ -176,7 +180,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/lblAmount"
         app:layout_constraintTop_toTopOf="@+id/etAmount"
-        app:srcCompat="@drawable/ic_remove" />
+        app:srcCompat="@drawable/ic_remove"
+        android:contentDescription="@string/decrement" />
 
     <TextView
         android:id="@+id/tvReasons"

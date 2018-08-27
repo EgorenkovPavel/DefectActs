@@ -8,6 +8,7 @@ import java.util.List;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
@@ -40,7 +41,6 @@ public class Repository implements DataSource.LoadDeliveriesCallback, DataSource
     }
 
     // DELIVERY
-
     public LiveData<List<Delivery>> getDeliveries(){
         if(mDeliveries == null){
             loadDeliveriesFromNetwork();
@@ -51,10 +51,6 @@ public class Repository implements DataSource.LoadDeliveriesCallback, DataSource
 
     private void loadDeliveriesFromNetwork(){
         mNetworkDataSource.loadDeliveries(this);
-    }
-
-    public LiveData<Delivery> getDelivery(int deliveryId){
-        return mLocalDataSource.getDelivery(deliveryId);
     }
 
     @Override
@@ -101,7 +97,21 @@ public class Repository implements DataSource.LoadDeliveriesCallback, DataSource
     }
 
     // DEFECT
-    public void saveDefect(Delivery delivery, Defect defect){
+    public void saveDefect(Delivery delivery, Defect defect, List<Reason> reasons, List<String> photoPaths){
+        if (!delivery.isActExist()){
+            mNetworkDataSource.createAct(delivery);
+            delivery.setActExist(true);
+            mLocalDataSource.saveDelivery(delivery);
+        }
+        mNetworkDataSource.saveDefect(defect, reasons);
+        mNetworkDataSource.savePhotos(photoPaths);
+
+        mLocalDataSource.saveDefect(defect);
+        for (Reason reason:reasons) {
+            mLocalDataSource.saveDefectReason(new DefectReason(defect.getId(), reason.getId()));
+        }
+
+
         //delivery.getDefectAct().addDefect(defect);
     }
 

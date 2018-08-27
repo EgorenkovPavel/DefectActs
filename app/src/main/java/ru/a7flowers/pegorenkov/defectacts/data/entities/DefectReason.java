@@ -25,6 +25,11 @@ public class DefectReason {
         this.reasonId = reasonId;
     }
 
+    public DefectReason(int defectId, int reasonId) {
+        this.defectId = defectId;
+        this.reasonId = reasonId;
+    }
+
     public int getId() {
         return id;
     }

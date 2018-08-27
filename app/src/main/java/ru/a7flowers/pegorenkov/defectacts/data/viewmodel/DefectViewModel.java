@@ -7,6 +7,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.ArraySet;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +32,8 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
     private MutableLiveData<String> mDefectComment = new MutableLiveData<>();
     private MutableLiveData<String> mDefectSeries = new MutableLiveData<>();
     private MutableLiveData<List<Reason>> mDefectReasons = new MutableLiveData<>();
+    private List<String> photoPaths = new ArrayList<>();
+
     private String currentPhotoPath;
 
     public DefectViewModel(@NonNull Application application, Repository repository) {
@@ -99,6 +102,10 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
         mDefectSeries.postValue(good.getSeries());
     }
 
+    public void setSeries(String series){
+        mDefectSeries.postValue(series);
+    }
+
     public void setAmount(int value){
         if(mDefectAmount.getValue() != value)
             mDefectAmount.postValue(value);
@@ -118,15 +125,17 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
     }
 
     public void saveDefect(){
-        //mRepository.saveDefect(mDelivery, mDefect.getValue());
+        mDefect.setQuantity(mDefectAmount.getValue());
+        mDefect.setSeries(mDefectSeries.getValue());
+        mDefect.setComment(mDefectComment.getValue());
+        mDefect.setDeliveryId(mDelivery.getId());
+
+        mRepository.saveDefect(mDelivery, mDefect, mDefectReasons.getValue(), photoPaths);
         //mDefect.postValue(new Defect());
     }
 
     public void setCurrentPhotoPath(String currentPhotoPath) {
         this.currentPhotoPath = currentPhotoPath;
-    }
-
-    public void savePhoto() {
     }
 
     public List<Reason> getDefectReasonsList(){
@@ -142,5 +151,9 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
     @Override
     public void onDefectReasonsLoadFailed() {
 
+    }
+
+    public void savePhoto() {
+        photoPaths.add(currentPhotoPath);
     }
 }

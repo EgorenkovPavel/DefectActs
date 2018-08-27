@@ -9,6 +9,7 @@ import java.util.List;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
@@ -91,6 +92,15 @@ public class LocalDataSource {
             @Override
             public void run() {
                 mDb.goodDao().insertGood(good);
+            }
+        });
+    }
+
+    public void saveDefectReason(final DefectReason reason){
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.defectReasonDao().insertReason(reason);
             }
         });
     }

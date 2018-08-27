@@ -42,7 +42,7 @@ public class Defect implements Serializable{
     }
 
     @Ignore
-    public Defect(){};
+    public Defect(){}
 
     public String getKey() {
         return key;
@@ -93,5 +93,9 @@ public class Defect implements Serializable{
         this.photoQuantity = defectGood.getPhotoQuantity();
         this.deliveryId = defectGood.getDeliveryId();
         this.comment = defectGood.getComment();
+    }
+
+    public void setDeliveryId(int deliveryId) {
+        this.deliveryId = deliveryId;
     }
 }

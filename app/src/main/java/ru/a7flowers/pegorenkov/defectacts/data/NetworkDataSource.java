@@ -32,14 +32,17 @@ public class NetworkDataSource implements DataSource {
 
     public void loadDeliveries(LoadDeliveriesCallback callback){
         List<Delivery> list = new ArrayList<>();
-        list.add(new Delivery(1, "sdfdsdfasdf", "CTQ234234", new Date()));
+        list.add(new Delivery(1, "sdfdsdfasdf", "CTQ234234", new Date(), true));
 
         callback.onDeliveriesLoaded(list);
     }
 
     public void loadGoods(Delivery delivery, LoadGoodsCallback callback){
         List<Good> list = new ArrayList<>();
-        list.add(new Good(23, "234234234234", "Rose", "OZ", "Vietnam", 34, delivery.getId()));
+
+        list.add(new Good(2, "1111111111111", "Rose", "OZ", "Vietnam", 1, delivery.getId()));
+        list.add(new Good(23, "234234234234", "Rose", "OZ", "Vietnam", 2, delivery.getId()));
+        list.add(new Good(3, "3333333333333", "Rose", "OZ", "Vietnam", 3, delivery.getId()));
 
         callback.onGoodsLoaded(list);
     }
@@ -62,4 +65,12 @@ public class NetworkDataSource implements DataSource {
         callback.onReasonsLoaded(list);
     }
 
+    public void createAct(Delivery delivery) {
+    }
+
+    public void saveDefect(Defect defect, List<Reason> reasons) {
+    }
+
+    public void savePhotos(List<String> photoPaths) {
+    }
 }

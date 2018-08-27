@@ -293,6 +293,7 @@ public class DefectActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     String barcode = data.getStringExtra(BarcodeScannerActivity.BARCODE);
+                    model.setSeries(barcode);
                     Toast.makeText(this, barcode, Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, R.string.barcode_failure, Toast.LENGTH_LONG).show();
