@@ -6,6 +6,8 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 @Entity(tableName = "goods",
 foreignKeys = {@ForeignKey(entity = Delivery.class, parentColumns = "id", childColumns = "deliveryId")},
 indices = {@Index("deliveryId")})
@@ -13,16 +15,27 @@ public class Good {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+
     @ColumnInfo(name = "series")
+    @SerializedName("series")
     private String series;
+
     @ColumnInfo(name = "good")
+    @SerializedName("good")
     private String good;
+
     @ColumnInfo(name = "suplier")
+    @SerializedName("suplier")
     private String suplier;
+
     @ColumnInfo(name = "country")
+    @SerializedName("contry")
     private String country;
+
     @ColumnInfo(name = "deliveryQuantity")
+    @SerializedName("quantity")
     private int deliveryQuantity;
+
     @ColumnInfo(name = "deliveryId")
     private int deliveryId;
 

@@ -4,19 +4,30 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.network.DeliveryApi;
 
 public class NetworkDataSource implements DataSource {
 
     private static volatile NetworkDataSource INSTANCE;
 
     private AppExecutors mAppExecutors;
+    private Retrofit mRetrofit;
+    private DeliveryApi mDeliveryApi;
 
     private NetworkDataSource() {
         mAppExecutors = AppExecutors.getInstance();
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl("http://7flowers.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        mDeliveryApi = mRetrofit.create(DeliveryApi.class);
     }
 
     public static NetworkDataSource getInstance() {

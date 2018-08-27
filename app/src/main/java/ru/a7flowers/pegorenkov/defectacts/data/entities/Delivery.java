@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,13 +14,21 @@ public class Delivery implements Serializable{
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+
     @ColumnInfo(name = "key")
+    @SerializedName("id")
     private String key;
+
     @ColumnInfo(name = "number")
+    @SerializedName("number")
     private String number;
+
     @ColumnInfo(name = "date")
+    @SerializedName("date")
     private Date date;
+
     @ColumnInfo(name = "actExist")
+    @SerializedName("actExist")
     private boolean actExist;
 
     public Delivery(int id, String key, String number, Date date, boolean actExist) {

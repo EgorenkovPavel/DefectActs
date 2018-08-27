@@ -3,6 +3,7 @@ package ru.a7flowers.pegorenkov.defectacts.data.entities;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -25,6 +26,7 @@ public class DefectReason {
         this.reasonId = reasonId;
     }
 
+    @Ignore
     public DefectReason(int defectId, int reasonId) {
         this.defectId = defectId;
         this.reasonId = reasonId;
