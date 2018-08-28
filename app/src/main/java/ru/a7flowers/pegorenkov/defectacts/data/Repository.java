@@ -2,10 +2,8 @@ package ru.a7flowers.pegorenkov.defectacts.data;
 
 import android.arch.lifecycle.LiveData;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
@@ -29,7 +27,8 @@ public class Repository {
         mNetworkDataSource = networkDataSource;
         mLocalDataSource = localDataSource;
 
-        getReasons();
+        loadDeliveriesFromNetwork();
+        loadReasonsFromNetwork();
     }
 
     public static Repository getInstance(NetworkDataSource networkDataSource, LocalDataSource localDataSource) {
@@ -46,7 +45,6 @@ public class Repository {
     // DELIVERY
     public LiveData<List<Delivery>> getDeliveries(){
         if(mDeliveries == null){
-            loadDeliveriesFromNetwork();
             mDeliveries = mLocalDataSource.getDeliveries();
         }
         return mDeliveries;
@@ -73,10 +71,23 @@ public class Repository {
         return mLocalDataSource.loadGoods(deliveryId);
     }
 
+    private void loadGoodsFromNetwork(Delivery delivery){
+        mNetworkDataSource.loadGoods(delivery, new DataSource.LoadGoodsCallback() {
+            @Override
+            public void onGoodsLoaded(List<Good> goods) {
+                mLocalDataSource.saveGoods(goods);
+            }
+
+            @Override
+            public void onGoodsLoadFailed() {
+
+            }
+        });
+    }
+
     // REASONS
     public LiveData<List<Reason>> getReasons(){
         if(mReasons == null){
-            loadReasonsFromNetwork();
             mReasons = mLocalDataSource.getReasons();
         }
 
@@ -98,42 +109,30 @@ public class Repository {
     }
 
     // DEFECT
-    public void saveDefect(Delivery delivery, Defect defect, List<Reason> reasons, List<String> photoPaths){
-        if (!delivery.isActExist()){
-            mNetworkDataSource.createAct(delivery);
-            delivery.setActExist(true);
-            mLocalDataSource.saveDelivery(delivery);
-        }
-        mNetworkDataSource.saveDefect(defect, reasons);
-        mNetworkDataSource.savePhotos(photoPaths);
+    public void saveDefect(Delivery delivery, Defect defect, List<Reason> reasons, final List<String> photoPaths){
 
-        mLocalDataSource.saveDefect(defect);
-        for (Reason reason:reasons) {
-            mLocalDataSource.saveDefectReason(new DefectReason(defect.getId(), reason.getId()));
-        }
-
-
-        //delivery.getDefectAct().addDefect(defect);
-    }
-
-    public LiveData<List<DefectGood>> getDefectGoods(Delivery delivery) {
-        loadDeliveryGoodsFromNetwork(delivery);
-        loadDefectsFromNetwork(delivery);
-        return mLocalDataSource.getDefectGoods(delivery.getId());
-    }
-
-    private void loadDeliveryGoodsFromNetwork(Delivery delivery){
-        mNetworkDataSource.loadGoods(delivery, new DataSource.LoadGoodsCallback() {
+        mNetworkDataSource.saveDefect(defect, reasons, new DataSource.UploadDefectCallback() {
             @Override
-            public void onGoodsLoaded(List<Good> goods) {
-                mLocalDataSource.saveGoods(goods);
+            public void onDefectUploaded(Defect defect) {
+                mNetworkDataSource.savePhotos(defect, photoPaths);
             }
 
             @Override
-            public void onGoodsLoadFailed() {
+            public void onDefectUploadingFailed() {
 
             }
         });
+
+
+        // load and save
+//        refreshDelivery(delivery);
+//        refreshDefect(defect); // with reasons
+    }
+
+    public LiveData<List<DefectGood>> getDefectGoods(Delivery delivery) {
+        loadGoodsFromNetwork(delivery);
+        loadDefectsFromNetwork(delivery);
+        return mLocalDataSource.getDefectGoods(delivery.getId());
     }
 
     private void loadDefectsFromNetwork(Delivery delivery){

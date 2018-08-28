@@ -1,13 +1,18 @@
 package ru.a7flowers.pegorenkov.defectacts.data;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,6 +24,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.network.DefectServer;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DeliveryApi;
 
 public class NetworkDataSource implements DataSource {
@@ -148,13 +154,50 @@ public class NetworkDataSource implements DataSource {
     }
 
 
-    public void createAct(Delivery delivery) {
+    public void saveDefect(final Defect defect, List<Reason> reasons, final UploadDefectCallback callback) {
+
+        DefectServer defectServer = new DefectServer(defect, reasons);
+
+        Call<String> responce = mDeliveryApi.setDefect(defect.getDeliveryId(), defectServer);
+        responce.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                defect.setId(response.body());
+                callback.onDefectUploaded(defect);
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                callback.onDefectUploadingFailed();
+            }
+        });
     }
 
-    public void saveDefect(Defect defect, List<Reason> reasons) {
-    }
+    public void savePhotos(Defect defect, List<String> photoPaths) {
 
-    public void savePhotos(List<String> photoPaths) {
+        for (String path:photoPaths) {
+
+            byte[] buf = null;
+
+            try {
+                InputStream in = new FileInputStream(new File(path));
+                buf = new byte[in.available()];
+                while (in.read(buf) != -1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (buf == null) continue;
+
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
+            Call responce = mDeliveryApi.setPhoto(defect.getDeliveryId(), defect.getId(), requestBody);
+            try {
+                responce.execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 

@@ -105,4 +105,8 @@ public class Defect implements Serializable{
     public void setDeliveryId(String deliveryId) {
         this.deliveryId = deliveryId;
     }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
 }

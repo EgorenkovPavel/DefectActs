@@ -32,6 +32,7 @@ public class DeliveryViewModel extends AndroidViewModel {
 
     public void start(Delivery delivery){
         mDelivery = delivery;
+
         mDefects = mRepository.getDefectGoods(mDelivery);
     }
 

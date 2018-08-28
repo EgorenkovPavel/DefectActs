@@ -44,4 +44,9 @@ public interface DataSource {
         void onReasonsSaved();
         void onReasonsSavingFailed();
     }
+
+    interface UploadDefectCallback{
+        void onDefectUploaded(Defect defect);
+        void onDefectUploadingFailed();
+    }
 }

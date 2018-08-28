@@ -40,7 +40,15 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
         super(application);
         mRepository = repository;
 
+        init();
+    }
+
+    private void init(){
+        mDefect = new Defect();
+
+        mDefectComment.postValue("");
         mDefectAmount.postValue(0);
+        mDefectSeries.postValue("");
         mDefectReasons.postValue(new ArrayList<Reason>());
     }
 
@@ -55,7 +63,6 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
 
         mDefectComment.postValue(mDefect.getComment());
         mDefectAmount.postValue(mDefect.getQuantity());
-        mDefectSeries.postValue(mDefect.getSeries());
 
         mRepository.getDefectReasons(mDelivery, mDefect, this);
     }
@@ -130,7 +137,8 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
         mDefect.setDeliveryId(mDelivery.getId());
 
         mRepository.saveDefect(mDelivery, mDefect, mDefectReasons.getValue(), photoPaths);
-        //mDefect.postValue(new Defect());
+
+        init();
     }
 
     public void setCurrentPhotoPath(String currentPhotoPath) {
