@@ -16,18 +16,18 @@ public class DefectReason {
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "defectId")
-    private int defectId;
+    private String defectId;
     @ColumnInfo(name = "reasonId")
-    private int reasonId;
+    private String reasonId;
 
-    public DefectReason(int id, int defectId, int reasonId) {
+    public DefectReason(int id, String defectId, String reasonId) {
         this.id = id;
         this.defectId = defectId;
         this.reasonId = reasonId;
     }
 
     @Ignore
-    public DefectReason(int defectId, int reasonId) {
+    public DefectReason(String defectId, String reasonId) {
         this.defectId = defectId;
         this.reasonId = reasonId;
     }
@@ -36,11 +36,11 @@ public class DefectReason {
         return id;
     }
 
-    public int getDefectId() {
+    public String getDefectId() {
         return defectId;
     }
 
-    public int getReasonId() {
+    public String getReasonId() {
         return reasonId;
     }
 }

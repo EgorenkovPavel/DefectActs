@@ -14,7 +14,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 public interface GoodDao {
 
     @Query("SELECT * FROM goods WHERE deliveryid = :deliveryId ")
-    LiveData<List<Good>> loadGoods(int deliveryId);
+    LiveData<List<Good>> loadGoods(String deliveryId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertGood(Good good);

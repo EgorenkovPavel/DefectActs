@@ -55,7 +55,7 @@ public class LocalDataSource {
         });
     }
 
-    public LiveData<List<Good>> loadGoods(int deliveryId) {
+    public LiveData<List<Good>> loadGoods(String deliveryId) {
         return mDb.goodDao().loadGoods(deliveryId);
     }
 
@@ -73,11 +73,11 @@ public class LocalDataSource {
         return mDb.deliveryDao().getDeliveryById(deliveryId);
     }
 
-    public LiveData<List<DefectGood>> getDefectGoods(int deliveryId) {
+    public LiveData<List<DefectGood>> getDefectGoods(String deliveryId) {
         return mDb.defectDao().loadDefects(deliveryId);
     }
 
-    public void getDefectReasons(final int defectId, final LoadDefectReasonsCallback callback) {
+    public void getDefectReasons(final String defectId, final LoadDefectReasonsCallback callback) {
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {

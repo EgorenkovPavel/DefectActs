@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "goods",
 foreignKeys = {@ForeignKey(entity = Delivery.class, parentColumns = "id", childColumns = "deliveryId")},
-indices = {@Index("deliveryId")})
+indices = {@Index("deliveryId"),@Index("series")})
 public class Good {
 
     @PrimaryKey(autoGenerate = true)
@@ -37,9 +37,9 @@ public class Good {
     private int deliveryQuantity;
 
     @ColumnInfo(name = "deliveryId")
-    private int deliveryId;
+    private String deliveryId;
 
-    public Good(int id, String series, String good, String suplier, String country, int deliveryQuantity, int deliveryId) {
+    public Good(int id, String series, String good, String suplier, String country, int deliveryQuantity, String deliveryId) {
         this.id = id;
         this.series = series;
         this.good = good;
@@ -73,7 +73,7 @@ public class Good {
         return id;
     }
 
-    public int getDeliveryId() {
+    public String getDeliveryId() {
         return deliveryId;
     }
 }

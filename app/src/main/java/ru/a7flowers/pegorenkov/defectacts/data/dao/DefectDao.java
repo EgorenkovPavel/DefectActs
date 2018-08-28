@@ -21,7 +21,7 @@ public interface DefectDao {
             "ON defects.series = goods.series " +
             "AND defects.deliveryId = goods.deliveryId " +
             "WHERE defects.deliveryId = :deliveryId")
-    LiveData<List<DefectGood>> loadDefects(int deliveryId);
+    LiveData<List<DefectGood>> loadDefects(String deliveryId);
 
     @Query("SELECT * FROM defects WHERE id = :defectId")
     Defect getDefectById(int defectId);

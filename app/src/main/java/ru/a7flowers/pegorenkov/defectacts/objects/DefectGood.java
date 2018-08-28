@@ -6,8 +6,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 
 public class DefectGood {
 
-    private int id;
-    private String key;
+    private String id;
     private int goodId;
 
     private String series;
@@ -19,11 +18,12 @@ public class DefectGood {
     private String comment = "";
     private int quantity;
     private int photoQuantity;
-    private int deliveryId;
+    private String deliveryId;
 
-    public DefectGood(int id, String key, String series, String good, int goodId, String suplier, String country, int deliveryQuantity, String comment, int quantity, int photoQuantity, int deliveryId) {
+    public DefectGood(String id, String series, String good, int goodId, String suplier,
+                      String country, int deliveryQuantity, String comment, int quantity,
+                      int photoQuantity, String deliveryId) {
         this.id = id;
-        this.key = key;
         this.series = series;
         this.goodId = goodId;
         this.good = good;
@@ -36,7 +36,7 @@ public class DefectGood {
         this.deliveryId = deliveryId;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -50,10 +50,6 @@ public class DefectGood {
 
     public int getPhotoQuantity() {
         return photoQuantity;
-    }
-
-    public String getKey() {
-        return key;
     }
 
     public String getSeries() {
@@ -80,7 +76,7 @@ public class DefectGood {
         return deliveryQuantity;
     }
 
-    public int getDeliveryId() {
+    public String getDeliveryId() {
         return deliveryId;
     }
 }

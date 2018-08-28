@@ -19,7 +19,7 @@ public interface DefectReasonDao {
             "INNER JOIN reasons as reasons " +
             "ON defectreasons.reasonId = reasons.id " +
             "WHERE defectreasons.defectId = :defectId")
-    List<Reason> loadReasons(int defectId);
+    List<Reason> loadReasons(String defectId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertReason(DefectReason reason);

@@ -66,7 +66,7 @@ public class Repository implements DataSource.LoadDeliveriesCallback, DataSource
     }
 
     // GOODS
-    public LiveData<List<Good>> loadGoods(int deliveryId) {
+    public LiveData<List<Good>> loadGoods(String deliveryId) {
         return mLocalDataSource.loadGoods(deliveryId);
     }
 
@@ -157,7 +157,7 @@ public class Repository implements DataSource.LoadDeliveriesCallback, DataSource
         mLocalDataSource.getDefectById(defectId, callback);
     }
 
-    public void getDefectReasons(int defectId, LoadDefectReasonsCallback callback) {
+    public void getDefectReasons(String defectId, LoadDefectReasonsCallback callback) {
         mLocalDataSource.getDefectReasons(defectId, callback);
     }
 

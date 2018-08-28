@@ -2,8 +2,11 @@ package ru.a7flowers.pegorenkov.defectacts.data.entities;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -12,12 +15,10 @@ import java.util.Date;
 @Entity(tableName = "deliveries")
 public class Delivery implements Serializable{
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
-    @ColumnInfo(name = "key")
+    @PrimaryKey
+    @NonNull
     @SerializedName("id")
-    private String key;
+    private String id;
 
     @ColumnInfo(name = "number")
     @SerializedName("number")
@@ -31,15 +32,14 @@ public class Delivery implements Serializable{
     @SerializedName("actExist")
     private boolean actExist;
 
-    public Delivery(int id, String key, String number, Date date, boolean actExist) {
+    public Delivery(String id, String number, Date date, boolean actExist) {
         this.id = id;
-        this.key = key;
         this.number = number;
         this.date = date;
         this.actExist = actExist;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -49,10 +49,6 @@ public class Delivery implements Serializable{
 
     public Date getDate() {
         return date;
-    }
-
-    public String getKey() {
-        return key;
     }
 
     public boolean isActExist() {

@@ -18,7 +18,7 @@ public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHo
 
     private List<Reason> mReasons;
     private List<Reason> mSelectedReasons;
-    private Set<Integer> mSelectedReasonsIds = new HashSet<>();
+    private Set<String> mSelectedReasonsIds = new HashSet<>();
 
     private OnReasonClickListener listener;
 

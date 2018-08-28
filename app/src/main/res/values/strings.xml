@@ -14,4 +14,5 @@
     <string name="comment">Comment</string>
     <string name="amount">Amount</string>
     <string name="good">Good</string>
+    <string name="deliveries">Deliveries</string>
 </resources>

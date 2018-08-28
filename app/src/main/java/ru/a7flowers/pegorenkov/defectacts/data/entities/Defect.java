@@ -6,6 +6,9 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -16,10 +19,10 @@ foreignKeys = {@ForeignKey(entity = Delivery.class, parentColumns = "id", childC
 indices = {@Index("deliveryId"), @Index("series")})
 public class Defect implements Serializable{
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-    @ColumnInfo(name = "key")
-    private String key;
+    @PrimaryKey
+    @NonNull
+    @SerializedName("id")
+    private String id;
     @ColumnInfo(name = "series")
     private String series;
     @ColumnInfo(name = "comment")
@@ -29,11 +32,10 @@ public class Defect implements Serializable{
     @ColumnInfo(name = "photoQuantity")
     private int photoQuantity;
     @ColumnInfo(name = "deliveryId")
-    private int deliveryId;
+    private String deliveryId;
 
-    public Defect(int id, String key, String series, int quantity, int photoQuantity, int deliveryId, String comment) {
+    public Defect(String id, String series, int quantity, int photoQuantity, String deliveryId, String comment) {
         this.id = id;
-        this.key = key;
         this.series = series;
         this.quantity = quantity;
         this.photoQuantity = photoQuantity;
@@ -43,10 +45,6 @@ public class Defect implements Serializable{
 
     @Ignore
     public Defect(){}
-
-    public String getKey() {
-        return key;
-    }
 
     public String getComment() {
         return comment;
@@ -64,11 +62,11 @@ public class Defect implements Serializable{
         return photoQuantity;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public int getDeliveryId() {
+    public String getDeliveryId() {
         return deliveryId;
     }
 
@@ -87,7 +85,6 @@ public class Defect implements Serializable{
     @Ignore
     public Defect(DefectGood defectGood) {
         this.id = defectGood.getId();
-        this.key = defectGood.getKey();
         this.series = defectGood.getSeries();
         this.quantity = defectGood.getQuantity();
         this.photoQuantity = defectGood.getPhotoQuantity();
@@ -95,7 +92,7 @@ public class Defect implements Serializable{
         this.comment = defectGood.getComment();
     }
 
-    public void setDeliveryId(int deliveryId) {
+    public void setDeliveryId(String deliveryId) {
         this.deliveryId = deliveryId;
     }
 }
