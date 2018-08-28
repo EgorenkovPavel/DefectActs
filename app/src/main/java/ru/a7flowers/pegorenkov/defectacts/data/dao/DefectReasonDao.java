@@ -15,12 +15,15 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 public interface DefectReasonDao {
 
     @Query("SELECT reasons.* " +
-            "FROM defectreasons as defectreasons " +
-            "INNER JOIN reasons as reasons " +
-            "ON defectreasons.reasonId = reasons.id " +
+            "FROM reasons as reasons " +
+            "INNER JOIN defectreasons as defectreasons " +
+            "ON reasons.id = defectreasons.reasonId " +
             "WHERE defectreasons.defectId = :defectId")
     List<Reason> loadReasons(String defectId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertReason(DefectReason reason);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertReasons(List<DefectReason> reasons);
 }

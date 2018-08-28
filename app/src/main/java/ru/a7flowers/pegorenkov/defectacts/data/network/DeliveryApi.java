@@ -21,13 +21,13 @@ public interface DeliveryApi {
     Call<List<Delivery>> getDeliveries();
 
     @GET("deliveries/{deliveryId}/goods")
-    Call<List<Good>> getGoods(@Part String deliveryId);
+    Call<List<Good>> getGoods(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/defects")
     Call<List<Defect>> getDefects(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/defects/{defectId}/reasons")
-    Call<List<DefectReason>> getDefects(@Path("deliveryId") String deliveryId, @Part("defectId") String defectId);
+    Call<List<DefectReason>> getDefectReasons(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
 
 
 }

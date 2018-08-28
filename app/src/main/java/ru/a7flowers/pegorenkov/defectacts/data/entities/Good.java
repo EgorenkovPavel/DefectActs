@@ -3,19 +3,20 @@ package ru.a7flowers.pegorenkov.defectacts.data.entities;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "goods",
+primaryKeys = {"series", "deliveryId"},
 foreignKeys = {@ForeignKey(entity = Delivery.class, parentColumns = "id", childColumns = "deliveryId")},
 indices = {@Index("deliveryId"),@Index("series")})
 public class Good {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
+    @NonNull
     @ColumnInfo(name = "series")
     @SerializedName("series")
     private String series;
@@ -29,18 +30,20 @@ public class Good {
     private String suplier;
 
     @ColumnInfo(name = "country")
-    @SerializedName("contry")
+    @SerializedName("country")
     private String country;
 
     @ColumnInfo(name = "deliveryQuantity")
+    @NonNull
     @SerializedName("quantity")
     private int deliveryQuantity;
 
     @ColumnInfo(name = "deliveryId")
+    @SerializedName("deliveryId")
+    @NonNull
     private String deliveryId;
 
-    public Good(int id, String series, String good, String suplier, String country, int deliveryQuantity, String deliveryId) {
-        this.id = id;
+    public Good(String series, String good, String suplier, String country, int deliveryQuantity, String deliveryId) {
         this.series = series;
         this.good = good;
         this.suplier = suplier;
@@ -67,10 +70,6 @@ public class Good {
 
     public int getDeliveryQuantity() {
         return deliveryQuantity;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getDeliveryId() {

@@ -15,4 +15,6 @@
     <string name="amount">Amount</string>
     <string name="good">Good</string>
     <string name="deliveries">Deliveries</string>
+    <string name="delivery">Delivery</string>
+    <string name="defect">Defect</string>
 </resources>

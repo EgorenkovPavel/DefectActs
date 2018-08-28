@@ -18,4 +18,7 @@ public interface ReasonDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertReason(Reason reason);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertReasons(List<Reason> reasons);
 }

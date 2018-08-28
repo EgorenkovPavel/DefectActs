@@ -55,10 +55,13 @@ public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHo
     public void setSelectedItems(List<Reason> reasons){
         mSelectedReasons = reasons;
 
-        mSelectedReasonsIds.clear();
-        for (Reason reason:reasons) {
-            mSelectedReasonsIds.add(reason.getId());
+        if (reasons != null) {
+            mSelectedReasonsIds.clear();
+            for (Reason reason : reasons) {
+                mSelectedReasonsIds.add(reason.getId());
+            }
         }
+
         notifyDataSetChanged();
     }
 

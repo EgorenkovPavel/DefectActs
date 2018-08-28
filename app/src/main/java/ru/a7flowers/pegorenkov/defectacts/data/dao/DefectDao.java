@@ -14,7 +14,7 @@ import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 @Dao
 public interface DefectDao {
 
-    @Query("SELECT goods.id as goodId, goods.series, goods.good, goods.suplier, goods.country, goods.deliveryQuantity,  " +
+    @Query("SELECT goods.series, goods.good, goods.suplier, goods.country, goods.deliveryQuantity,  " +
             "defects.* " +
             "FROM defects as defects " +
             "INNER JOIN goods as goods " +
@@ -28,4 +28,7 @@ public interface DefectDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertDefect(Defect defect);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertDefects(List<Defect> defects);
 }

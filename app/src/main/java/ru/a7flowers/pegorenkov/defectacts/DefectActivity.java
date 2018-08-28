@@ -66,7 +66,7 @@ public class DefectActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DefectViewModel.class);
 
@@ -100,12 +100,14 @@ public class DefectActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable Integer value) {
                 etAmount.setText(String.valueOf(value));
+                etAmount.setSelection(etAmount.getText().length());
             }
         });
         model.getDefectComment().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String comment) {
                 etComment.setText(comment);
+                etComment.setSelection(etComment.getText().length());
             }
         });
         model.getDefectSeries().observe(this, new Observer<String>() {

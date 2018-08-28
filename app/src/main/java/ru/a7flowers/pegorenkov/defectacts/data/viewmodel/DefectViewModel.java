@@ -19,7 +19,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
-public class DefectViewModel extends AndroidViewModel implements DataSource.LoadDefectReasonsCallback {
+public class DefectViewModel extends AndroidViewModel implements DataSource.LoadReasonsCallback {
 
     private Repository mRepository;
     // General
@@ -39,6 +39,9 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
     public DefectViewModel(@NonNull Application application, Repository repository) {
         super(application);
         mRepository = repository;
+
+        mDefectAmount.postValue(0);
+        mDefectReasons.postValue(new ArrayList<Reason>());
     }
 
     public void start(Delivery delivery){
@@ -54,7 +57,7 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
         mDefectAmount.postValue(mDefect.getQuantity());
         mDefectSeries.postValue(mDefect.getSeries());
 
-        mRepository.getDefectReasons(defect.getId(), this);
+        mRepository.getDefectReasons(mDelivery, mDefect, this);
     }
 
     private void loadDelivery(Delivery delivery){
@@ -82,7 +85,7 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
 
     public void decAmount(){
         int value = mDefectAmount.getValue();
-        value--;
+        value = value == 0 ? 0 : value-1;
         mDefectAmount.postValue(value);
     }
 
@@ -116,10 +119,6 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
             mDefectComment.postValue(text);
     }
 
-    public LiveData<List<Reason>> getReasons() {
-        return mDefectReasons;
-    }
-
     public void setDefectReasons(List<Reason> defectReasons) {
         mDefectReasons.postValue(defectReasons);
     }
@@ -143,13 +142,13 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
     }
 
     @Override
-    public void onDefectReasonsLoaded(List<Reason> reasons) {
+    public void onReasonsLoaded(List<Reason> reasons) {
         if(reasons != null)
             mDefectReasons.postValue(reasons);
     }
 
     @Override
-    public void onDefectReasonsLoadFailed() {
+    public void onReasonsLoadFailed() {
 
     }
 

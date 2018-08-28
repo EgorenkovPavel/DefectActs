@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.List;
 
@@ -37,4 +38,5 @@ public class DeliveryViewModel extends AndroidViewModel {
     public Delivery getDelivery(){
         return mDelivery;
     }
+
 }

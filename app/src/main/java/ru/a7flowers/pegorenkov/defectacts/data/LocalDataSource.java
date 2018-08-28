@@ -8,6 +8,8 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectReasonsCallback;
+import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
+import ru.a7flowers.pegorenkov.defectacts.data.DataSource.SaveReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
@@ -77,12 +79,12 @@ public class LocalDataSource {
         return mDb.defectDao().loadDefects(deliveryId);
     }
 
-    public void getDefectReasons(final String defectId, final LoadDefectReasonsCallback callback) {
+    public void getDefectReasons(final String defectId, final LoadReasonsCallback callback) {
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
-                List<Reason> defects = mDb.defectReasonDao().loadReasons(defectId);
-                callback.onDefectReasonsLoaded(defects);
+                List<Reason> reasons = mDb.defectReasonDao().loadReasons(defectId);
+                callback.onReasonsLoaded(reasons);
             }
         });
     }
@@ -123,4 +125,40 @@ public class LocalDataSource {
         });
     }
 
+    public void saveGoods(final List<Good> goods) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.goodDao().insertGoods(goods);
+            }
+        });
+    }
+
+    public void saveDefects(final List<Defect> defects) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.defectDao().insertDefects(defects);
+            }
+        });
+    }
+
+    public void saveReasons(final List<Reason> reasons) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.reasonDao().insertReasons(reasons);
+            }
+        });
+    }
+
+    public void saveDefectReasons(final List<DefectReason> reasons, final SaveReasonsCallback callback) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.defectReasonDao().insertReasons(reasons);
+                callback.onReasonsSaved();
+            }
+        });
+    }
 }

@@ -15,6 +15,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
@@ -79,33 +80,73 @@ public class NetworkDataSource implements DataSource {
         });
     }
 
-    public void loadGoods(Delivery delivery, LoadGoodsCallback callback){
-        List<Good> list = new ArrayList<>();
+    public void loadGoods(Delivery delivery, final LoadGoodsCallback callback){
 
-        list.add(new Good(2, "1111111111111", "Rose", "OZ", "Vietnam", 1, delivery.getId()));
-        list.add(new Good(23, "234234234234", "Rose", "OZ", "Vietnam", 2, delivery.getId()));
-        list.add(new Good(3, "3333333333333", "Rose", "OZ", "Vietnam", 3, delivery.getId()));
+        Call<List<Good>> goods = mDeliveryApi.getGoods(delivery.getId());
+        goods.enqueue(new Callback<List<Good>>() {
+            @Override
+            public void onResponse(Call<List<Good>> call, retrofit2.Response<List<Good>> response) {
+                List<Good> list = response.body();
+                callback.onGoodsLoaded(list);
+            }
 
-        callback.onGoodsLoaded(list);
+            @Override
+            public void onFailure(Call<List<Good>> call, Throwable t) {
+                callback.onGoodsLoadFailed();
+            }
+        });
     }
 
-    public void loadDefects(Delivery delivery, LoadDefectsCallback callback){
-        List<Defect> list = new ArrayList<>();
+    public void loadDefects(Delivery delivery, final LoadDefectsCallback callback){
 
-        //list.add(new Defect(34, "dfsf334fd34f", "234234234234", 34, 5 , delivery.getId(), "comment1"));
+        Call<List<Defect>> defects = mDeliveryApi.getDefects(delivery.getId());
+        defects.enqueue(new Callback<List<Defect>>() {
+            @Override
+            public void onResponse(Call<List<Defect>> call, retrofit2.Response<List<Defect>> response) {
+                List<Defect> list = response.body();
+                callback.onDefectsLoaded(list);
+            }
 
-        callback.onDefectsLoaded(list);
+            @Override
+            public void onFailure(Call<List<Defect>> call, Throwable t) {
+                callback.onDefectsLoadFailed();
+            }
+        });
     }
 
-    public void loadReasons(LoadReasonsCallback callback){
-        List<Reason> list = new ArrayList<>();
+    public void loadReasons(final LoadReasonsCallback callback){
 
-        list.add(new Reason("asdfsdasda", "reason 1"));
-        list.add(new Reason("asdfsdssa", "reason 2"));
-        list.add(new Reason( "asdfsd55da", "reason 3"));
+        Call<List<Reason>> reasons = mDeliveryApi.getReasons();
+        reasons.enqueue(new Callback<List<Reason>>() {
+            @Override
+            public void onResponse(Call<List<Reason>> call, retrofit2.Response<List<Reason>> response) {
+                List<Reason> list = response.body();
+                callback.onReasonsLoaded(list);
+            }
 
-        callback.onReasonsLoaded(list);
+            @Override
+            public void onFailure(Call<List<Reason>> call, Throwable t) {
+                callback.onReasonsLoadFailed();
+            }
+        });
     }
+
+    public void loadDefectReasons(final Delivery delivery, final Defect defect, final LoadDefectReasonsCallback callback) {
+        Call<List<DefectReason>> reasons = mDeliveryApi.getDefectReasons(delivery.getId(), defect.getId());
+        reasons.enqueue(new Callback<List<DefectReason>>() {
+            @Override
+            public void onResponse(Call<List<DefectReason>> call, retrofit2.Response<List<DefectReason>> response) {
+                List<DefectReason> list = response.body();
+                callback.onDefectReasonsLoaded(list);
+            }
+
+            @Override
+            public void onFailure(Call<List<DefectReason>> call, Throwable t) {
+                callback.onDefectReasonsLoadFailed();
+            }
+        });
+    }
+
 
     public void createAct(Delivery delivery) {
     }
@@ -115,4 +156,6 @@ public class NetworkDataSource implements DataSource {
 
     public void savePhotos(List<String> photoPaths) {
     }
+
+
 }

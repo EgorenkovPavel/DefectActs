@@ -23,15 +23,25 @@ public class Defect implements Serializable{
     @NonNull
     @SerializedName("id")
     private String id;
+
     @ColumnInfo(name = "series")
+    @SerializedName("series")
     private String series;
+
     @ColumnInfo(name = "comment")
+    @SerializedName("comment")
     private String comment = "";
+
     @ColumnInfo(name = "quantity")
+    @SerializedName("quantity")
     private int quantity;
+
     @ColumnInfo(name = "photoQuantity")
+    @SerializedName("photoQuantity")
     private int photoQuantity;
+
     @ColumnInfo(name = "deliveryId")
+    @SerializedName("deliveryId")
     private String deliveryId;
 
     public Defect(String id, String series, int quantity, int photoQuantity, String deliveryId, String comment) {

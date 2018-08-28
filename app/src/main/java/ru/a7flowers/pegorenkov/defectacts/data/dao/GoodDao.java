@@ -18,4 +18,8 @@ public interface GoodDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertGood(Good good);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertGoods(List<Good> goods);
+
 }
