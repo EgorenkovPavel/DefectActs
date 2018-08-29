@@ -197,8 +197,5 @@ public class NetworkDataSource implements DataSource {
                 e.printStackTrace();
             }
         }
-
     }
-
-
 }

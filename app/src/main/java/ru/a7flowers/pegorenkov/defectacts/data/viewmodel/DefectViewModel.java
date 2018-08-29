@@ -27,7 +27,7 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
     private LiveData<List<Good>> mGoods;
 
     // For defect
-    private Defect mDefect;
+    private String mDefectId;
     private MutableLiveData<Integer> mDefectAmount = new MutableLiveData<>();
     private MutableLiveData<String> mDefectComment = new MutableLiveData<>();
     private MutableLiveData<String> mDefectSeries = new MutableLiveData<>();
@@ -44,8 +44,7 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
     }
 
     private void init(){
-        mDefect = new Defect();
-
+        mDefectId = "";
         mDefectComment.postValue("");
         mDefectAmount.postValue(0);
         mDefectSeries.postValue("");
@@ -59,12 +58,11 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
     public void start(Delivery delivery, Defect defect){
         loadDelivery(delivery);
 
-        mDefect = defect;
+        mDefectId = defect.getId();
+        mDefectComment.postValue(defect.getComment());
+        mDefectAmount.postValue(defect.getQuantity());
 
-        mDefectComment.postValue(mDefect.getComment());
-        mDefectAmount.postValue(mDefect.getQuantity());
-
-        mRepository.getDefectReasons(mDelivery, mDefect, this);
+        mRepository.getDefectReasons(mDelivery, defect, this);
     }
 
     private void loadDelivery(Delivery delivery){
@@ -131,12 +129,16 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
     }
 
     public void saveDefect(){
-        mDefect.setQuantity(mDefectAmount.getValue());
-        mDefect.setSeries(mDefectSeries.getValue());
-        mDefect.setComment(mDefectComment.getValue());
-        mDefect.setDeliveryId(mDelivery.getId());
+        Defect defect = new Defect();
+        defect.setId(mDefectId);
+        defect.setQuantity(mDefectAmount.getValue());
+        defect.setSeries(mDefectSeries.getValue());
+        defect.setComment(mDefectComment.getValue());
+        defect.setDeliveryId(mDelivery.getId());
 
-        mRepository.saveDefect(mDelivery, mDefect, mDefectReasons.getValue(), photoPaths);
+        mRepository.saveDefect(mDelivery, defect,
+                new ArrayList<Reason>(mDefectReasons.getValue()),
+                new ArrayList<String>(photoPaths));
 
         init();
     }

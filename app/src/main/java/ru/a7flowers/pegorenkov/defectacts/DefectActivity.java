@@ -1,15 +1,22 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +51,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 public class DefectActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int RC_HANDLE_CAMERA_PERM = 2;
     private static final int RC_BARCODE_CAPTURE = 9001;
     public static final String DELIVERY = "delivery_id";
     public static final String DEFECT = "defect_key";
@@ -126,16 +135,6 @@ public class DefectActivity extends AppCompatActivity {
                 tvReasons.setText(text);
             }
         });
-    }
-
-    private void setCurrentSeries(String series){
-        for (int i = 0; i<adapter.getCount(); i++){
-            Good good = adapter.getItem(i);
-            if(good.getSeries().equals(series)){
-                sGoods.setSelection(i);
-                break;
-            }
-        }
     }
 
     private void findViews() {
@@ -237,31 +236,47 @@ public class DefectActivity extends AppCompatActivity {
         ibPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int pCamera = ActivityCompat.checkSelfPermission(DefectActivity.this, Manifest.permission.CAMERA);
+                int pStorage = ActivityCompat.checkSelfPermission(DefectActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (pCamera == PackageManager.PERMISSION_GRANTED
+                        && pStorage == PackageManager.PERMISSION_GRANTED) {
+                    takePicture();
+                } else {
+                    List<String> per = new ArrayList<>();
+                    if(pCamera == PackageManager.PERMISSION_DENIED)
+                        per.add(Manifest.permission.CAMERA);
+                    if(pStorage == PackageManager.PERMISSION_DENIED)
+                        per.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Ensure that there's a camera activity to handle the intent
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (IOException ex) {
-
-                    }
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(DefectActivity.this,
-                                "ru.a7flowers.pegorenkov.defectacts.GenericFileProvider",
-                                photoFile);
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                    }
+                    final String[] permissions = per.toArray(new String[per.size()]);
+                    ActivityCompat.requestPermissions(DefectActivity.this, permissions, RC_HANDLE_CAMERA_PERM);
                 }
-            }
+             }
         });
     }
 
-    //TODO camera and storage permission
+    private void takePicture(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(DefectActivity.this,
+                        "ru.a7flowers.pegorenkov.defectacts.GenericFileProvider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+
+    }
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -283,6 +298,48 @@ public class DefectActivity extends AppCompatActivity {
         Intent i = new Intent(this, ReasonsActivity.class);
         i.putExtra(SELECTED_REASONS, (Serializable) model.getDefectReasonsList());
         startActivityForResult(i, SELECT_REASON);
+    }
+
+    private void setCurrentSeries(String series){
+        for (int i = 0; i<adapter.getCount(); i++){
+            Good good = adapter.getItem(i);
+            if(good.getSeries().equals(series)){
+                sGoods.setSelection(i);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode != RC_HANDLE_CAMERA_PERM) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            return;
+        }
+
+        boolean granted = grantResults.length != 0;
+        for (int i=0; i<permissions.length;i++){
+            granted = granted && grantResults[i] == PackageManager.PERMISSION_GRANTED;
+        }
+
+        if (granted) {
+            takePicture();
+            return;
+        }
+
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finish();
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Multitracker sample")
+                .setMessage(R.string.no_camera_permission)
+                .setPositiveButton(android.R.string.ok, listener)
+                .show();
     }
 
     @Override
