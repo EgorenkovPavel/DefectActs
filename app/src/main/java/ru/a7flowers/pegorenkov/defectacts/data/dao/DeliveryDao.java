@@ -7,6 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Transaction;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -21,6 +22,9 @@ public interface DeliveryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertDelivery(Delivery delivery);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertDeliveries(List<Delivery> deliveries);
 
     @Query("SELECT * FROM deliveries WHERE id = :deliveryId")
     LiveData<Delivery> getDeliveryById(int deliveryId);

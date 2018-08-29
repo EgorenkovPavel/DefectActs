@@ -15,7 +15,7 @@ import java.io.Serializable;
 import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 
 @Entity(tableName = "defects",
-foreignKeys = {@ForeignKey(entity = Delivery.class, parentColumns = "id", childColumns = "deliveryId")},
+foreignKeys = {@ForeignKey(entity = Delivery.class, parentColumns = "id", childColumns = "deliveryId", onDelete = ForeignKey.CASCADE)},
 indices = {@Index("deliveryId"), @Index("series")})
 public class Defect implements Serializable{
 

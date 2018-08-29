@@ -12,6 +12,11 @@ public interface DataSource {
 
     interface LoadDeliveriesCallback{
         void onDeliveriesLoaded(List<Delivery> deliveries);
+        void onDeliveriesLoadFailed();
+    }
+
+    interface LoadDeliveryCallback{
+        void onDeliveryLoaded(Delivery delivery);
         void onDeliveryLoadFailed();
     }
 
@@ -48,5 +53,15 @@ public interface DataSource {
     interface UploadDefectCallback{
         void onDefectUploaded(Defect defect);
         void onDefectUploadingFailed();
+    }
+
+    interface UploadPhotosCallback{
+        void onPhotosUploaded();
+        void onPhotosUploadingFailed();
+    }
+
+    interface ClearDatabaseCallback{
+        void onDatabaseCleared();
+        void onDatabaseClearingFailed();
     }
 }

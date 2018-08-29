@@ -136,7 +136,7 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
         defect.setComment(mDefectComment.getValue());
         defect.setDeliveryId(mDelivery.getId());
 
-        mRepository.saveDefect(mDelivery, defect,
+        mRepository.saveDefect(defect,
                 new ArrayList<Reason>(mDefectReasons.getValue()),
                 new ArrayList<String>(photoPaths));
 

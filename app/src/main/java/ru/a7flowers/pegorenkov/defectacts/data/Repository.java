@@ -27,8 +27,18 @@ public class Repository {
         mNetworkDataSource = networkDataSource;
         mLocalDataSource = localDataSource;
 
-        loadDeliveriesFromNetwork();
-        loadReasonsFromNetwork();
+        mLocalDataSource.deleteAll(new DataSource.ClearDatabaseCallback() {
+            @Override
+            public void onDatabaseCleared() {
+                loadDeliveriesFromNetwork();
+                loadReasonsFromNetwork();
+            }
+
+            @Override
+            public void onDatabaseClearingFailed() {
+
+            }
+        });
     }
 
     public static Repository getInstance(NetworkDataSource networkDataSource, LocalDataSource localDataSource) {
@@ -54,13 +64,11 @@ public class Repository {
         mNetworkDataSource.loadDeliveries(new DataSource.LoadDeliveriesCallback() {
             @Override
             public void onDeliveriesLoaded(List<Delivery> deliveries) {
-                for (Delivery delivery:deliveries) {
-                    mLocalDataSource.saveDelivery(delivery);
-                }
+                mLocalDataSource.saveDeliveries(deliveries);
             }
 
             @Override
-            public void onDeliveryLoadFailed() {
+            public void onDeliveriesLoadFailed() {
 
             }
         });
@@ -109,12 +117,22 @@ public class Repository {
     }
 
     // DEFECT
-    public void saveDefect(Delivery delivery, Defect defect, List<Reason> reasons, final List<String> photoPaths){
+    public void saveDefect(Defect defect, List<Reason> reasons, final List<String> photoPaths){
 
         mNetworkDataSource.saveDefect(defect, reasons, new DataSource.UploadDefectCallback() {
             @Override
-            public void onDefectUploaded(Defect defect) {
-                mNetworkDataSource.savePhotos(defect, photoPaths);
+            public void onDefectUploaded(final Defect defect) {
+                mNetworkDataSource.savePhotos(defect, photoPaths, new DataSource.UploadPhotosCallback() {
+                    @Override
+                    public void onPhotosUploaded() {
+                        refreshDataAfterSaving(defect);
+                    }
+
+                    @Override
+                    public void onPhotosUploadingFailed() {
+
+                    }
+                });
             }
 
             @Override
@@ -122,11 +140,6 @@ public class Repository {
 
             }
         });
-
-
-        // load and save
-//        refreshDelivery(delivery);
-//        refreshDefect(defect); // with reasons
     }
 
     public LiveData<List<DefectGood>> getDefectGoods(Delivery delivery) {
@@ -153,7 +166,7 @@ public class Repository {
         mNetworkDataSource.loadDefectReasons(delivery, defect, new LoadDefectReasonsCallback() {
             @Override
             public void onDefectReasonsLoaded(List<DefectReason> reasons) {
-                mLocalDataSource.saveDefectReasons(reasons, new DataSource.SaveReasonsCallback() {
+                mLocalDataSource.saveDefectReasons(defect.getId(), reasons, new DataSource.SaveReasonsCallback() {
                     @Override
                     public void onReasonsSaved() {
                         mLocalDataSource.getDefectReasons(defect.getId(), callback);
@@ -168,6 +181,32 @@ public class Repository {
 
             @Override
             public void onDefectReasonsLoadFailed() {
+
+            }
+        });
+    }
+
+    private void refreshDataAfterSaving(Defect defect){
+        mNetworkDataSource.loadDelivery(defect.getDeliveryId(), new DataSource.LoadDeliveryCallback() {
+            @Override
+            public void onDeliveryLoaded(Delivery delivery) {
+                mLocalDataSource.saveDelivery(delivery);
+            }
+
+            @Override
+            public void onDeliveryLoadFailed() {
+
+            }
+        });
+
+        mNetworkDataSource.loadDefect(defect.getDeliveryId(), defect.getId(), new DataSource.LoadDefectCallback() {
+            @Override
+            public void onDefectLoaded(Defect defect) {
+                mLocalDataSource.saveDefect(defect);
+            }
+
+            @Override
+            public void onDefectLoadFailed() {
 
             }
         });

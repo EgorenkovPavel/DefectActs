@@ -21,4 +21,7 @@ public interface ReasonDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertReasons(List<Reason> reasons);
+
+    @Query("DELETE FROM reasons")
+    void deleteAll();
 }

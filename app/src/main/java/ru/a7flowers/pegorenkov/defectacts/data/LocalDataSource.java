@@ -3,9 +3,11 @@ package ru.a7flowers.pegorenkov.defectacts.data;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.List;
 
+import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ClearDatabaseCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
@@ -19,6 +21,7 @@ import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 
 public class LocalDataSource {
 
+    private static final String TAG = "DATA_TRANSFER";
     private static volatile LocalDataSource INSTANCE;
 
     private AppDatabase mDb;
@@ -41,14 +44,27 @@ public class LocalDataSource {
     }
 
     public LiveData<List<Delivery>> getDeliveries() {
+        Log.d(TAG, "Get all deliveries");
         return mDb.deliveryDao().loadAllDeliveries();
     }
 
     public LiveData<List<Reason>> getReasons() {
+        Log.d(TAG, "Get all reasons");
         return mDb.reasonDao().loadReasons();
     }
 
-    public void saveDelivery(final Delivery delivery){
+    public void saveDeliveries(final List<Delivery> deliveries){
+        Log.d(TAG, "Insert all delivery");
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.deliveryDao().insertDeliveries(deliveries);
+            }
+        });
+    }
+
+    public void saveDelivery(final Delivery delivery) {
+        Log.d(TAG, "Insert 1 delivery");
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -58,28 +74,17 @@ public class LocalDataSource {
     }
 
     public LiveData<List<Good>> loadGoods(String deliveryId) {
+        Log.d(TAG, "Get delivery goods");
         return mDb.goodDao().loadGoods(deliveryId);
     }
 
-    public void getDefectById(final int defectId, final LoadDefectCallback callback) {
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                Defect defect = mDb.defectDao().getDefectById(defectId);
-                callback.onDefectLoaded(defect);
-            }
-        });
-    }
-
-    public LiveData<Delivery> getDelivery(int deliveryId) {
-        return mDb.deliveryDao().getDeliveryById(deliveryId);
-    }
-
     public LiveData<List<DefectGood>> getDefectGoods(String deliveryId) {
+        Log.d(TAG, "Get delivery defects");
         return mDb.defectDao().loadDefects(deliveryId);
     }
 
     public void getDefectReasons(final String defectId, final LoadReasonsCallback callback) {
+        Log.d(TAG, "Get delivery defect reasons");
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -89,43 +94,8 @@ public class LocalDataSource {
         });
     }
 
-    public void saveGood(final Good good){
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.goodDao().insertGood(good);
-            }
-        });
-    }
-
-    public void saveDefectReason(final DefectReason reason){
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.defectReasonDao().insertReason(reason);
-            }
-        });
-    }
-
-    public void saveDefect(final Defect defect){
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.defectDao().insertDefect(defect);
-            }
-        });
-    }
-
-    public void saveReason(final Reason reason) {
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.reasonDao().insertReason(reason);
-            }
-        });
-    }
-
     public void saveGoods(final List<Good> goods) {
+        Log.d(TAG, "Insert goods");
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -135,6 +105,7 @@ public class LocalDataSource {
     }
 
     public void saveDefects(final List<Defect> defects) {
+        Log.d(TAG, "Insert defects");
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -143,7 +114,18 @@ public class LocalDataSource {
         });
     }
 
+    public void saveDefect(final Defect defect) {
+        Log.d(TAG, "Insert 1 defect");
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.defectDao().insertDefect(defect);
+            }
+        });
+    }
+
     public void saveReasons(final List<Reason> reasons) {
+        Log.d(TAG, "Insert reasons");
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -152,12 +134,25 @@ public class LocalDataSource {
         });
     }
 
-    public void saveDefectReasons(final List<DefectReason> reasons, final SaveReasonsCallback callback) {
+    public void saveDefectReasons(final String defectId, final List<DefectReason> reasons, final SaveReasonsCallback callback) {
+        Log.d(TAG, "Insert defect reasons");
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
+                mDb.defectReasonDao().deleteReasons(defectId);
                 mDb.defectReasonDao().insertReasons(reasons);
                 callback.onReasonsSaved();
+            }
+        });
+    }
+
+    public void deleteAll(final ClearDatabaseCallback callback) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.deliveryDao().deleteAllDeliveries();
+                mDb.reasonDao().deleteAll();
+                callback.onDatabaseCleared();
             }
         });
     }

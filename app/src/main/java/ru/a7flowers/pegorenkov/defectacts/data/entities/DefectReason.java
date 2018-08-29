@@ -10,8 +10,8 @@ import android.support.annotation.NonNull;
 
 @Entity(tableName = "defectreasons",
 primaryKeys = {"defectId", "reasonId"},
-foreignKeys = {@ForeignKey(entity = Defect.class, parentColumns = "id", childColumns = "defectId"),
-@ForeignKey(entity = Reason.class, parentColumns = "id", childColumns = "reasonId")},
+foreignKeys = {@ForeignKey(entity = Defect.class, parentColumns = "id", childColumns = "defectId", onDelete = ForeignKey.CASCADE),
+@ForeignKey(entity = Reason.class, parentColumns = "id", childColumns = "reasonId", onDelete = ForeignKey.CASCADE)},
 indices = {@Index("reasonId"), @Index("defectId")})
 public class DefectReason {
 
