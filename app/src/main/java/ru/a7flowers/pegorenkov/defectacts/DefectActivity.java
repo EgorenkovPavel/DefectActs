@@ -107,15 +107,21 @@ public class DefectActivity extends AppCompatActivity {
         model.getDefectAmount().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer value) {
-                etAmount.setText(String.valueOf(value));
-                etAmount.setSelection(etAmount.getText().length());
+                String text = String.valueOf(value);
+                if(!text.equals(etAmount.getText().toString())) {
+                    etAmount.setText(text);
+                    etAmount.setSelection(etAmount.getText().length());
+                }
             }
         });
         model.getDefectComment().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String comment) {
-                etComment.setText(comment);
-                etComment.setSelection(etComment.getText().length());
+                String text = String.valueOf(comment);
+                if(!text.equals(etComment.getText().toString())) {
+                    etComment.setText(comment);
+                    etComment.setSelection(etComment.getText().length());
+                }
             }
         });
         model.getDefectSeries().observe(this, new Observer<String>() {

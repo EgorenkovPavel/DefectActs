@@ -16,7 +16,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
-public class DefectViewModel extends AndroidViewModel implements DataSource.LoadReasonsCallback {
+public class DefectViewModel extends AndroidViewModel{
 
     private Repository mRepository;
     // General
@@ -59,7 +59,18 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
         mDefectComment.postValue(defect.getComment());
         mDefectAmount.postValue(defect.getQuantity());
 
-        mRepository.getDefectReasons(mDelivery, defect, this);
+        mRepository.getDefectReasons(mDelivery, defect, new DataSource.LoadReasonsCallback() {
+            @Override
+            public void onReasonsLoaded(List<Reason> reasons) {
+                if(reasons != null)
+                    mDefectReasons.postValue(reasons);
+            }
+
+            @Override
+            public void onReasonsLoadFailed() {
+
+            }
+        });
     }
 
     private void loadDelivery(Delivery delivery){
@@ -146,17 +157,6 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
 
     public List<Reason> getDefectReasonsList(){
         return mDefectReasons.getValue();
-    }
-
-    @Override
-    public void onReasonsLoaded(List<Reason> reasons) {
-        if(reasons != null)
-            mDefectReasons.postValue(reasons);
-    }
-
-    @Override
-    public void onReasonsLoadFailed() {
-
     }
 
     public void savePhoto() {
