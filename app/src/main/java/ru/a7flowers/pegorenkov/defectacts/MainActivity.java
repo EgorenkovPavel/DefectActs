@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements DeliveryAdapter.O
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         rvDeliveries.addItemDecoration(itemDecor);
 
-
         final DeliveryAdapter adapter = new DeliveryAdapter();
         adapter.setOnItemClickListener(this);
 
