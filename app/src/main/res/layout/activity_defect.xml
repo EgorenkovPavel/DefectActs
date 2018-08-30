@@ -28,7 +28,6 @@
         android:layout_height="88dp"
         android:background="@drawable/frame"
         android:spinnerMode="dialog"
-        app:layout_constraintBottom_toTopOf="@+id/lblReasons"
         app:layout_constraintEnd_toEndOf="@+id/lblGood"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/lblGood"
@@ -42,11 +41,26 @@
         android:layout_marginTop="16dp"
         android:text="@string/reasons"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        app:layout_constraintBottom_toTopOf="@+id/tvReasons"
         app:layout_constraintEnd_toEndOf="@+id/sGoods"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/sGoods"
         app:layout_constraintTop_toBottomOf="@+id/sGoods" />
+
+    <TextView
+        android:id="@+id/lblComment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:labelFor="@id/etComment"
+        android:text="@string/comment"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toTopOf="@+id/etComment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAmount" />
 
     <EditText
         android:id="@+id/etComment"
@@ -58,7 +72,6 @@
         android:background="@drawable/frame"
         android:ems="10"
         android:gravity="top|start"
-        android:hint="@string/comment"
         android:inputType="textMultiLine"
         android:padding="8dp"
         android:singleLine="false"
@@ -67,20 +80,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAmount" />
+        app:layout_constraintTop_toBottomOf="@+id/lblComment" />
 
     <EditText
         android:id="@+id/etAmount"
         android:layout_width="68dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
         android:background="@drawable/frame"
         android:ems="10"
         android:gravity="center"
         android:inputType="numberDecimal"
         android:padding="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/etComment"
+        app:layout_constraintBottom_toTopOf="@+id/lblComment"
         app:layout_constraintEnd_toStartOf="@+id/btnInc"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnDec"
@@ -89,10 +100,10 @@
 
     <TextView
         android:id="@+id/lblAmount"
-        android:labelFor="@id/etAmount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:labelFor="@id/etAmount"
         android:text="@string/amount"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintBottom_toBottomOf="@+id/etAmount"
@@ -108,12 +119,12 @@
         android:layout_height="60dp"
         android:background="@android:color/background_light"
         android:backgroundTint="@color/colorAccent"
+        android:contentDescription="@string/photo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ibBarcode"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_camera"
-        android:contentDescription="@string/photo" />
+        app:srcCompat="@android:drawable/ic_menu_camera" />
 
     <ImageButton
         android:id="@+id/ibNext"
@@ -121,12 +132,12 @@
         android:layout_height="60dp"
         android:background="@android:color/background_light"
         android:backgroundTint="@color/colorAccent"
+        android:contentDescription="@string/next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ibBarcode"
-        app:srcCompat="@android:drawable/ic_menu_send"
-        android:contentDescription="@string/next" />
+        app:srcCompat="@android:drawable/ic_menu_send" />
 
     <ImageButton
         android:id="@+id/ibBarcode"
@@ -134,13 +145,13 @@
         android:layout_height="60dp"
         android:background="@android:color/background_light"
         android:backgroundTint="@color/colorAccent"
+        android:contentDescription="@string/barcode"
         android:tint="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ibNext"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ibPhoto"
-        app:srcCompat="@drawable/barcode_scan"
-        android:contentDescription="@string/barcode" />
+        app:srcCompat="@drawable/barcode_scan" />
 
     <TextView
         android:id="@+id/lblGood"
@@ -151,11 +162,11 @@
         android:layout_marginTop="16dp"
         android:text="@string/good"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        app:layout_constraintBottom_toTopOf="@+id/sGoods"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
+        app:layout_constraintVertical_chainStyle="spread" />
 
     <ImageButton
         android:id="@+id/btnInc"
@@ -163,31 +174,32 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
+        android:contentDescription="@string/increment"
         app:layout_constraintBottom_toBottomOf="@+id/etAmount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/etAmount"
         app:layout_constraintTop_toTopOf="@+id/etAmount"
-        app:srcCompat="@drawable/ic_add"
-        android:contentDescription="@string/increment" />
+        app:srcCompat="@drawable/ic_add" />
 
     <ImageButton
         android:id="@+id/btnDec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/decrement"
         app:layout_constraintBottom_toBottomOf="@+id/etAmount"
         app:layout_constraintEnd_toStartOf="@+id/etAmount"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/lblAmount"
         app:layout_constraintTop_toTopOf="@+id/etAmount"
-        app:srcCompat="@drawable/ic_remove"
-        android:contentDescription="@string/decrement" />
+        app:srcCompat="@drawable/ic_remove" />
 
     <TextView
         android:id="@+id/tvReasons"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/frame"
         android:padding="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
@@ -196,6 +208,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/lblReasons"
         app:layout_constraintTop_toBottomOf="@+id/lblReasons"
+        app:layout_constraintVertical_bias="0.155"
         tools:text="Reasons" />
 
 </android.support.constraint.ConstraintLayout>
