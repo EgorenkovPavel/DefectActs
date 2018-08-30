@@ -1,15 +1,12 @@
 package ru.a7flowers.pegorenkov.defectacts.data;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ClearDatabaseCallback;
-import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
-import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.SaveReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;

@@ -14,6 +14,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 public class ReasonsViewModel extends AndroidViewModel {
 
+    @SuppressWarnings("FieldCanBeLocal")
     private Repository mRepository;
 
     private LiveData<List<Reason>> mReasons;

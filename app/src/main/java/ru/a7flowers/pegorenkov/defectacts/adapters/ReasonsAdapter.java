@@ -17,7 +17,6 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHolder> {
 
     private List<Reason> mReasons;
-    private List<Reason> mSelectedReasons;
     private Set<String> mSelectedReasonsIds = new HashSet<>();
 
     private OnReasonClickListener listener;
@@ -53,13 +52,14 @@ public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHo
     }
 
     public void setSelectedItems(List<Reason> reasons){
-        mSelectedReasons = reasons;
 
         if (reasons != null) {
             mSelectedReasonsIds.clear();
             for (Reason reason : reasons) {
                 mSelectedReasonsIds.add(reason.getId());
             }
+        }else{
+            mSelectedReasonsIds.clear();
         }
 
         notifyDataSetChanged();

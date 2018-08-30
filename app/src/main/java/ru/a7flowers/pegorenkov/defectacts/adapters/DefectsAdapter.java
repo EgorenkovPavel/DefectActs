@@ -11,7 +11,6 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 
 public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHolder> {

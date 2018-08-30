@@ -41,7 +41,6 @@ public class NetworkDataSource {
     private static volatile NetworkDataSource INSTANCE;
 
     private AppExecutors mAppExecutors;
-    private Retrofit mRetrofit;
     private DeliveryApi mDeliveryApi;
 
     private NetworkDataSource() {
@@ -57,7 +56,7 @@ public class NetworkDataSource {
             }
         }).build();
 
-        mRetrofit = new Retrofit.Builder()
+        Retrofit mRetrofit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl("http://msavelev/UT11_PE/ru_RU/hs/DefectActs/")
                 .addConverterFactory(GsonConverterFactory.create())

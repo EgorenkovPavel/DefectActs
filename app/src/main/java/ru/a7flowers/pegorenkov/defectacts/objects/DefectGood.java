@@ -1,9 +1,5 @@
 package ru.a7flowers.pegorenkov.defectacts.objects;
 
-import android.arch.persistence.room.Embedded;
-
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
-
 public class DefectGood {
 
     private String id;

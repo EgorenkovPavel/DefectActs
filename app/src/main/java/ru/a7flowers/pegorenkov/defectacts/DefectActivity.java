@@ -1,7 +1,7 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
 import android.Manifest;
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -15,7 +15,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -56,7 +55,7 @@ public class DefectActivity extends AppCompatActivity {
     public static final String DELIVERY = "delivery_id";
     public static final String DEFECT = "defect_key";
 
-    public static final int SELECT_REASON = 47;
+    private static final int SELECT_REASON = 47;
     public static final String SELECTED_REASONS = "selected_reasons";
 
     private DefectViewModel model;
@@ -73,7 +72,7 @@ public class DefectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defect);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -128,11 +127,16 @@ public class DefectActivity extends AppCompatActivity {
         model.getDefectReasons().observe(this, new Observer<List<Reason>>() {
             @Override
             public void onChanged(@Nullable List<Reason> reasons) {
-                String text = "";
-                for (Reason reason:reasons) {
-                    text+=reason.getTitle();
+                if (reasons == null){
+                    tvReasons.setText("");
+                    return;
                 }
-                tvReasons.setText(text);
+
+                StringBuilder text = new StringBuilder();
+                for (Reason reason:reasons) {
+                    text.append(reason.getTitle()).append("; ");
+                }
+                tvReasons.setText(text.toString());
             }
         });
     }
@@ -280,7 +284,7 @@ public class DefectActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -343,15 +347,17 @@ public class DefectActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
         if(requestCode == SELECT_REASON && resultCode == RESULT_OK){
-            List<Reason> list = (List<Reason>) data.getExtras().get(SELECTED_REASONS);
-            model.setDefectReasons(list);
+            if(intent.hasExtra(SELECTED_REASONS)) {
+                List<Reason> list = (List<Reason>) intent.getExtras().getSerializable(SELECTED_REASONS);
+                model.setDefectReasons(list);
+            }
         }else if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    String barcode = data.getStringExtra(BarcodeScannerActivity.BARCODE);
+                if (intent != null) {
+                    String barcode = intent.getStringExtra(BarcodeScannerActivity.BARCODE);
                     model.setSeries(barcode);
                     Toast.makeText(this, barcode, Toast.LENGTH_LONG).show();
                 } else {
@@ -362,7 +368,7 @@ public class DefectActivity extends AppCompatActivity {
             model.savePhoto();
         }
         else {
-            super.onActivityResult(requestCode, resultCode, data);
+            super.onActivityResult(requestCode, resultCode, intent);
         }
     }
 

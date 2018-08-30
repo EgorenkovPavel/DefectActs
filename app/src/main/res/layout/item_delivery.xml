@@ -38,5 +38,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_done" />
+        app:srcCompat="@drawable/ic_done"
+        android:contentDescription="@string/actExist" />
 </android.support.constraint.ConstraintLayout>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DefectActs</string>
+    <string name="action_settings">Настройки</string>
+    <string name="permission_camera_rationale">Доступ к камере нужен для считывания штрихкодов.</string>
+    <string name="barcode_failure">Штрихкод не считан</string>
+    <string name="photo">Фото</string>
+    <string name="next">Далее</string>
+    <string name="barcode">Штрихкод</string>
+    <string name="increment">Увеличить</string>
+    <string name="decrement">Уменьшить</string>
+    <string name="reasons">Причины</string>
+    <string name="comment">Комментарий</string>
+    <string name="amount">Количество</string>
+    <string name="good">Товар</string>
+    <string name="deliveries">Доставки</string>
+    <string name="delivery">Доставка</string>
+    <string name="defect">Дефект</string>
+    <string name="actExist">Акт введен</string>
+</resources>

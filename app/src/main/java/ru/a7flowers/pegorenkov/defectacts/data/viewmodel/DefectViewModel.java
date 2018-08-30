@@ -5,12 +5,9 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
-import android.util.ArraySet;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
@@ -137,8 +134,8 @@ public class DefectViewModel extends AndroidViewModel implements DataSource.Load
         defect.setDeliveryId(mDelivery.getId());
 
         mRepository.saveDefect(defect,
-                new ArrayList<Reason>(mDefectReasons.getValue()),
-                new ArrayList<String>(photoPaths));
+                new ArrayList<>(mDefectReasons.getValue()),
+                new ArrayList<>(photoPaths));
 
         init();
     }

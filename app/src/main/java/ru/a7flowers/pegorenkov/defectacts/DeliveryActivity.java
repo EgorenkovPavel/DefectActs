@@ -33,7 +33,7 @@ public class DeliveryActivity extends AppCompatActivity implements DefectsAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -42,10 +42,11 @@ public class DeliveryActivity extends AppCompatActivity implements DefectsAdapte
         Intent i = getIntent();
         if(i.hasExtra(DELIVERY)){
             Delivery delivery = (Delivery) i.getExtras().getSerializable(DELIVERY);
+            toolbar.setTitle(delivery.getNumber());
             model.start(delivery);
         }
         
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

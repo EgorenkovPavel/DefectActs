@@ -15,7 +15,6 @@ import android.widget.Button;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.ReasonsAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ReasonsViewModel;
@@ -31,7 +30,7 @@ public class ReasonsActivity extends AppCompatActivity implements ReasonsAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reasons);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -75,8 +74,10 @@ public class ReasonsActivity extends AppCompatActivity implements ReasonsAdapter
         rvReasons.setAdapter(adapter);
 
         Intent i = getIntent();
-        List<Reason> list = (List<Reason>) i.getExtras().get(DefectActivity.SELECTED_REASONS);
-        model.setDefectReasons(list);
+        if(i.hasExtra(DefectActivity.SELECTED_REASONS)) {
+            List<Reason> list = (List<Reason>) i.getExtras().get(DefectActivity.SELECTED_REASONS);
+            model.setDefectReasons(list);
+        }
 
         model.getReasons().observe(this, new Observer<List<Reason>>() {
             @Override
