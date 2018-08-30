@@ -32,7 +32,7 @@ public class ReasonsActivity extends AppCompatActivity implements ReasonsAdapter
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(ReasonsViewModel.class);
 
