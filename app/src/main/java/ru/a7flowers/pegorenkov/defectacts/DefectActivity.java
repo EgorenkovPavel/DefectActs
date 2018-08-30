@@ -127,6 +127,7 @@ public class DefectActivity extends AppCompatActivity {
         model.getDefectSeries().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String series) {
+                if(series == null) return;
                 setCurrentSeries(series);
             }
         });
@@ -311,13 +312,19 @@ public class DefectActivity extends AppCompatActivity {
     }
 
     private void setCurrentSeries(String series){
+
+        Good curGood = adapter.getItem(sGoods.getSelectedItemPosition());
+        if(curGood != null && series.equals(curGood.getSeries())) return;
+
         for (int i = 0; i<adapter.getCount(); i++){
             Good good = adapter.getItem(i);
             if(good.getSeries().equals(series)){
                 sGoods.setSelection(i);
-                break;
+                return;
             }
         }
+
+        Toast.makeText(this, "Barcode " + series + " not found", Toast.LENGTH_LONG).show();
     }
 
     @Override
