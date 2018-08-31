@@ -20,8 +20,8 @@ public interface DefectDao {
             "INNER JOIN goods as goods " +
             "ON defects.series = goods.series " +
             "AND defects.deliveryId = goods.deliveryId " +
-            "WHERE defects.deliveryId = :deliveryId")
-    LiveData<List<DefectGood>> loadDefects(String deliveryId);
+            "WHERE defects.deliveryId IN (:deliveryIds)")
+    LiveData<List<DefectGood>> loadDefects(String[] deliveryIds);
 
     @Query("SELECT * FROM defects WHERE id = :defectId")
     Defect getDefectById(int defectId);

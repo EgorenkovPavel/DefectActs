@@ -14,6 +14,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.network.DefectServer;
 import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 
 public class LocalDataSource {
@@ -70,14 +71,14 @@ public class LocalDataSource {
         });
     }
 
-    public LiveData<List<Good>> loadGoods(String deliveryId) {
+    public LiveData<List<Good>> loadGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery goods");
-        return mDb.goodDao().loadGoods(deliveryId);
+        return mDb.goodDao().loadGoods(deliveryIds);
     }
 
-    public LiveData<List<DefectGood>> getDefectGoods(String deliveryId) {
+    public LiveData<List<DefectGood>> getDefectGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery defects");
-        return mDb.defectDao().loadDefects(deliveryId);
+        return mDb.defectDao().loadDefects(deliveryIds);
     }
 
     public void getDefectReasons(final String defectId, final LoadReasonsCallback callback) {
@@ -152,5 +153,13 @@ public class LocalDataSource {
                 callback.onDatabaseCleared();
             }
         });
+    }
+
+    public void saveDefectsServer(List<DefectServer> defects) {
+        //TODO
+    }
+
+    public void saveDefectServer(DefectServer defect) {
+        //TODO
     }
 }

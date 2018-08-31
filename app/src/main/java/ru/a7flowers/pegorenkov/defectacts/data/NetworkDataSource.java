@@ -117,10 +117,10 @@ public class NetworkDataSource {
         });
     }
 
-    public void loadGoods(Delivery delivery, final LoadGoodsCallback callback){
+    public void loadGoods(String deliveryId, final LoadGoodsCallback callback){
 
         Log.d(TAG, "Start download goods");
-        Call<List<Good>> goods = mDeliveryApi.getGoods(delivery.getId());
+        Call<List<Good>> goods = mDeliveryApi.getGoods(deliveryId);
         goods.enqueue(new Callback<List<Good>>() {
             @Override
             public void onResponse(Call<List<Good>> call, retrofit2.Response<List<Good>> response) {
@@ -137,20 +137,20 @@ public class NetworkDataSource {
         });
     }
 
-    public void loadDefects(Delivery delivery, final LoadDefectsCallback callback){
+    public void loadDefects(String deliveryId, final LoadDefectsCallback callback){
 
         Log.d(TAG, "Start download defects");
-        Call<List<Defect>> defects = mDeliveryApi.getDefects(delivery.getId());
-        defects.enqueue(new Callback<List<Defect>>() {
+        Call<List<DefectServer>> defects = mDeliveryApi.getDefects(deliveryId);
+        defects.enqueue(new Callback<List<DefectServer>>() {
             @Override
-            public void onResponse(Call<List<Defect>> call, retrofit2.Response<List<Defect>> response) {
+            public void onResponse(Call<List<DefectServer>> call, retrofit2.Response<List<DefectServer>> response) {
                 Log.d(TAG, "End download defects - success");
-                List<Defect> list = response.body();
+                List<DefectServer> list = response.body();
                 callback.onDefectsLoaded(list);
             }
 
             @Override
-            public void onFailure(Call<List<Defect>> call, Throwable t) {
+            public void onFailure(Call<List<DefectServer>> call, Throwable t) {
                 Log.d(TAG, "End download defects - failed");
                 callback.onDefectsLoadFailed();
             }
@@ -160,17 +160,17 @@ public class NetworkDataSource {
     public void loadDefect(String deliveryId, String defectId, final LoadDefectCallback callback){
 
         Log.d(TAG, "Start download 1 defect");
-        Call<Defect> defect = mDeliveryApi.getDefect(deliveryId, defectId);
-        defect.enqueue(new Callback<Defect>() {
+        Call<DefectServer> defect = mDeliveryApi.getDefect(deliveryId, defectId);
+        defect.enqueue(new Callback<DefectServer>() {
             @Override
-            public void onResponse(Call<Defect> call, retrofit2.Response<Defect> response) {
+            public void onResponse(Call<DefectServer> call, retrofit2.Response<DefectServer> response) {
                 Log.d(TAG, "End download 1 defect - success");
-                Defect list = response.body();
-                callback.onDefectLoaded(list);
+                DefectServer defectServer = response.body();
+                callback.onDefectLoaded(defectServer);
             }
 
             @Override
-            public void onFailure(Call<Defect> call, Throwable t) {
+            public void onFailure(Call<DefectServer> call, Throwable t) {
                 Log.d(TAG, "End download 1 defect - failed");
                 callback.onDefectLoadFailed();
             }
@@ -197,24 +197,25 @@ public class NetworkDataSource {
         });
     }
 
-    public void loadDefectReasons(final Delivery delivery, final Defect defect, final LoadDefectReasonsCallback callback) {
+    public void loadDefectReasons(final String[] deliveryIds, final Defect defect, final LoadDefectReasonsCallback callback) {
 
-        Log.d(TAG, "Start download defect reasons");
-        Call<List<DefectReason>> reasons = mDeliveryApi.getDefectReasons(delivery.getId(), defect.getId());
-        reasons.enqueue(new Callback<List<DefectReason>>() {
-            @Override
-            public void onResponse(Call<List<DefectReason>> call, retrofit2.Response<List<DefectReason>> response) {
-                Log.d(TAG, "End download defect reasons - success");
-                List<DefectReason> list = response.body();
-                callback.onDefectReasonsLoaded(list);
-            }
-
-            @Override
-            public void onFailure(Call<List<DefectReason>> call, Throwable t) {
-                Log.d(TAG, "End download defect reasons - failed");
-                callback.onDefectReasonsLoadFailed();
-            }
-        });
+        //TODO
+//        Log.d(TAG, "Start download defect reasons");
+//        Call<List<DefectReason>> reasons = mDeliveryApi.getDefectReasons(delivery.getId(), defect.getId());
+//        reasons.enqueue(new Callback<List<DefectReason>>() {
+//            @Override
+//            public void onResponse(Call<List<DefectReason>> call, retrofit2.Response<List<DefectReason>> response) {
+//                Log.d(TAG, "End download defect reasons - success");
+//                List<DefectReason> list = response.body();
+//                callback.onDefectReasonsLoaded(list);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<DefectReason>> call, Throwable t) {
+//                Log.d(TAG, "End download defect reasons - failed");
+//                callback.onDefectReasonsLoadFailed();
+//            }
+//        });
     }
 
 

@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,13 +59,55 @@ public class MainActivity extends AppCompatActivity implements DeliveryAdapter.O
                 adapter.setItems(deliveries);
             }
         });
+
+        model.getSelectedDeliveries().observe(this, new Observer<List<Delivery>>() {
+            @Override
+            public void onChanged(@Nullable List<Delivery> deliveries) {
+                adapter.setSelectedItems(deliveries);
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.deliveries_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_edit:{
+                openDeliveryActivity();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
     public void onDeliveryClick(Delivery delivery) {
+        model.onDeliverySelected(delivery);
+    }
+
+    private void openDeliveryActivity(){
+
+        List<Delivery> list = model.getSelectedDeliveries().getValue();
+
+        if(list == null || list.isEmpty()) {
+            return;
+        }
+
+        String[] deliveriesIds = new String[list.size()];
+        for (int i = 0; i<list.size(); i++) {
+            deliveriesIds[i] = list.get(i).getId();
+        }
+
         Intent i = new Intent(this, DeliveryActivity.class);
-        i.putExtra(DeliveryActivity.DELIVERY, delivery);
+        i.putExtra(DeliveryActivity.DELIVERY, deliveriesIds);
         startActivity(i);
+
     }
 
 }

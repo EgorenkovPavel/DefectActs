@@ -20,11 +20,12 @@ public class DefectViewModel extends AndroidViewModel{
 
     private Repository mRepository;
     // General
-    private Delivery mDelivery;
+    private String[] mDeliveryIds;
     private LiveData<List<Good>> mGoods;
 
     // For defect
     private String mDefectId;
+    private String mDefectDeliveryId;
     private MutableLiveData<Integer> mDefectAmount = new MutableLiveData<>();
     private MutableLiveData<String> mDefectComment = new MutableLiveData<>();
     private MutableLiveData<String> mDefectSeries = new MutableLiveData<>();
@@ -48,18 +49,19 @@ public class DefectViewModel extends AndroidViewModel{
         mDefectReasons.postValue(new ArrayList<Reason>());
     }
 
-    public void start(Delivery delivery){
-        loadDelivery(delivery);
+    public void start(String[] deliveryIds){
+        loadDelivery(deliveryIds);
     }
 
-    public void start(Delivery delivery, Defect defect){
-        loadDelivery(delivery);
+    public void start(String[] deliveryIds, Defect defect){
+        loadDelivery(deliveryIds);
 
         mDefectId = defect.getId();
+        mDefectDeliveryId = defect.getDeliveryId();
         mDefectComment.postValue(defect.getComment());
         mDefectAmount.postValue(defect.getQuantity());
 
-        mRepository.getDefectReasons(mDelivery, defect, new DataSource.LoadReasonsCallback() {
+        mRepository.getDefectReasons(mDeliveryIds, defect, new DataSource.LoadReasonsCallback() {
             @Override
             public void onReasonsLoaded(List<Reason> reasons) {
                 if(reasons != null)
@@ -73,9 +75,9 @@ public class DefectViewModel extends AndroidViewModel{
         });
     }
 
-    private void loadDelivery(Delivery delivery){
-        mDelivery = delivery;
-        mGoods = mRepository.loadGoods(delivery.getId());
+    private void loadDelivery(String[] deliveryIds){
+        mDeliveryIds = deliveryIds;
+        mGoods = mRepository.loadGoods(deliveryIds);
     }
 
     public LiveData<List<Good>> getGoods() {
@@ -116,6 +118,7 @@ public class DefectViewModel extends AndroidViewModel{
 
     public void setGood(Good good){
         mDefectSeries.postValue(good.getSeries());
+        mDefectDeliveryId = good.getDeliveryId();
     }
 
     public void setSeries(String series){
@@ -142,7 +145,7 @@ public class DefectViewModel extends AndroidViewModel{
         defect.setQuantity(mDefectAmount.getValue());
         defect.setSeries(mDefectSeries.getValue());
         defect.setComment(mDefectComment.getValue());
-        defect.setDeliveryId(mDelivery.getId());
+        defect.setDeliveryId(mDefectDeliveryId);
 
         mRepository.saveDefect(defect,
                 new ArrayList<>(mDefectReasons.getValue()),

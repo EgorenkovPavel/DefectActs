@@ -13,8 +13,8 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 @Dao
 public interface GoodDao {
 
-    @Query("SELECT * FROM goods WHERE deliveryid = :deliveryId ")
-    LiveData<List<Good>> loadGoods(String deliveryId);
+    @Query("SELECT * FROM goods WHERE deliveryid IN (:deliveryIds) ")
+    LiveData<List<Good>> loadGoods(String[] deliveryIds);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertGood(Good good);

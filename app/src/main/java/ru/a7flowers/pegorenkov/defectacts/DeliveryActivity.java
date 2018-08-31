@@ -17,7 +17,6 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.DefectsAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveryViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
@@ -41,9 +40,8 @@ public class DeliveryActivity extends AppCompatActivity implements DefectsAdapte
 
         Intent i = getIntent();
         if(i.hasExtra(DELIVERY)){
-            Delivery delivery = (Delivery) i.getExtras().getSerializable(DELIVERY);
-            toolbar.setTitle(delivery.getNumber());
-            model.start(delivery);
+            String[] deliveries = i.getExtras().getStringArray(DELIVERY);
+            model.start(deliveries);
         }
         
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -51,7 +49,7 @@ public class DeliveryActivity extends AppCompatActivity implements DefectsAdapte
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(DeliveryActivity.this, DefectActivity.class);
-                i.putExtra(DefectActivity.DELIVERY, model.getDelivery());
+                i.putExtra(DefectActivity.DELIVERY, model.getDeliveryIds());
                 startActivity(i);
             }
         });
@@ -83,7 +81,7 @@ public class DeliveryActivity extends AppCompatActivity implements DefectsAdapte
     @Override
     public void onDefectClick(Defect defect) {
         Intent i = new Intent(this, DefectActivity.class);
-        i.putExtra(DefectActivity.DELIVERY, model.getDelivery());
+        i.putExtra(DefectActivity.DELIVERY, model.getDeliveryIds());
         i.putExtra(DefectActivity.DEFECT, defect);
         startActivity(i);
     }

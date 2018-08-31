@@ -82,12 +82,12 @@ public class DefectActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         if (i.hasExtra(DELIVERY)){
-            Delivery delivery = (Delivery) i.getSerializableExtra(DELIVERY);
+            String[] deliveryIds = i.getExtras().getStringArray(DELIVERY);
             if(i.hasExtra(DEFECT)){
                 Defect defect = (Defect) i.getSerializableExtra(DEFECT);
-                model.start(delivery, defect);
+                model.start(deliveryIds, defect);
             }else{
-                model.start(delivery);
+                model.start(deliveryIds);
             }
         }
 

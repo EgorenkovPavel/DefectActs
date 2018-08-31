@@ -7,6 +7,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.network.DefectServer;
 
 public interface DataSource {
 
@@ -26,12 +27,12 @@ public interface DataSource {
     }
 
     interface LoadDefectsCallback{
-        void onDefectsLoaded(List<Defect> defects);
+        void onDefectsLoaded(List<DefectServer> defects);
         void onDefectsLoadFailed();
     }
 
     interface LoadDefectCallback{
-        void onDefectLoaded(Defect defect);
+        void onDefectLoaded(DefectServer defect);
         void onDefectLoadFailed();
     }
 
