@@ -7,6 +7,7 @@ import android.util.Log;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ClearDatabaseCallback;
+import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.SaveReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
@@ -171,6 +172,16 @@ public class LocalDataSource {
                 mDb.defectReasonDao().deleteReasons(defectServer.getId());
                 if (list.isEmpty()) return;
                 mDb.defectReasonDao().insertReasons(list);
+            }
+        });
+    }
+
+    public void getDefect(final String defectId, final LoadDefectCallback callback) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                DefectWithReasons defect = mDb.defectDao().loadDefect(defectId);
+                callback.onDefectLoaded(defect);
             }
         });
     }

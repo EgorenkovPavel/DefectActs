@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
+import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
@@ -118,6 +119,10 @@ public class Repository {
     }
 
     // DEFECT
+    public void getDefect(String defectId, LoadDefectCallback callback){
+        mLocalDataSource.getDefect(defectId, callback);
+    }
+
     public void saveDefect(DefectWithReasons defect, final List<String> photoPaths){
 
         mNetworkDataSource.saveDefectWithReasons(defect, new DataSource.UploadDefectCallback() {
@@ -166,8 +171,8 @@ public class Repository {
         }
     }
 
-    public void getDefectReasons(String[] deliveryIds, final Defect defect, final LoadReasonsCallback callback) {
-        mLocalDataSource.getDefectReasons(defect.getId(), callback);
+    public void getDefectReasons(String defectId, final LoadReasonsCallback callback) {
+        mLocalDataSource.getDefectReasons(defectId, callback);
     }
 
     private void refreshDataAfterSaving(DefectWithReasons defect){
@@ -183,7 +188,7 @@ public class Repository {
             }
         });
 
-        mNetworkDataSource.loadDefectWithReasons(defect.getDeliveryId(), defect.getId(), new DataSource.LoadDefectCallback() {
+        mNetworkDataSource.loadDefectWithReasons(defect.getDeliveryId(), defect.getId(), new LoadDefectCallback() {
             @Override
             public void onDefectLoaded(DefectWithReasons defect) {
                 mLocalDataSource.saveDefectServer(defect);

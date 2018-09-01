@@ -19,7 +19,7 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
     private OnDefectClickListener listener;
 
     public interface OnDefectClickListener{
-        void onDefectClick(Defect defect);
+        void onDefectClick(DefectWithReasons defect);
     }
 
     @NonNull
@@ -35,7 +35,7 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
         DefectWithReasons defect = mDefects.get(position);
 
         holder.tvSeries.setText(defect.getSeries());
-        holder.tvGood.setText(defect.getGoodTitle());
+        holder.tvGood.setText(defect.getTitle());
         holder.tvSuplier.setText(defect.getSuplier());
         holder.tvCountry.setText(defect.getCountry());
         holder.tvQuantity.setText(String.valueOf(defect.getQuantity()));
@@ -81,7 +81,7 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
 
         @Override
         public void onClick(View view) {
-            listener.onDefectClick(new Defect(mDefects.get(getAdapterPosition())));
+            listener.onDefectClick(mDefects.get(getAdapterPosition()));
         }
     }
 

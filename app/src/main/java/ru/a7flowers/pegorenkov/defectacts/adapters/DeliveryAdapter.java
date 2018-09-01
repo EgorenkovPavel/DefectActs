@@ -76,6 +76,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
 
         @Override
         public void onClick(View view) {
+            if (!view.equals(cbSelected))
             cbSelected.setChecked(!cbSelected.isChecked());
 
             Delivery delivery = items.get(getAdapterPosition());

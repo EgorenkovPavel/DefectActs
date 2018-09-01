@@ -79,10 +79,10 @@ public class DeliveryActivity extends AppCompatActivity implements DefectsAdapte
     }
 
     @Override
-    public void onDefectClick(Defect defect) {
+    public void onDefectClick(DefectWithReasons defect) {
         Intent i = new Intent(this, DefectActivity.class);
         i.putExtra(DefectActivity.DELIVERY, model.getDeliveryIds());
-        i.putExtra(DefectActivity.DEFECT, defect);
+        i.putExtra(DefectActivity.DEFECT, defect.getId());
         startActivity(i);
     }
 }

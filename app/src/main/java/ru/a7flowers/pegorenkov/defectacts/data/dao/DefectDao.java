@@ -17,12 +17,9 @@ public interface DefectDao {
 
     @Transaction
     @Query("SELECT defects.*, " +
-            "goods.series as good_series, "
-            + "goods.good as good_good, "
-            + "goods.suplier as good_suplier, "
-            + "goods.country as good_country, "
-            + "goods.deliveryId as good_deliveryId, "
-            + "goods.deliveryQuantity as good_deliveryQuantity " +
+            "goods.good as title, " +
+            "goods.suplier as suplier, " +
+            "goods.country as country " +
             "FROM defects as defects " +
             "INNER JOIN goods as goods " +
             "ON defects.series = goods.series " +
@@ -32,12 +29,21 @@ public interface DefectDao {
 
     @Transaction
     @Query("SELECT defects.*, " +
-            "goods.series as good_series, "
-            + "goods.good as good_good, "
-            + "goods.suplier as good_suplier, "
-            + "goods.country as good_country, "
-            + "goods.deliveryId as good_deliveryId, "
-            + "goods.deliveryQuantity as good_deliveryQuantity " +
+            "goods.good as title, " +
+            "goods.suplier as suplier, " +
+            "goods.country as country " +
+            "FROM defects as defects " +
+            "INNER JOIN goods as goods " +
+            "ON defects.series = goods.series " +
+            "AND defects.deliveryId = goods.deliveryId " +
+            "WHERE defects.id = :defectId")
+    DefectWithReasons loadDefect(String defectId);
+
+    @Transaction
+    @Query("SELECT defects.*, " +
+            "goods.good as title, " +
+            "goods.suplier as suplier, " +
+            "goods.country as country " +
             "FROM defects as defects " +
             "INNER JOIN goods as goods " +
             "ON defects.series = goods.series " +

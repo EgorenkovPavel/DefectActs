@@ -42,6 +42,7 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
+import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DefectViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
@@ -84,8 +85,8 @@ public class DefectActivity extends AppCompatActivity {
         if (i.hasExtra(DELIVERY)){
             String[] deliveryIds = i.getExtras().getStringArray(DELIVERY);
             if(i.hasExtra(DEFECT)){
-                Defect defect = (Defect) i.getSerializableExtra(DEFECT);
-                model.start(deliveryIds, defect);
+                String defectId = i.getStringExtra(DEFECT);
+                model.start(deliveryIds, defectId);
             }else{
                 model.start(deliveryIds);
             }

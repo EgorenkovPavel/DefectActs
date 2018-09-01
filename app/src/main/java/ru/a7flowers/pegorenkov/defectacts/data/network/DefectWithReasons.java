@@ -6,6 +6,7 @@ import android.arch.persistence.room.Relation;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +15,37 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
-public class DefectWithReasons {
+public class DefectWithReasons{
 
-    @Embedded
-    private Defect mDefect;
+//    @Embedded
+//    private Defect mDefect;
 
-    @Embedded(prefix = "good_")
-    transient private Good mGood; //ignore in retrofit
+    @SerializedName("id")
+    private String id;
+
+    @SerializedName("series")
+    private String series;
+
+    @SerializedName("comment")
+    private String comment = "";
+
+    @SerializedName("quantity")
+    private int quantity;
+
+    @SerializedName("photoQuantity")
+    private int photoQuantity;
+
+    @SerializedName("deliveryId")
+    private String deliveryId;
+
+    @SerializedName("title")
+    private String title;
+
+    @SerializedName("suplier")
+    private String suplier;
+
+    @SerializedName("country")
+    private String country;
 
     @SerializedName("reasons")
     @Relation(parentColumn = "id", entityColumn = "defectId", entity = DefectReason.class)
@@ -31,7 +56,9 @@ public class DefectWithReasons {
 
     @Ignore
     public DefectWithReasons(Defect defect, List<Reason> reasons) {
-        mDefect = defect;
+//        mDefect = defect;
+        setDefect(defect);
+
         mReasons = new ArrayList<>();
         for (Reason reason:reasons) {
             mReasons.add(new DefectReason(defect.getId(), reason.getId()));
@@ -47,58 +74,87 @@ public class DefectWithReasons {
     }
 
     public Defect getDefect() {
-        return mDefect;
+        return new Defect(id, series, quantity, photoQuantity, deliveryId, comment);
     }
 
     public void setDefect(Defect defect) {
-        mDefect = defect;
+        this.id = defect.getId();
+        this.deliveryId = defect.getDeliveryId();
+        this.series = defect.getSeries();
+        this.comment = defect.getComment();
+        this.quantity = defect.getQuantity();
+        this.photoQuantity = defect.getPhotoQuantity();
     }
 
     public String getId() {
-        return mDefect.getId();
+        return id;
     }
 
     public String getDeliveryId() {
-        return mDefect.getDeliveryId();
+        return deliveryId;
     }
 
     public int getPhotoQuantity() {
-        return mDefect.getPhotoQuantity();
+        return photoQuantity;
     }
 
     public String getSeries() {
-        return mDefect.getSeries();
+        return series;
     }
 
     public int getQuantity() {
-        return mDefect.getQuantity();
+        return quantity;
     }
 
     public String getComment() {
-        return mDefect.getComment();
-    }
-
-    public Good getGood() {
-        return mGood;
-    }
-
-    public void setGood(Good good) {
-        mGood = good;
+        return comment;
     }
 
     public void setId(String id) {
-        mDefect.setId(id);
+        this.id = id;
     }
 
-    public String getGoodTitle() {
-        return mGood.getGood();
+    public void setSeries(String series) {
+        this.series = series;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPhotoQuantity(int photoQuantity) {
+        this.photoQuantity = photoQuantity;
+    }
+
+    public void setDeliveryId(String deliveryId) {
+        this.deliveryId = deliveryId;
     }
 
     public String getSuplier() {
-        return mGood.getSuplier();
+        return suplier;
     }
 
     public String getCountry() {
-        return mGood.getCountry();
+        return country;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setSuplier(String suplier) {
+        this.suplier = suplier;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

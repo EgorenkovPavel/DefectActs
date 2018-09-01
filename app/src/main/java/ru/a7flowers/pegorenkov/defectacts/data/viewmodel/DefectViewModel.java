@@ -27,6 +27,9 @@ public class DefectViewModel extends AndroidViewModel{
     // For defect
     private String mDefectId;
     private String mDefectDeliveryId;
+    private MutableLiveData<String> mDefectTitle = new MutableLiveData<>();
+    private MutableLiveData<String> mDefectSuplier = new MutableLiveData<>();
+    private MutableLiveData<String> mDefectCountry = new MutableLiveData<>();
     private MutableLiveData<Integer> mDefectAmount = new MutableLiveData<>();
     private MutableLiveData<String> mDefectComment = new MutableLiveData<>();
     private MutableLiveData<String> mDefectSeries = new MutableLiveData<>();
@@ -44,6 +47,9 @@ public class DefectViewModel extends AndroidViewModel{
 
     private void init(){
         mDefectId = "";
+        mDefectTitle.postValue("");
+        mDefectSuplier.postValue("");
+        mDefectCountry.postValue("");
         mDefectComment.postValue("");
         mDefectAmount.postValue(0);
         mDefectSeries.postValue("");
@@ -54,15 +60,29 @@ public class DefectViewModel extends AndroidViewModel{
         loadDelivery(deliveryIds);
     }
 
-    public void start(String[] deliveryIds, Defect defect){
+    public void start(String[] deliveryIds, String defectId){
         loadDelivery(deliveryIds);
 
-        mDefectId = defect.getId();
-        mDefectDeliveryId = defect.getDeliveryId();
-        mDefectComment.postValue(defect.getComment());
-        mDefectAmount.postValue(defect.getQuantity());
+        mDefectId = defectId;
 
-        mRepository.getDefectReasons(mDeliveryIds, defect, new DataSource.LoadReasonsCallback() {
+        mRepository.getDefect(defectId, new DataSource.LoadDefectCallback() {
+            @Override
+            public void onDefectLoaded(DefectWithReasons defect) {
+                mDefectTitle.postValue(defect.getTitle());
+                mDefectSuplier.postValue(defect.getSuplier());
+                mDefectCountry.postValue(defect.getCountry());
+                mDefectDeliveryId = defect.getDeliveryId();
+                mDefectComment.postValue(defect.getComment());
+                mDefectAmount.postValue(defect.getQuantity());
+            }
+
+            @Override
+            public void onDefectLoadFailed() {
+
+            }
+        });
+
+        mRepository.getDefectReasons(defectId, new DataSource.LoadReasonsCallback() {
             @Override
             public void onReasonsLoaded(List<Reason> reasons) {
                 if(reasons != null)
