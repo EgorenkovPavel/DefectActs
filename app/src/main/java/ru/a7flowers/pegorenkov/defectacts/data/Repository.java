@@ -4,15 +4,12 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectServer;
-import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
+import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 
 public class Repository {
 
@@ -121,12 +118,12 @@ public class Repository {
     }
 
     // DEFECT
-    public void saveDefect(Defect defect, List<Reason> reasons, final List<String> photoPaths){
+    public void saveDefect(DefectWithReasons defect, final List<String> photoPaths){
 
-        mNetworkDataSource.saveDefect(defect, reasons, new DataSource.UploadDefectCallback() {
+        mNetworkDataSource.saveDefectWithReasons(defect, new DataSource.UploadDefectCallback() {
             @Override
-            public void onDefectUploaded(final Defect defect) {
-                mNetworkDataSource.savePhotos(defect, photoPaths, new DataSource.UploadPhotosCallback() {
+            public void onDefectUploaded(final DefectWithReasons defect) {
+                mNetworkDataSource.savePhotos(defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
                     @Override
                     public void onPhotosUploaded() {
                         refreshDataAfterSaving(defect);
@@ -146,7 +143,7 @@ public class Repository {
         });
     }
 
-    public LiveData<List<DefectGood>> getDefectGoods(String[] deliveryIds) {
+    public LiveData<List<DefectWithReasons>> getDefectGoods(String[] deliveryIds) {
         loadGoodsFromNetwork(deliveryIds);
         loadDefectsFromNetwork(deliveryIds);
         return mLocalDataSource.getDefectGoods(deliveryIds);
@@ -155,9 +152,9 @@ public class Repository {
     private void loadDefectsFromNetwork(String[] deliveryIds){
         for (int i = 0; i<deliveryIds.length; i++) {
             String deliveryId = deliveryIds[i];
-            mNetworkDataSource.loadDefects(deliveryId, new DataSource.LoadDefectsCallback() {
+            mNetworkDataSource.loadDefectsWithReasons(deliveryId, new DataSource.LoadDefectsCallback() {
                 @Override
-                public void onDefectsLoaded(List<DefectServer> defects) {
+                public void onDefectsLoaded(List<DefectWithReasons> defects) {
                     mLocalDataSource.saveDefectsServer(defects);
                 }
 
@@ -170,30 +167,10 @@ public class Repository {
     }
 
     public void getDefectReasons(String[] deliveryIds, final Defect defect, final LoadReasonsCallback callback) {
-        mNetworkDataSource.loadDefectReasons(deliveryIds, defect, new LoadDefectReasonsCallback() {
-            @Override
-            public void onDefectReasonsLoaded(List<DefectReason> reasons) {
-                mLocalDataSource.saveDefectReasons(defect.getId(), reasons, new DataSource.SaveReasonsCallback() {
-                    @Override
-                    public void onReasonsSaved() {
-                        mLocalDataSource.getDefectReasons(defect.getId(), callback);
-                    }
-
-                    @Override
-                    public void onReasonsSavingFailed() {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onDefectReasonsLoadFailed() {
-
-            }
-        });
+        mLocalDataSource.getDefectReasons(defect.getId(), callback);
     }
 
-    private void refreshDataAfterSaving(Defect defect){
+    private void refreshDataAfterSaving(DefectWithReasons defect){
         mNetworkDataSource.loadDelivery(defect.getDeliveryId(), new DataSource.LoadDeliveryCallback() {
             @Override
             public void onDeliveryLoaded(Delivery delivery) {
@@ -206,9 +183,9 @@ public class Repository {
             }
         });
 
-        mNetworkDataSource.loadDefect(defect.getDeliveryId(), defect.getId(), new DataSource.LoadDefectCallback() {
+        mNetworkDataSource.loadDefectWithReasons(defect.getDeliveryId(), defect.getId(), new DataSource.LoadDefectCallback() {
             @Override
-            public void onDefectLoaded(DefectServer defect) {
+            public void onDefectLoaded(DefectWithReasons defect) {
                 mLocalDataSource.saveDefectServer(defect);
             }
 

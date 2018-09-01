@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ClearDatabaseCallback;
@@ -15,8 +14,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectServer;
-import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
+import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 
 public class LocalDataSource {
 
@@ -77,7 +75,7 @@ public class LocalDataSource {
         return mDb.goodDao().loadGoods(deliveryIds);
     }
 
-    public LiveData<List<DefectGood>> getDefectGoods(String[] deliveryIds) {
+    public LiveData<List<DefectWithReasons>> getDefectGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery defects");
         return mDb.defectDao().loadDefects(deliveryIds);
     }
@@ -156,23 +154,20 @@ public class LocalDataSource {
         });
     }
 
-    public void saveDefectsServer(final List<DefectServer> defects) {
-        for (DefectServer defectServer:defects) {
+    public void saveDefectsServer(final List<DefectWithReasons> defects) {
+        for (DefectWithReasons defectServer:defects) {
             saveDefectServer(defectServer);
         };
     }
 
-    public void saveDefectServer(final DefectServer defectServer) {
+    public void saveDefectServer(final DefectWithReasons defectServer) {
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
                 Defect defect = new Defect(defectServer);
                 mDb.defectDao().insertDefect(defect);
 
-                List<DefectReason> list = new ArrayList<>();
-                for (Reason reason : defectServer.getReasons()) {
-                    list.add(new DefectReason(defect.getId(), reason.getId()));
-                }
+                List<DefectReason> list = defectServer.getReasons();
                 mDb.defectReasonDao().deleteReasons(defectServer.getId());
                 if (list.isEmpty()) return;
                 mDb.defectReasonDao().insertReasons(list);

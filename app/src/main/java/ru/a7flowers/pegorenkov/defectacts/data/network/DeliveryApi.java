@@ -29,16 +29,16 @@ public interface DeliveryApi {
     Call<List<Good>> getGoods(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/defects")
-    Call<List<DefectServer>> getDefects(@Path("deliveryId") String deliveryId);
+    Call<List<DefectWithReasons>> getDefects(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/defects/{defectId}")
-    Call<DefectServer> getDefect(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
+    Call<DefectWithReasons> getDefect(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
 
 //    @GET("deliveries/{deliveryId}/defects/{defectId}/reasons")
 //    Call<List<DefectReason>> getDefectReasons(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
 
     @POST("deliveries/{deliveryId}/defects")
-    Call<String> setDefect(@Path("deliveryId") String deliveryId, @Body DefectServer defect);
+    Call<String> setDefect(@Path("deliveryId") String deliveryId, @Body DefectWithReasons defect);
 
     @POST("deliveries/{deliveryId}/defects/{defectId}/photo")
     Call<Boolean> setPhoto(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId, @Body RequestBody photo);

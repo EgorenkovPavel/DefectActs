@@ -11,11 +11,11 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
-import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
+import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 
 public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHolder> {
 
-    private List<DefectGood> mDefects;
+    private List<DefectWithReasons> mDefects;
     private OnDefectClickListener listener;
 
     public interface OnDefectClickListener{
@@ -32,10 +32,10 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
     @Override
     public void onBindViewHolder(@NonNull DefectHolder holder, int position) {
 
-        DefectGood defect = mDefects.get(position);
+        DefectWithReasons defect = mDefects.get(position);
 
         holder.tvSeries.setText(defect.getSeries());
-        holder.tvGood.setText(defect.getGood());
+        holder.tvGood.setText(defect.getGoodTitle());
         holder.tvSuplier.setText(defect.getSuplier());
         holder.tvCountry.setText(defect.getCountry());
         holder.tvQuantity.setText(String.valueOf(defect.getQuantity()));
@@ -48,7 +48,7 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
         return mDefects == null ? 0 : mDefects.size();
     }
 
-    public void setItems(List<DefectGood> defects){
+    public void setItems(List<DefectWithReasons> defects){
         mDefects = defects;
         notifyDataSetChanged();
     }

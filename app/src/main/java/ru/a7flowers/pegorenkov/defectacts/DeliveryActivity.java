@@ -17,9 +17,9 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.DefectsAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveryViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
-import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 
 public class DeliveryActivity extends AppCompatActivity implements DefectsAdapter.OnDefectClickListener {
 
@@ -69,9 +69,9 @@ public class DeliveryActivity extends AppCompatActivity implements DefectsAdapte
 
         rvDefects.setAdapter(adapter);
 
-        model.getDefects().observe(this, new Observer<List<DefectGood>>() {
+        model.getDefects().observe(this, new Observer<List<DefectWithReasons>>() {
             @Override
-            public void onChanged(@Nullable List<DefectGood> defects) {
+            public void onChanged(@Nullable List<DefectWithReasons> defects) {
                 adapter.setItems(defects);
             }
         });
