@@ -12,6 +12,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+import ru.a7flowers.pegorenkov.defectacts.data.network.DefectServer;
 import ru.a7flowers.pegorenkov.defectacts.objects.DefectGood;
 
 @Entity(tableName = "defects",
@@ -56,6 +57,26 @@ public class Defect implements Serializable{
     @Ignore
     public Defect(){}
 
+    @Ignore
+    public Defect(DefectGood defectGood) {
+        this.id = defectGood.getId();
+        this.series = defectGood.getSeries();
+        this.quantity = defectGood.getQuantity();
+        this.photoQuantity = defectGood.getPhotoQuantity();
+        this.deliveryId = defectGood.getDeliveryId();
+        this.comment = defectGood.getComment();
+    }
+
+    @Ignore
+    public Defect(DefectServer defectServer) {
+        this.id = defectServer.getId();
+        this.series = defectServer.getSeries();
+        this.quantity = defectServer.getQuantity();
+        this.photoQuantity = defectServer.getPhotoQuantity();
+        this.deliveryId = defectServer.getDeliveryId();
+        this.comment = defectServer.getComment();
+    }
+
     public String getComment() {
         return comment;
     }
@@ -90,16 +111,6 @@ public class Defect implements Serializable{
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    @Ignore
-    public Defect(DefectGood defectGood) {
-        this.id = defectGood.getId();
-        this.series = defectGood.getSeries();
-        this.quantity = defectGood.getQuantity();
-        this.photoQuantity = defectGood.getPhotoQuantity();
-        this.deliveryId = defectGood.getDeliveryId();
-        this.comment = defectGood.getComment();
     }
 
     public void setDeliveryId(String deliveryId) {

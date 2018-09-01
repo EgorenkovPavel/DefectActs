@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ClearDatabaseCallback;
@@ -155,11 +156,27 @@ public class LocalDataSource {
         });
     }
 
-    public void saveDefectsServer(List<DefectServer> defects) {
-        //TODO
+    public void saveDefectsServer(final List<DefectServer> defects) {
+        for (DefectServer defectServer:defects) {
+            saveDefectServer(defectServer);
+        };
     }
 
-    public void saveDefectServer(DefectServer defect) {
-        //TODO
+    public void saveDefectServer(final DefectServer defectServer) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Defect defect = new Defect(defectServer);
+                mDb.defectDao().insertDefect(defect);
+
+                List<DefectReason> list = new ArrayList<>();
+                for (Reason reason : defectServer.getReasons()) {
+                    list.add(new DefectReason(defect.getId(), reason.getId()));
+                }
+                mDb.defectReasonDao().deleteReasons(defectServer.getId());
+                if (list.isEmpty()) return;
+                mDb.defectReasonDao().insertReasons(list);
+            }
+        });
     }
 }
