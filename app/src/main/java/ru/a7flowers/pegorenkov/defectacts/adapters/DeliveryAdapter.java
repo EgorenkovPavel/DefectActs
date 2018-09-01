@@ -9,21 +9,20 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
+import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveriesViewModel;
 
 public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.DeliveryHolder>{
 
+    private DeliveriesViewModel mViewModel;
     private List<Delivery> items;
-    private List<Delivery> selectedItems;
-    private OnDeliveryClickListener listener;
 
-    public interface OnDeliveryClickListener{
-        void onDeliveryClick(Delivery delivery);
+    public void setViewModel(DeliveriesViewModel viewModel) {
+        mViewModel = viewModel;
     }
 
     @NonNull
@@ -43,7 +42,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
         viewHolder.tvNumber.setText(delivery.getNumber());
         viewHolder.tvDate.setText(String.format(Locale.getDefault(), "%tD", delivery.getDate()));
         viewHolder.ivActExist.setVisibility(delivery.isActExist() ? View.VISIBLE : View.INVISIBLE);
-        viewHolder.cbSelected.setChecked(selectedItems != null && selectedItems.contains(delivery));
+        viewHolder.cbSelected.setChecked(mViewModel.isDeliverySelected(delivery));
     }
 
     @Override
@@ -54,15 +53,6 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
     public void setItems(List<Delivery> deliveries){
         items = deliveries;
         notifyDataSetChanged();
-    }
-
-    public void setSelectedItems(List<Delivery> selectedItems) {
-        this.selectedItems = new ArrayList<>(selectedItems);
-        notifyDataSetChanged();
-    }
-
-    public void setOnItemClickListener(OnDeliveryClickListener listener){
-        this.listener = listener;
     }
 
     class DeliveryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -86,7 +76,14 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
 
         @Override
         public void onClick(View view) {
-            listener.onDeliveryClick(items.get(getAdapterPosition()));
+            cbSelected.setChecked(!cbSelected.isChecked());
+
+            Delivery delivery = items.get(getAdapterPosition());
+            if(cbSelected.isChecked()){
+                mViewModel.addSelectedDelivery(delivery);
+            }else{
+                mViewModel.removeSelectedDelivery(delivery);
+            }
         }
     }
 

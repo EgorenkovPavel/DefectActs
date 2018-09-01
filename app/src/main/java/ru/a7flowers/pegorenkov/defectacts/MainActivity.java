@@ -13,18 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.DeliveryAdapter;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveriesViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 
-public class MainActivity extends AppCompatActivity implements DeliveryAdapter.OnDeliveryClickListener{
-
-    private ArrayList<Delivery> items = new ArrayList<>();
+public class MainActivity extends AppCompatActivity{
 
     @SuppressWarnings("FieldCanBeLocal")
     private DeliveriesViewModel model;
@@ -37,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements DeliveryAdapter.O
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DeliveriesViewModel.class);
+
         RecyclerView rvDeliveries = findViewById(R.id.rvDeliveries);
         rvDeliveries.setHasFixedSize(true);
 
@@ -47,23 +45,14 @@ public class MainActivity extends AppCompatActivity implements DeliveryAdapter.O
         rvDeliveries.addItemDecoration(itemDecor);
 
         final DeliveryAdapter adapter = new DeliveryAdapter();
-        adapter.setOnItemClickListener(this);
+        adapter.setViewModel(model);
 
         rvDeliveries.setAdapter(adapter);
-
-        model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DeliveriesViewModel.class);
 
         model.getDeliveries().observe(this, new Observer<List<Delivery>>() {
             @Override
             public void onChanged(@Nullable List<Delivery> deliveries) {
                 adapter.setItems(deliveries);
-            }
-        });
-
-        model.getSelectedDeliveries().observe(this, new Observer<List<Delivery>>() {
-            @Override
-            public void onChanged(@Nullable List<Delivery> deliveries) {
-                adapter.setSelectedItems(deliveries);
             }
         });
     }
@@ -86,28 +75,14 @@ public class MainActivity extends AppCompatActivity implements DeliveryAdapter.O
         }
     }
 
-    @Override
-    public void onDeliveryClick(Delivery delivery) {
-        model.onDeliverySelected(delivery);
-    }
-
     private void openDeliveryActivity(){
 
-        List<Delivery> list = model.getSelectedDeliveries().getValue();
-
-        if(list == null || list.isEmpty()) {
-            return;
-        }
-
-        String[] deliveriesIds = new String[list.size()];
-        for (int i = 0; i<list.size(); i++) {
-            deliveriesIds[i] = list.get(i).getId();
-        }
+        String[] deliveriesIds = model.getSelectedDeliveryIds();
+        if(deliveriesIds.length == 0) return;
 
         Intent i = new Intent(this, DeliveryActivity.class);
         i.putExtra(DeliveryActivity.DELIVERY, deliveriesIds);
         startActivity(i);
-
     }
 
 }
