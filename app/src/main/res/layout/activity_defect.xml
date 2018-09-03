@@ -22,29 +22,19 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <Spinner
-        android:id="@+id/sGoods"
-        android:layout_width="0dp"
-        android:layout_height="88dp"
-        android:background="@drawable/frame"
-        android:spinnerMode="dialog"
-        app:layout_constraintEnd_toEndOf="@+id/lblGood"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/lblGood"
-        app:layout_constraintTop_toBottomOf="@+id/lblGood"
-        app:layout_constraintVertical_chainStyle="spread" />
-
     <TextView
         android:id="@+id/lblReasons"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="21dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/reasons"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        app:layout_constraintEnd_toEndOf="@+id/sGoods"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/sGoods"
-        app:layout_constraintTop_toBottomOf="@+id/sGoods" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCountry" />
 
     <TextView
         android:id="@+id/lblComment"
@@ -154,13 +144,14 @@
         app:srcCompat="@drawable/barcode_scan" />
 
     <TextView
-        android:id="@+id/lblGood"
+        android:id="@+id/lblSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/good"
+        android:labelFor="@id/acSearch"
+        android:text="@string/search"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -205,10 +196,98 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         app:layout_constraintBottom_toTopOf="@+id/etAmount"
         app:layout_constraintEnd_toEndOf="@+id/lblReasons"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/lblReasons"
         app:layout_constraintTop_toBottomOf="@+id/lblReasons"
         app:layout_constraintVertical_bias="0.155"
         tools:text="Reasons" />
+
+    <AutoCompleteTextView
+        android:id="@+id/acSearch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/frame"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/lblSearch"
+        app:layout_constraintStart_toStartOf="@+id/lblSearch"
+        app:layout_constraintTop_toBottomOf="@+id/lblSearch" />
+
+    <TextView
+        android:id="@+id/lblSeries"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/series"
+        app:layout_constraintStart_toStartOf="@+id/acSearch"
+        app:layout_constraintTop_toBottomOf="@+id/acSearch" />
+
+    <TextView
+        android:id="@+id/lblTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        app:layout_constraintStart_toStartOf="@+id/lblSeries"
+        app:layout_constraintTop_toBottomOf="@+id/lblSeries" />
+
+    <TextView
+        android:id="@+id/lblSuplier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/suplier"
+        app:layout_constraintStart_toStartOf="@+id/lblTitle"
+        app:layout_constraintTop_toBottomOf="@+id/lblTitle" />
+
+    <TextView
+        android:id="@+id/lblCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/country"
+        app:layout_constraintStart_toStartOf="@+id/lblSuplier"
+        app:layout_constraintTop_toBottomOf="@+id/lblSuplier" />
+
+    <TextView
+        android:id="@+id/tvSeries"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/lblSeries"
+        app:layout_constraintStart_toEndOf="@+id/barrier2"
+        app:layout_constraintTop_toTopOf="@+id/lblSeries"
+        tools:text="55000012513123" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/lblTitle"
+        app:layout_constraintStart_toStartOf="@+id/tvSeries"
+        app:layout_constraintTop_toTopOf="@+id/lblTitle"
+        tools:text="Rose L-60" />
+
+    <TextView
+        android:id="@+id/tvSuplier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/lblSuplier"
+        app:layout_constraintStart_toStartOf="@+id/tvTitle"
+        app:layout_constraintTop_toTopOf="@+id/lblSuplier"
+        tools:text="OZ" />
+
+    <TextView
+        android:id="@+id/tvCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/lblCountry"
+        app:layout_constraintStart_toStartOf="@+id/tvSuplier"
+        app:layout_constraintTop_toTopOf="@+id/lblCountry"
+        tools:text="Belgium" />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="lblCountry,lblTitle,lblSuplier,lblSeries"
+        tools:layout_editor_absoluteX="360dp" />
 
 </android.support.constraint.ConstraintLayout>

@@ -17,4 +17,10 @@
     <string name="delivery">Доставка</string>
     <string name="defect">Дефект</string>
     <string name="actExist">Акт введен</string>
+    <string name="no_camera_permission">Нет разрешения на доступ к камере. Приложение не запустится</string>
+    <string name="search">Поиск</string>
+    <string name="series">Серия</string>
+    <string name="title">Название</string>
+    <string name="suplier">Поставщик</string>
+    <string name="country">Страна</string>
 </resources>

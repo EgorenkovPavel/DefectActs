@@ -17,4 +17,9 @@
     <string name="delivery">Delivery</string>
     <string name="defect">Defect</string>
     <string name="actExist">Act exist</string>
+    <string name="search">Search</string>
+    <string name="series">Series</string>
+    <string name="title">Title</string>
+    <string name="suplier">Suplier</string>
+    <string name="country">Country</string>
 </resources>

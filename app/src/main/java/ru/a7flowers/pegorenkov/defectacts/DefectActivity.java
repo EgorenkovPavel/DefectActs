@@ -26,7 +26,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -63,10 +65,14 @@ public class DefectActivity extends AppCompatActivity {
 
     private GoodsAdapter adapter;
 
-    private Spinner sGoods;
     private EditText etAmount;
     private TextView tvReasons;
     private EditText etComment;
+    private TextView tvSeries;
+    private TextView tvTitle;
+    private TextView tvSuplier;
+    private TextView tvCountry;
+    private AutoCompleteTextView acSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,19 +98,14 @@ public class DefectActivity extends AppCompatActivity {
             }
         }
 
-        adapter = new GoodsAdapter(this);
-        sGoods.setAdapter(adapter);
-
         model.getGoods().observe(this, new Observer<List<Good>>() {
             @Override
             public void onChanged(@Nullable List<Good> goods) {
                 adapter.clear();
-                if(goods != null) {
-                    adapter.addAll(goods);
-                    setCurrentSeries(model.getCurrentSeries());
-                }
+                if (goods != null) adapter.setItems(goods);
             }
         });
+
         model.getDefectAmount().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer value) {
@@ -128,7 +129,25 @@ public class DefectActivity extends AppCompatActivity {
         model.getDefectSeries().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String series) {
-                setCurrentSeries(series);
+                tvSeries.setText(series);
+            }
+        });
+        model.getDefectTitle().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                tvTitle.setText(s);
+            }
+        });
+        model.getDefectSuplier().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                tvSuplier.setText(s);
+            }
+        });
+        model.getDefectCountry().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                tvCountry.setText(s);
             }
         });
         model.getDefectReasons().observe(this, new Observer<List<Reason>>() {
@@ -149,7 +168,12 @@ public class DefectActivity extends AppCompatActivity {
     }
 
     private void findViews() {
-        sGoods = findViewById(R.id.sGoods);
+
+        acSearch = findViewById(R.id.acSearch);
+        tvSeries = findViewById(R.id.tvSeries);
+        tvTitle = findViewById(R.id.tvTitle);
+        tvSuplier = findViewById(R.id.tvSuplier);
+        tvCountry = findViewById(R.id.tvCountry);
         tvReasons = findViewById(R.id.tvReasons);
         etAmount = findViewById(R.id.etAmount);
         etComment = findViewById(R.id.etComment);
@@ -159,16 +183,15 @@ public class DefectActivity extends AppCompatActivity {
         ImageButton ibNext = findViewById(R.id.ibNext);
         ImageButton ibBarcode = findViewById(R.id.ibBarcode);
 
-        sGoods.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        acSearch.setThreshold(3);
+        adapter = new GoodsAdapter(this);
+        acSearch.setAdapter(adapter);
+
+        acSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Good good = (Good) adapterView.getAdapter().getItem(i);
                 model.setGood(good);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
@@ -233,6 +256,7 @@ public class DefectActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 model.saveDefect();
+                acSearch.setText("");
             }
         });
 
@@ -311,19 +335,6 @@ public class DefectActivity extends AppCompatActivity {
         startActivityForResult(i, SELECT_REASON);
     }
 
-    private void setCurrentSeries(String series){
-        for (int i = 0; i<adapter.getCount(); i++){
-            Good good = adapter.getItem(i);
-            if(good.getSeries().equals(series)){
-                sGoods.setSelection(i);
-                return;
-            }
-        }
-
-        if (!series.isEmpty())
-        Toast.makeText(this, "Barcode " + series + " not found", Toast.LENGTH_LONG).show();
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -368,7 +379,8 @@ public class DefectActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if (intent != null) {
                     String barcode = intent.getStringExtra(BarcodeScannerActivity.BARCODE);
-                    model.setSeries(barcode);
+                    model.setBarcode(barcode);
+                    acSearch.setText(barcode);
                     Toast.makeText(this, barcode, Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, R.string.barcode_failure, Toast.LENGTH_LONG).show();
@@ -383,6 +395,42 @@ public class DefectActivity extends AppCompatActivity {
     }
 
     class GoodsAdapter extends ArrayAdapter<Good>{
+
+        private List<Good> goods;
+        private List<Good> suggestions = new ArrayList<>();
+        Filter goodsFilter = new Filter() {
+            @Override
+            public CharSequence convertResultToString(Object resultValue) {
+                return ((Good)resultValue).getSeries();
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                if(constraint != null) {
+                    suggestions.clear();
+                    for (Good good:goods){
+                        if (good.getSeries().startsWith(constraint.toString())){
+                            suggestions.add(good);
+                        }
+                    }
+
+                    FilterResults filterResults = new FilterResults();
+                    filterResults.values = suggestions;
+                    filterResults.count = suggestions.size();
+                    return filterResults;
+                } else {
+                    return new FilterResults();
+                }
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                if((filterResults == null) || (filterResults.count == 0)) return;
+                ArrayList<Good> filteredList = (ArrayList<Good>)filterResults.values;
+                clear();
+                addAll(filteredList);
+            }
+        };
 
         public GoodsAdapter(@NonNull Context context) {
             super(context, R.layout.item_good);
@@ -416,6 +464,16 @@ public class DefectActivity extends AppCompatActivity {
             tvAmount.setText(String.valueOf(good.getDeliveryQuantity()));
 
             return v;
+        }
+
+        @NonNull
+        @Override
+        public Filter getFilter() {
+            return goodsFilter;
+        }
+
+        public void setItems(List<Good> items) {
+            goods = items;
         }
     }
 }

@@ -54,13 +54,14 @@ public class DefectViewModel extends AndroidViewModel{
         mDefectAmount.postValue(0);
         mDefectSeries.postValue("");
         mDefectReasons.postValue(new ArrayList<Reason>());
+        photoPaths = new ArrayList<>();
     }
 
     public void start(String[] deliveryIds){
         loadDelivery(deliveryIds);
     }
 
-    public void start(String[] deliveryIds, String defectId){
+    public void start(String[] deliveryIds, final String defectId){
         loadDelivery(deliveryIds);
 
         mDefectId = defectId;
@@ -68,6 +69,7 @@ public class DefectViewModel extends AndroidViewModel{
         mRepository.getDefect(defectId, new DataSource.LoadDefectCallback() {
             @Override
             public void onDefectLoaded(DefectWithReasons defect) {
+                mDefectSeries.postValue(defect.getSeries());
                 mDefectTitle.postValue(defect.getTitle());
                 mDefectSuplier.postValue(defect.getSuplier());
                 mDefectCountry.postValue(defect.getCountry());
@@ -109,10 +111,6 @@ public class DefectViewModel extends AndroidViewModel{
         return mDefectReasons;
     }
 
-    public String getCurrentSeries(){
-        return mDefectSeries.getValue();
-    }
-
     public void incAmount(){
         int value = mDefectAmount.getValue();
         value++;
@@ -140,10 +138,9 @@ public class DefectViewModel extends AndroidViewModel{
     public void setGood(Good good){
         mDefectSeries.postValue(good.getSeries());
         mDefectDeliveryId = good.getDeliveryId();
-    }
-
-    public void setSeries(String series){
-        mDefectSeries.postValue(series);
+        mDefectTitle.postValue(good.getGood());
+        mDefectSuplier.postValue(good.getSuplier());
+        mDefectCountry.postValue(good.getCountry());
     }
 
     public void setAmount(int value){
@@ -186,5 +183,28 @@ public class DefectViewModel extends AndroidViewModel{
 
     public void savePhoto() {
         photoPaths.add(currentPhotoPath);
+    }
+
+    public MutableLiveData<String> getDefectTitle() {
+        return mDefectTitle;
+    }
+
+    public MutableLiveData<String> getDefectSuplier() {
+        return mDefectSuplier;
+    }
+
+    public MutableLiveData<String> getDefectCountry() {
+        return mDefectCountry;
+    }
+
+    public void setBarcode(String barcode) {
+        List<Good> goods = mGoods.getValue();
+        if(goods == null) return;
+        for (Good good:goods) {
+            if (good.getSeries().equals(barcode)){
+                setGood(good);
+                break;
+            }
+        }
     }
 }
