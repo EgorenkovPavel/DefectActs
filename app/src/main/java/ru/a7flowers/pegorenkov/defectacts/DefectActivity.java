@@ -21,18 +21,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,9 +41,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DefectViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
@@ -68,6 +62,7 @@ public class DefectActivity extends AppCompatActivity {
     private GoodsAdapter adapter;
 
     private EditText etAmount;
+    private EditText etWriteoff;
     private TextView tvReasons;
     private EditText etComment;
     private TextView tvSeries;
@@ -119,6 +114,18 @@ public class DefectActivity extends AppCompatActivity {
                 }
             }
         });
+
+        model.getDefectWriteoff().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer value) {
+                String text = String.valueOf(value);
+                if(!text.equals(etWriteoff.getText().toString())) {
+                    etWriteoff.setText(text);
+                    etWriteoff.setSelection(etWriteoff.getText().length());
+                }
+            }
+        });
+
         model.getDefectComment().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String comment) {
@@ -186,9 +193,12 @@ public class DefectActivity extends AppCompatActivity {
         tvDelivery = findViewById(R.id.tvDelivery);
         tvReasons = findViewById(R.id.tvReasons);
         etAmount = findViewById(R.id.etAmount);
+        etWriteoff = findViewById(R.id.etWriteoff);
         etComment = findViewById(R.id.etComment);
-        ImageButton btnInc = findViewById(R.id.btnInc);
-        ImageButton btnDec = findViewById(R.id.btnDec);
+        ImageButton btnAmountInc = findViewById(R.id.btnAmountInc);
+        ImageButton btnAmountDec = findViewById(R.id.btnAmountDec);
+        ImageButton btnWriteoffInc = findViewById(R.id.btnWriteoffInc);
+        ImageButton btnWriteoffDec = findViewById(R.id.btnWriteoffDec);
         ImageButton ibPhoto = findViewById(R.id.ibPhoto);
         ImageButton ibNext = findViewById(R.id.ibNext);
         ImageButton ibBarcode = findViewById(R.id.ibBarcode);
@@ -231,6 +241,25 @@ public class DefectActivity extends AppCompatActivity {
             }
         });
 
+        etWriteoff.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = String.valueOf(etWriteoff.getText());
+                int value = text.isEmpty() ? 0 : Integer.valueOf(text);
+                model.setWriteoff(value);
+            }
+        });
+
         etComment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -248,19 +277,34 @@ public class DefectActivity extends AppCompatActivity {
             }
         });
 
-        btnInc.setOnClickListener(new View.OnClickListener() {
+        btnAmountInc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 model.incAmount();
             }
         });
 
-        btnDec.setOnClickListener(new View.OnClickListener() {
+        btnAmountDec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 model.decAmount();
             }
         });
+
+        btnWriteoffInc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                model.incWriteoff();
+            }
+        });
+
+        btnWriteoffDec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                model.decWriteoff();
+            }
+        });
+
 
         ibNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -415,31 +459,35 @@ public class DefectActivity extends AppCompatActivity {
             }
         }
 
-        if (selectedGoods.size() == 0){
-            return;
-        }else if (selectedGoods.size() == 1){
-            model.setGood(selectedGoods.get(0));
-        }else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.choose_delivery)
-                    .setAdapter(new DeliveryDialogAdapter(this, selectedGoods), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            model.setGood(selectedGoods.get(which));
-                        }
-                    });
-            builder.create().show();
+        switch (selectedGoods.size()) {
+            case 0:
+                return;
+            case 1:
+                model.setGood(selectedGoods.get(0));
+                break;
+            default:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.choose_delivery)
+                        .setAdapter(new DeliveryDialogAdapter(this, selectedGoods), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                model.setGood(selectedGoods.get(which));
+                            }
+                        });
+                builder.create().show();
+                break;
         }
     }
 
     class DeliveryDialogAdapter extends ArrayAdapter<Good>{
 
-        public DeliveryDialogAdapter(@NonNull Context context, @NonNull List objects) {
+        public DeliveryDialogAdapter(@NonNull Context context, @NonNull List<Good> objects) {
             super(context, android.R.layout.simple_list_item_1, objects);
         }
 
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            @SuppressLint("ViewHolder")
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_good, parent, false);
             Good good = getItem(position);
 

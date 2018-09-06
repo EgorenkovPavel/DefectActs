@@ -32,6 +32,7 @@ public class DefectViewModel extends AndroidViewModel{
     private MutableLiveData<String> mDefectCountry = new MutableLiveData<>();
     private MutableLiveData<String> mDefectDelivery = new MutableLiveData<>();
     private MutableLiveData<Integer> mDefectAmount = new MutableLiveData<>();
+    private MutableLiveData<Integer> mDefectWriteoff = new MutableLiveData<>();
     private MutableLiveData<String> mDefectComment = new MutableLiveData<>();
     private MutableLiveData<String> mDefectSeries = new MutableLiveData<>();
     private MutableLiveData<List<Reason>> mDefectReasons = new MutableLiveData<>();
@@ -54,6 +55,7 @@ public class DefectViewModel extends AndroidViewModel{
         mDefectDelivery.postValue("");
         mDefectComment.postValue("");
         mDefectAmount.postValue(0);
+        mDefectWriteoff.postValue(0);
         mDefectSeries.postValue("");
         mDefectReasons.postValue(new ArrayList<Reason>());
         photoPaths = new ArrayList<>();
@@ -78,6 +80,7 @@ public class DefectViewModel extends AndroidViewModel{
                 mDefectDeliveryId = defect.getDeliveryId();
                 mDefectComment.postValue(defect.getComment());
                 mDefectAmount.postValue(defect.getQuantity());
+                mDefectWriteoff.postValue(defect.getWriteoff());
                 mDefectDelivery.postValue(mRepository.getDeliverNumber(defect.getDeliveryId()));
             }
 
@@ -165,6 +168,7 @@ public class DefectViewModel extends AndroidViewModel{
         Defect defect = new Defect();
         defect.setId(mDefectId);
         defect.setQuantity(mDefectAmount.getValue());
+        defect.setWriteoff(mDefectWriteoff.getValue());
         defect.setSeries(mDefectSeries.getValue());
         defect.setComment(mDefectComment.getValue());
         defect.setDeliveryId(mDefectDeliveryId);
@@ -209,4 +213,26 @@ public class DefectViewModel extends AndroidViewModel{
         //TODO add delivery number to defectWithReasons and Good
         return mRepository.getDeliverNumber(deliveryId);
     }
+
+    public void setWriteoff(int value) {
+        if(mDefectWriteoff.getValue() != value)
+            mDefectWriteoff.postValue(value);
+    }
+
+    public void incWriteoff() {
+        int value = mDefectWriteoff.getValue();
+        value++;
+        mDefectWriteoff.postValue(value);
+    }
+
+    public void decWriteoff() {
+        int value = mDefectWriteoff.getValue();
+        value = value == 0 ? 0 : value-1;
+        mDefectWriteoff.postValue(value);
+    }
+
+    public MutableLiveData<Integer> getDefectWriteoff() {
+        return mDefectWriteoff;
+    }
+
 }

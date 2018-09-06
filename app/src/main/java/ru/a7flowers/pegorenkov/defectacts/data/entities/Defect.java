@@ -36,6 +36,10 @@ public class Defect implements Serializable{
     @SerializedName("quantity")
     private int quantity;
 
+    @ColumnInfo(name = "writeoff")
+    @SerializedName("writeoff")
+    private int writeoff;
+
     @ColumnInfo(name = "photoQuantity")
     @SerializedName("photoQuantity")
     private int photoQuantity;
@@ -44,10 +48,11 @@ public class Defect implements Serializable{
     @SerializedName("deliveryId")
     private String deliveryId;
 
-    public Defect(String id, String series, int quantity, int photoQuantity, String deliveryId, String comment) {
+    public Defect(String id, String series, int quantity, int writeoff, int photoQuantity, String deliveryId, String comment) {
         this.id = id;
         this.series = series;
         this.quantity = quantity;
+        this.writeoff = writeoff;
         this.photoQuantity = photoQuantity;
         this.deliveryId = deliveryId;
         this.comment = comment;
@@ -61,6 +66,7 @@ public class Defect implements Serializable{
         this.id = defectServer.getId();
         this.series = defectServer.getSeries();
         this.quantity = defectServer.getQuantity();
+        this.writeoff = defectServer.getWriteoff();
         this.photoQuantity = defectServer.getPhotoQuantity();
         this.deliveryId = defectServer.getDeliveryId();
         this.comment = defectServer.getComment();
@@ -108,5 +114,13 @@ public class Defect implements Serializable{
 
     public void setId(@NonNull String id) {
         this.id = id;
+    }
+
+    public void setWriteoff(Integer writeoff) {
+        this.writeoff = writeoff;
+    }
+
+    public int getWriteoff() {
+        return writeoff;
     }
 }

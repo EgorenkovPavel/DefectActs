@@ -32,6 +32,9 @@ public class DefectWithReasons{
     @SerializedName("quantity")
     private int quantity;
 
+    @SerializedName("writeoff")
+    private int writeoff;
+
     @SerializedName("photoQuantity")
     private int photoQuantity;
 
@@ -74,7 +77,7 @@ public class DefectWithReasons{
     }
 
     public Defect getDefect() {
-        return new Defect(id, series, quantity, photoQuantity, deliveryId, comment);
+        return new Defect(id, series, quantity, writeoff, photoQuantity, deliveryId, comment);
     }
 
     public void setDefect(Defect defect) {
@@ -83,6 +86,7 @@ public class DefectWithReasons{
         this.series = defect.getSeries();
         this.comment = defect.getComment();
         this.quantity = defect.getQuantity();
+        this.writeoff = defect.getWriteoff();
         this.photoQuantity = defect.getPhotoQuantity();
     }
 
@@ -156,5 +160,13 @@ public class DefectWithReasons{
 
     public String getTitle() {
         return title;
+    }
+
+    public Integer getWriteoff() {
+        return writeoff;
+    }
+
+    public void setWriteoff(int writeoff) {
+        this.writeoff = writeoff;
     }
 }

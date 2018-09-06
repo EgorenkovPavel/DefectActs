@@ -53,7 +53,4 @@ public class Delivery implements Serializable{
         return actExist;
     }
 
-    public void setActExist(boolean actExist) {
-        this.actExist = actExist;
-    }
 }

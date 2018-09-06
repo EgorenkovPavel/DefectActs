@@ -31,10 +31,11 @@
         android:layout_marginTop="8dp"
         android:text="@string/reasons"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toTopOf="@+id/tvReasons"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDelivery" />
+        app:layout_constraintTop_toBottomOf="@+id/lblDelivery" />
 
     <TextView
         android:id="@+id/lblComment"
@@ -74,34 +75,60 @@
 
     <EditText
         android:id="@+id/etAmount"
-        android:layout_width="68dp"
+        android:layout_width="64dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:background="@drawable/frame"
         android:ems="10"
         android:gravity="center"
         android:inputType="numberDecimal"
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/lblComment"
-        app:layout_constraintEnd_toStartOf="@+id/btnInc"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnDec"
-        app:layout_constraintTop_toBottomOf="@+id/tvReasons"
+        app:layout_constraintStart_toEndOf="@+id/btnAmountDec"
+        app:layout_constraintTop_toBottomOf="@+id/lblAmount"
+        tools:text="12" />
+
+    <EditText
+        android:id="@+id/etWriteoff"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/frame"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/etAmount"
+        app:layout_constraintEnd_toStartOf="@+id/btnWriteoffInc"
+        app:layout_constraintTop_toTopOf="@+id/etAmount"
         tools:text="12" />
 
     <TextView
         android:id="@+id/lblAmount"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:labelFor="@id/etAmount"
         android:text="@string/amount"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        app:layout_constraintBottom_toBottomOf="@+id/etAmount"
-        app:layout_constraintEnd_toStartOf="@+id/btnDec"
+        app:layout_constraintBottom_toTopOf="@+id/etAmount"
+        app:layout_constraintEnd_toEndOf="@+id/etAmount"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/etAmount" />
+        app:layout_constraintStart_toStartOf="@+id/etAmount"
+        app:layout_constraintTop_toBottomOf="@+id/tvReasons" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:labelFor="@id/etWriteoff"
+        android:text="@string/writeoff"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toTopOf="@+id/etWriteoff"
+        app:layout_constraintEnd_toEndOf="@+id/etWriteoff"
+        app:layout_constraintStart_toStartOf="@+id/etWriteoff" />
 
     <ImageButton
         android:id="@+id/ibPhoto"
@@ -160,30 +187,52 @@
         app:layout_constraintVertical_chainStyle="spread" />
 
     <ImageButton
-        android:id="@+id/btnInc"
+        android:id="@+id/btnAmountInc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
+        android:background="@drawable/button_inc"
         android:contentDescription="@string/increment"
         app:layout_constraintBottom_toBottomOf="@+id/etAmount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/etAmount"
         app:layout_constraintTop_toTopOf="@+id/etAmount"
         app:srcCompat="@drawable/ic_add" />
 
     <ImageButton
-        android:id="@+id/btnDec"
+        android:id="@+id/btnWriteoffInc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button_inc"
+        android:contentDescription="@string/increment"
+        app:layout_constraintBottom_toBottomOf="@+id/etWriteoff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etWriteoff"
+        app:layout_constraintVertical_bias="0.545"
+        app:srcCompat="@drawable/ic_add" />
+
+    <ImageButton
+        android:id="@+id/btnAmountDec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/button_inc"
+        android:contentDescription="@string/decrement"
+        app:layout_constraintBottom_toBottomOf="@+id/etAmount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etAmount"
+        app:srcCompat="@drawable/ic_remove" />
+
+    <ImageButton
+        android:id="@+id/btnWriteoffDec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/button_inc"
         android:contentDescription="@string/decrement"
-        app:layout_constraintBottom_toBottomOf="@+id/etAmount"
-        app:layout_constraintEnd_toStartOf="@+id/etAmount"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/lblAmount"
-        app:layout_constraintTop_toTopOf="@+id/etAmount"
+        app:layout_constraintBottom_toBottomOf="@+id/etWriteoff"
+        app:layout_constraintEnd_toStartOf="@+id/etWriteoff"
+        app:layout_constraintTop_toTopOf="@+id/etWriteoff"
         app:srcCompat="@drawable/ic_remove" />
 
     <TextView
@@ -194,12 +243,11 @@
         android:background="@drawable/frame"
         android:padding="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-        app:layout_constraintBottom_toTopOf="@+id/etAmount"
+        app:layout_constraintBottom_toTopOf="@+id/lblAmount"
         app:layout_constraintEnd_toEndOf="@+id/lblReasons"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/lblReasons"
         app:layout_constraintTop_toBottomOf="@+id/lblReasons"
-        app:layout_constraintVertical_bias="0.155"
         tools:text="Reasons" />
 
     <AutoCompleteTextView

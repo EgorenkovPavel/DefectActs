@@ -98,8 +98,7 @@ public class Repository {
     }
 
     private void loadGoodsFromNetwork(String[] deliveryIds){
-        for (int i = 0; i<deliveryIds.length; i++) {
-            String deliveryId = deliveryIds[i];
+        for (String deliveryId : deliveryIds) {
             mNetworkDataSource.loadGoods(deliveryId, new DataSource.LoadGoodsCallback() {
                 @Override
                 public void onGoodsLoaded(List<Good> goods) {
@@ -174,8 +173,7 @@ public class Repository {
     }
 
     private void loadDefectsFromNetwork(String[] deliveryIds){
-        for (int i = 0; i<deliveryIds.length; i++) {
-            String deliveryId = deliveryIds[i];
+        for (String deliveryId : deliveryIds) {
             mNetworkDataSource.loadDefectsWithReasons(deliveryId, new DataSource.LoadDefectsCallback() {
                 @Override
                 public void onDefectsLoaded(List<DefectWithReasons> defects) {

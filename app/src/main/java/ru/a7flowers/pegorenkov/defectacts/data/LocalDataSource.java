@@ -158,7 +158,7 @@ public class LocalDataSource {
     public void saveDefectsServer(final List<DefectWithReasons> defects) {
         for (DefectWithReasons defectServer:defects) {
             saveDefectServer(defectServer);
-        };
+        }
     }
 
     public void saveDefectServer(final DefectWithReasons defectServer) {

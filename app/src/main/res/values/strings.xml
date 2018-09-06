@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">DefectActs</string>
-    <string name="action_settings">Settings</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
     <string name="barcode_failure">No barcode captured</string>
@@ -12,7 +11,6 @@
     <string name="reasons">Reasons</string>
     <string name="comment">Comment</string>
     <string name="amount">Amount</string>
-    <string name="good">Good</string>
     <string name="deliveries">Deliveries</string>
     <string name="delivery">Delivery</string>
     <string name="defect">Defect</string>
@@ -23,4 +21,5 @@
     <string name="suplier">Suplier</string>
     <string name="country">Country</string>
     <string name="choose_delivery">Choose delivery</string>
+    <string name="writeoff">Write-off</string>
 </resources>
