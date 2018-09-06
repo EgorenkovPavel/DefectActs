@@ -155,7 +155,7 @@ public class Repository {
 
                     @Override
                     public void onPhotosUploadingFailed() {
-
+                        refreshDataAfterSaving(defect);
                     }
                 });
             }
