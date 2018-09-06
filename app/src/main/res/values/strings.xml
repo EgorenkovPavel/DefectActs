@@ -22,4 +22,5 @@
     <string name="title">Title</string>
     <string name="suplier">Suplier</string>
     <string name="country">Country</string>
+    <string name="choose_delivery">Choose delivery</string>
 </resources>

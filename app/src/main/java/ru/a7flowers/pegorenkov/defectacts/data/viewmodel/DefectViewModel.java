@@ -207,12 +207,25 @@ public class DefectViewModel extends AndroidViewModel{
 
     public void setBarcode(String barcode) {
         List<Good> goods = mGoods.getValue();
+        List<Good> selectedGoods = new ArrayList<>();
+
         if(goods == null) return;
         for (Good good:goods) {
             if (good.getSeries().equals(barcode)){
-                setGood(good);
-                break;
+                selectedGoods.add(good);
             }
         }
+
+        if (selectedGoods.size() == 0){
+            return;
+        }else if (selectedGoods.size() == 1){
+            setGood(selectedGoods.get(0));
+        }else {
+
+        }
+    }
+
+    public String getDeliveryNumber(String deliveryId) {
+        return mRepository.getDeliverNumber(deliveryId);
     }
 }

@@ -21,9 +21,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -387,8 +389,8 @@ public class DefectActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if (intent != null) {
                     String barcode = intent.getStringExtra(BarcodeScannerActivity.BARCODE);
-                    model.setBarcode(barcode);
                     acSearch.setText(barcode);
+                    onBarcodeScanned(barcode);
                     Toast.makeText(this, barcode, Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, R.string.barcode_failure, Toast.LENGTH_LONG).show();
@@ -399,6 +401,52 @@ public class DefectActivity extends AppCompatActivity {
         }
         else {
             super.onActivityResult(requestCode, resultCode, intent);
+        }
+    }
+
+    private void onBarcodeScanned(String barcode){
+        List<Good> goods = model.getGoods().getValue();
+        final List<Good> selectedGoods = new ArrayList<>();
+
+        if(goods == null) return;
+        for (Good good:goods) {
+            if (good.getSeries().equals(barcode)){
+                selectedGoods.add(good);
+            }
+        }
+
+        if (selectedGoods.size() == 0){
+            return;
+        }else if (selectedGoods.size() == 1){
+            model.setGood(selectedGoods.get(0));
+        }else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.choose_delivery)
+                    .setAdapter(new DeliveryDialogAdapter(this, selectedGoods), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            model.setGood(selectedGoods.get(which));
+                        }
+                    });
+            builder.create().show();
+        }
+    }
+
+    class DeliveryDialogAdapter extends ArrayAdapter<Good>{
+
+        public DeliveryDialogAdapter(@NonNull Context context, @NonNull List objects) {
+            super(context, android.R.layout.simple_list_item_1, objects);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_good, parent, false);
+            Good good = getItem(position);
+
+            TextView tvText = v.findViewById(android.R.id.text1);
+            tvText.setText(model.getDeliveryNumber(good.getDeliveryId()));
+
+            return v;
         }
     }
 
