@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,8 +40,10 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
 
         Delivery delivery = items.get(position);
 
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+
         viewHolder.tvNumber.setText(delivery.getNumber());
-        viewHolder.tvDate.setText(String.format(Locale.getDefault(), "%tD", delivery.getDate()));
+        viewHolder.tvDate.setText(format.format(delivery.getDate()));
         viewHolder.ivActExist.setVisibility(delivery.isActExist() ? View.VISIBLE : View.INVISIBLE);
         viewHolder.cbSelected.setChecked(mViewModel.isDeliverySelected(delivery));
     }
