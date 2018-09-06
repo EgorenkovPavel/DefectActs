@@ -205,27 +205,8 @@ public class DefectViewModel extends AndroidViewModel{
         return mDefectDelivery;
     }
 
-    public void setBarcode(String barcode) {
-        List<Good> goods = mGoods.getValue();
-        List<Good> selectedGoods = new ArrayList<>();
-
-        if(goods == null) return;
-        for (Good good:goods) {
-            if (good.getSeries().equals(barcode)){
-                selectedGoods.add(good);
-            }
-        }
-
-        if (selectedGoods.size() == 0){
-            return;
-        }else if (selectedGoods.size() == 1){
-            setGood(selectedGoods.get(0));
-        }else {
-
-        }
-    }
-
     public String getDeliveryNumber(String deliveryId) {
+        //TODO add delivery number to defectWithReasons and Good
         return mRepository.getDeliverNumber(deliveryId);
     }
 }
