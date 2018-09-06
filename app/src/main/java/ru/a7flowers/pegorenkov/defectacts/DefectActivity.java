@@ -72,6 +72,7 @@ public class DefectActivity extends AppCompatActivity {
     private TextView tvTitle;
     private TextView tvSuplier;
     private TextView tvCountry;
+    private TextView tvDelivery;
     private AutoCompleteTextView acSearch;
 
     @Override
@@ -150,6 +151,12 @@ public class DefectActivity extends AppCompatActivity {
                 tvCountry.setText(s);
             }
         });
+        model.getDefectDelivery().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                tvDelivery.setText(s);
+            }
+        });
         model.getDefectReasons().observe(this, new Observer<List<Reason>>() {
             @Override
             public void onChanged(@Nullable List<Reason> reasons) {
@@ -174,6 +181,7 @@ public class DefectActivity extends AppCompatActivity {
         tvTitle = findViewById(R.id.tvTitle);
         tvSuplier = findViewById(R.id.tvSuplier);
         tvCountry = findViewById(R.id.tvCountry);
+        tvDelivery = findViewById(R.id.tvDelivery);
         tvReasons = findViewById(R.id.tvReasons);
         etAmount = findViewById(R.id.etAmount);
         etComment = findViewById(R.id.etComment);

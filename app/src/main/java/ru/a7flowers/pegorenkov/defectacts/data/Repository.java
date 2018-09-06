@@ -73,6 +73,19 @@ public class Repository {
         });
     }
 
+    public String getDeliverNumber(String deliveryId){
+        List<Delivery> list = mDeliveries.getValue();
+
+        if (list == null) return "";
+
+        for (Delivery delivery:list) {
+            if(delivery.getId().equals(deliveryId)){
+                return delivery.getNumber();
+            }
+        }
+        return "";
+    }
+
     // GOODS
     public LiveData<List<Good>> loadGoods(String[] deliveryIds) {
         return mLocalDataSource.loadGoods(deliveryIds);

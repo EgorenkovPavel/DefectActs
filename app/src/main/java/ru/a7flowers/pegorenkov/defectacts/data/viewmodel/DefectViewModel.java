@@ -30,6 +30,7 @@ public class DefectViewModel extends AndroidViewModel{
     private MutableLiveData<String> mDefectTitle = new MutableLiveData<>();
     private MutableLiveData<String> mDefectSuplier = new MutableLiveData<>();
     private MutableLiveData<String> mDefectCountry = new MutableLiveData<>();
+    private MutableLiveData<String> mDefectDelivery = new MutableLiveData<>();
     private MutableLiveData<Integer> mDefectAmount = new MutableLiveData<>();
     private MutableLiveData<String> mDefectComment = new MutableLiveData<>();
     private MutableLiveData<String> mDefectSeries = new MutableLiveData<>();
@@ -50,6 +51,7 @@ public class DefectViewModel extends AndroidViewModel{
         mDefectTitle.postValue("");
         mDefectSuplier.postValue("");
         mDefectCountry.postValue("");
+        mDefectDelivery.postValue("");
         mDefectComment.postValue("");
         mDefectAmount.postValue(0);
         mDefectSeries.postValue("");
@@ -76,6 +78,7 @@ public class DefectViewModel extends AndroidViewModel{
                 mDefectDeliveryId = defect.getDeliveryId();
                 mDefectComment.postValue(defect.getComment());
                 mDefectAmount.postValue(defect.getQuantity());
+                mDefectDelivery.postValue(mRepository.getDeliverNumber(defect.getDeliveryId()));
             }
 
             @Override
@@ -141,6 +144,7 @@ public class DefectViewModel extends AndroidViewModel{
         mDefectTitle.postValue(good.getGood());
         mDefectSuplier.postValue(good.getSuplier());
         mDefectCountry.postValue(good.getCountry());
+        mDefectDelivery.postValue(mRepository.getDeliverNumber(good.getDeliveryId()));
     }
 
     public void setAmount(int value){
@@ -195,6 +199,10 @@ public class DefectViewModel extends AndroidViewModel{
 
     public MutableLiveData<String> getDefectCountry() {
         return mDefectCountry;
+    }
+
+    public MutableLiveData<String> getDefectDelivery() {
+        return mDefectDelivery;
     }
 
     public void setBarcode(String barcode) {
