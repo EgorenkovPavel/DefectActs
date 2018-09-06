@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 
@@ -19,6 +20,8 @@ public class DeliveriesViewModel extends AndroidViewModel {
     @SuppressWarnings("FieldCanBeLocal")
     private Repository mRepository;
 
+    private MutableLiveData<Boolean> isReloading = new MutableLiveData<>();
+
     private LiveData<List<Delivery>> mDeliveries;
     private Set<String> mSelectedDeliveriesIds = new HashSet<>();
 
@@ -26,6 +29,8 @@ public class DeliveriesViewModel extends AndroidViewModel {
         super(application);
 
         mRepository = repository;
+
+        isReloading.postValue(false);
 
         mDeliveries = mRepository.getDeliveries();
     }
@@ -48,5 +53,24 @@ public class DeliveriesViewModel extends AndroidViewModel {
 
     public void removeSelectedDelivery(Delivery delivery) {
         mSelectedDeliveriesIds.remove(delivery.getId());
+    }
+
+    public void refreshData() {
+        isReloading.postValue(true);
+        mRepository.reloadData(new DataSource.ReloadDataCallback() {
+            @Override
+            public void onDataReloaded() {
+                isReloading.setValue(false);
+            }
+
+            @Override
+            public void onDataReloadingFailed() {
+                isReloading.setValue(false);
+            }
+        });
+    }
+
+    public MutableLiveData<Boolean> getIsReloading() {
+        return isReloading;
     }
 }

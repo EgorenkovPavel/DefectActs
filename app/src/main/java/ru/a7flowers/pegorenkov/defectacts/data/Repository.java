@@ -6,6 +6,7 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
+import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ReloadDataCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
@@ -26,18 +27,7 @@ public class Repository {
         mNetworkDataSource = networkDataSource;
         mLocalDataSource = localDataSource;
 
-        mLocalDataSource.deleteAll(new DataSource.ClearDatabaseCallback() {
-            @Override
-            public void onDatabaseCleared() {
-                loadDeliveriesFromNetwork();
-                loadReasonsFromNetwork();
-            }
-
-            @Override
-            public void onDatabaseClearingFailed() {
-
-            }
-        });
+        reloadData(null);
     }
 
     public static Repository getInstance(NetworkDataSource networkDataSource, LocalDataSource localDataSource) {
@@ -51,6 +41,21 @@ public class Repository {
         return INSTANCE;
     }
 
+    public void reloadData(final ReloadDataCallback callback){
+        mLocalDataSource.deleteAll(new DataSource.ClearDatabaseCallback() {
+            @Override
+            public void onDatabaseCleared() {
+                loadDeliveriesFromNetwork(callback);
+                loadReasonsFromNetwork();
+            }
+
+            @Override
+            public void onDatabaseClearingFailed() {
+                if(callback != null) callback.onDataReloadingFailed();
+            }
+        });
+    }
+
     // DELIVERY
     public LiveData<List<Delivery>> getDeliveries(){
         if(mDeliveries == null){
@@ -59,11 +64,12 @@ public class Repository {
         return mDeliveries;
     }
 
-    private void loadDeliveriesFromNetwork(){
+    private void loadDeliveriesFromNetwork(final ReloadDataCallback callback){
         mNetworkDataSource.loadDeliveries(new DataSource.LoadDeliveriesCallback() {
             @Override
             public void onDeliveriesLoaded(List<Delivery> deliveries) {
                 mLocalDataSource.saveDeliveries(deliveries);
+                if(callback != null) callback.onDataReloaded();
             }
 
             @Override

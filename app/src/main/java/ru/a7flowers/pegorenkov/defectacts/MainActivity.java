@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity{
     @SuppressWarnings("FieldCanBeLocal")
     private DeliveriesViewModel model;
 
+    private SwipeRefreshLayout swipeContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,19 @@ public class MainActivity extends AppCompatActivity{
                 openDeliveryActivity();
             }
         });
+
+        swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                model.refreshData();
+            }
+        });
+        swipeContainer.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         RecyclerView rvDeliveries = findViewById(R.id.rvDeliveries);
         rvDeliveries.setHasFixedSize(true);
@@ -63,6 +79,12 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onChanged(@Nullable List<Delivery> deliveries) {
                 adapter.setItems(deliveries);
+            }
+        });
+        model.getIsReloading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isLoading) {
+                swipeContainer.setRefreshing(isLoading);
             }
         });
     }

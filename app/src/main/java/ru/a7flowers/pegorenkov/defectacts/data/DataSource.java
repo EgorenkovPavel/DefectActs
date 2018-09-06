@@ -36,11 +36,6 @@ public interface DataSource {
         void onDefectLoadFailed();
     }
 
-    interface LoadDefectReasonsCallback{
-        void onDefectReasonsLoaded(List<DefectReason> reasons);
-        void onDefectReasonsLoadFailed();
-    }
-
     interface LoadReasonsCallback{
         void onReasonsLoaded(List<Reason> reasons);
         void onReasonsLoadFailed();
@@ -64,5 +59,10 @@ public interface DataSource {
     interface ClearDatabaseCallback{
         void onDatabaseCleared();
         void onDatabaseClearingFailed();
+    }
+
+    interface ReloadDataCallback{
+        void onDataReloaded();
+        void onDataReloadingFailed();
     }
 }
