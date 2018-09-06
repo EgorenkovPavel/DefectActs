@@ -19,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ru.a7flowers.pegorenkov.defectacts.BuildConfig;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectsCallback;
@@ -49,7 +50,7 @@ public class NetworkDataSource {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request newRequest  = chain.request().newBuilder()
-                        .addHeader("Authorization", "Basic dXNlcjo=") //""Bearer " + token)
+                        .addHeader("Authorization", BuildConfig.ServerPassword)
                         .build();
                 return chain.proceed(newRequest);
             }
@@ -57,7 +58,7 @@ public class NetworkDataSource {
 
         Retrofit mRetrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl("http://msavelev/UT11_PE/ru_RU/hs/DefectActs/")
+                .baseUrl(BuildConfig.ServerPath)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
