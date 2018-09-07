@@ -165,6 +165,9 @@ public class DefectViewModel extends AndroidViewModel{
     }
 
     public void saveDefect(){
+
+        if(mDefectSeries.getValue() == null || mDefectSeries.getValue() == "") return;
+
         Defect defect = new Defect();
         defect.setId(mDefectId);
         defect.setQuantity(mDefectAmount.getValue());
