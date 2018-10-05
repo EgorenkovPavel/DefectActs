@@ -312,6 +312,7 @@ public class DefectActivity extends AppCompatActivity {
             public void onClick(View view) {
                 model.saveDefect();
                 acSearch.setText("");
+                acSearch.requestFocus();
             }
         });
 
