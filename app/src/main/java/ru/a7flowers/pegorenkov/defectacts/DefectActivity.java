@@ -326,7 +326,9 @@ public class DefectActivity extends AppCompatActivity {
         ibPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkPermissions(RC_HANDLE_CAMERA_PERM, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE});
+                checkPermissions(RC_HANDLE_CAMERA_PERM,
+                        new String[]{Manifest.permission.CAMERA,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE});
              }
         });
     }
@@ -566,7 +568,12 @@ public class DefectActivity extends AppCompatActivity {
                 if((filterResults == null) || (filterResults.count == 0)) return;
                 ArrayList<Good> filteredList = (ArrayList<Good>)filterResults.values;
                 clear();
-                addAll(filteredList);
+
+                if(charSequence.length() == 13 && filteredList.size() == 1){
+                    model.setGood(filteredList.get(0));
+                }else{
+                    addAll(filteredList);
+                }
             }
         };
 
