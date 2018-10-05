@@ -8,10 +8,12 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,7 +22,9 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +78,9 @@ public class DefectActivity extends AppCompatActivity {
     private TextView tvDelivery;
     private AutoCompleteTextView acSearch;
 
+    private String suffix;
+    private String preffix;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +89,10 @@ public class DefectActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        suffix = prefs.getString(getString(R.string.pref_suffix), "");
+        preffix = prefs.getString(getString(R.string.pref_preffix), "");
 
         model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DefectViewModel.class);
 
@@ -204,8 +215,11 @@ public class DefectActivity extends AppCompatActivity {
         ImageButton ibPhoto = findViewById(R.id.ibPhoto);
         ImageButton ibNext = findViewById(R.id.ibNext);
         ImageButton ibBarcode = findViewById(R.id.ibBarcode);
+        ImageButton ibClear = findViewById(R.id.btnClear);
 
         acSearch.setThreshold(3);
+        acSearch.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        acSearch.setKeyListener(DigitsKeyListener.getInstance("0123456789@#"));
         adapter = new GoodsAdapter(this);
         acSearch.setAdapter(adapter);
 
@@ -330,6 +344,13 @@ public class DefectActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.CAMERA,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE});
              }
+        });
+
+        ibClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                acSearch.setText("");
+            }
         });
     }
 
@@ -514,6 +535,16 @@ public class DefectActivity extends AppCompatActivity {
         }
     }
 
+    private String clearBarcode(String text){
+        if(!suffix.isEmpty() && text.endsWith(suffix))
+            text = text.substring(0, text.length() - suffix.length());
+
+        if(!preffix.isEmpty() && text.startsWith(preffix))
+            text = text.substring(preffix.length());
+
+        return text;
+    }
+
     class DeliveryDialogAdapter extends ArrayAdapter<Good>{
 
         public DeliveryDialogAdapter(@NonNull Context context, @NonNull List<Good> objects) {
@@ -547,9 +578,12 @@ public class DefectActivity extends AppCompatActivity {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 if(constraint != null) {
+                    String text = constraint.toString();
+                    text = clearBarcode(text);
+
                     suggestions.clear();
                     for (Good good:goods){
-                        if (good.getSeries().startsWith(constraint.toString())){
+                        if (good.getSeries().startsWith(text)){
                             suggestions.add(good);
                         }
                     }
@@ -569,7 +603,11 @@ public class DefectActivity extends AppCompatActivity {
                 ArrayList<Good> filteredList = (ArrayList<Good>)filterResults.values;
                 clear();
 
-                if(charSequence.length() == 13 && filteredList.size() == 1){
+                String text = charSequence.toString();
+                text = clearBarcode(text);
+
+                if(text.length() == 13
+                        && filteredList.size() == 1){
                     model.setGood(filteredList.get(0));
                 }else{
                     addAll(filteredList);

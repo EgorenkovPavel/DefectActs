@@ -43,5 +43,4 @@ public interface DeliveryApi {
     @POST("deliveries/{deliveryId}/defects/{defectId}/photo")
     Call<Boolean> setPhoto(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId, @Body RequestBody photo);
 
-
 }
