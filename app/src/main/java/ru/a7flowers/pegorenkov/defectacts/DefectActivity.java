@@ -39,7 +39,9 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DefectViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
@@ -305,7 +307,6 @@ public class DefectActivity extends AppCompatActivity {
             }
         });
 
-
         ibNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -317,31 +318,58 @@ public class DefectActivity extends AppCompatActivity {
         ibBarcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DefectActivity.this, BarcodeScannerActivity.class);
-                startActivityForResult(intent, RC_BARCODE_CAPTURE);
+                checkPermissions(RC_BARCODE_CAPTURE, new String[]{Manifest.permission.CAMERA});
             }
         });
 
         ibPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pCamera = ActivityCompat.checkSelfPermission(DefectActivity.this, Manifest.permission.CAMERA);
-                int pStorage = ActivityCompat.checkSelfPermission(DefectActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                if (pCamera == PackageManager.PERMISSION_GRANTED
-                        && pStorage == PackageManager.PERMISSION_GRANTED) {
-                    takePicture();
-                } else {
-                    List<String> per = new ArrayList<>();
-                    if(pCamera == PackageManager.PERMISSION_DENIED)
-                        per.add(Manifest.permission.CAMERA);
-                    if(pStorage == PackageManager.PERMISSION_DENIED)
-                        per.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-                    final String[] permissions = per.toArray(new String[per.size()]);
-                    ActivityCompat.requestPermissions(DefectActivity.this, permissions, RC_HANDLE_CAMERA_PERM);
-                }
+                checkPermissions(RC_HANDLE_CAMERA_PERM, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE});
              }
         });
+    }
+
+    private void checkPermissions(int requestCode, String[] permissions){
+
+        Map<String, Integer> accesses = new HashMap<>();
+        for (String permission:permissions) {
+            accesses.put(permission, ActivityCompat.checkSelfPermission(DefectActivity.this, permission));
+        }
+
+        boolean granted = true;
+        List<String> per = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry: accesses.entrySet()) {
+            granted = granted && entry.getValue().equals(PackageManager.PERMISSION_GRANTED);
+            if (entry.getValue().equals(PackageManager.PERMISSION_DENIED)){
+                per.add(entry.getKey());
+            }
+        }
+
+        if (granted){
+            startAction(requestCode);
+        }else{
+            final String[] pers = per.toArray(new String[per.size()]);
+            ActivityCompat.requestPermissions(DefectActivity.this, pers, requestCode);
+        }
+    }
+
+    private void startAction(int requestCode){
+        switch (requestCode){
+            case RC_BARCODE_CAPTURE:{
+                scanBarcode();
+                break;
+            }
+            case RC_HANDLE_CAMERA_PERM:{
+                takePicture();
+                break;
+            }
+        }
+    }
+
+    private void scanBarcode(){
+        Intent intent = new Intent(DefectActivity.this, BarcodeScannerActivity.class);
+        startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
 
     private void takePicture(){
@@ -393,32 +421,37 @@ public class DefectActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode != RC_HANDLE_CAMERA_PERM) {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            return;
-        }
 
-        boolean granted = grantResults.length != 0;
-        for (int i=0; i<permissions.length;i++){
-            granted = granted && grantResults[i] == PackageManager.PERMISSION_GRANTED;
-        }
+        switch (requestCode){
+            case RC_HANDLE_CAMERA_PERM: case RC_BARCODE_CAPTURE:{
+                boolean granted = grantResults.length != 0;
+                for (int i=0; i<permissions.length;i++){
+                    granted = granted && grantResults[i] == PackageManager.PERMISSION_GRANTED;
+                }
 
-        if (granted) {
-            takePicture();
-            return;
-        }
+                if (granted) {
+                    startAction(requestCode);
+                    return;
+                }
 
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                finish();
+                DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Multitracker sample")
+                        .setMessage(R.string.no_camera_permission)
+                        .setPositiveButton(android.R.string.ok, listener)
+                        .show();
+                break;
             }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Multitracker sample")
-                .setMessage(R.string.no_camera_permission)
-                .setPositiveButton(android.R.string.ok, listener)
-                .show();
+             default:{
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                break;
+            }
+        }
     }
 
     @Override

@@ -93,6 +93,8 @@ public class LocalDataSource {
     }
 
     public void saveGoods(final List<Good> goods) {
+        if(goods == null) return;
+
         Log.d(TAG, "Insert goods");
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
@@ -156,6 +158,8 @@ public class LocalDataSource {
     }
 
     public void saveDefectsServer(final List<DefectWithReasons> defects) {
+        if(defects == null) return;
+
         for (DefectWithReasons defectServer:defects) {
             saveDefectServer(defectServer);
         }
