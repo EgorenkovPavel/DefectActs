@@ -21,6 +21,7 @@ public class Repository {
 
     private LiveData<List<Delivery>> mDeliveries;
     private LiveData<List<Reason>> mReasons;
+    private Mode mMode = Mode.DEFECTS;
 
     private Repository(NetworkDataSource networkDataSource, LocalDataSource localDataSource){
         mNetworkDataSource = networkDataSource;
@@ -53,6 +54,14 @@ public class Repository {
                 if(callback != null) callback.onDataReloadingFailed();
             }
         });
+    }
+
+    public Mode getMode() {
+        return mMode;
+    }
+
+    public void setMode(Mode mode) {
+        this.mMode = mode;
     }
 
     // DELIVERY

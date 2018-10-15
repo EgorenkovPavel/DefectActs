@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
+import ru.a7flowers.pegorenkov.defectacts.data.Mode;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 
@@ -52,6 +53,14 @@ public class DeliveriesViewModel extends AndroidViewModel {
 
     public void removeSelectedDelivery(Delivery delivery) {
         mSelectedDeliveriesIds.remove(delivery.getId());
+    }
+
+    public Mode getMode(){
+        return mRepository.getMode();
+    }
+
+    public void setMode(@NonNull Mode mode){
+        mRepository.setMode(mode);
     }
 
     public void refreshData() {
