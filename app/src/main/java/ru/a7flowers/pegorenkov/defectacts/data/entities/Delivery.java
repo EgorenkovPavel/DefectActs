@@ -26,17 +26,23 @@ public class Delivery implements Serializable{
     @SerializedName("date")
     private Date date;
 
-    @ColumnInfo(name = "actExist")
-    @SerializedName("actExist")
-    private boolean actExist;
+    @ColumnInfo(name = "defectActExist")
+    @SerializedName("defectActExist")
+    private boolean defectActExist;
 
-    public Delivery(String id, String number, Date date, boolean actExist) {
+    @ColumnInfo(name = "differenceActExist")
+    @SerializedName("differenceActExist")
+    private boolean differenceActExist;
+
+    public Delivery(@NonNull String id, String number, Date date, boolean defectActExist, boolean differenceActExist) {
         this.id = id;
         this.number = number;
         this.date = date;
-        this.actExist = actExist;
+        this.defectActExist = defectActExist;
+        this.differenceActExist = differenceActExist;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
@@ -49,8 +55,11 @@ public class Delivery implements Serializable{
         return date;
     }
 
-    public boolean isActExist() {
-        return actExist;
+    public boolean isDefectActExist() {
+        return defectActExist;
     }
 
+    public boolean isDifferenceActExist() {
+        return differenceActExist;
+    }
 }

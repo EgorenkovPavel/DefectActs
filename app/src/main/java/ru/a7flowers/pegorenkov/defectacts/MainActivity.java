@@ -29,7 +29,6 @@ import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 
 public class MainActivity extends AppCompatActivity{
 
-    @SuppressWarnings("FieldCanBeLocal")
     private DeliveriesViewModel model;
 
     private SwipeRefreshLayout swipeContainer;
@@ -76,7 +75,6 @@ public class MainActivity extends AppCompatActivity{
 
         final DeliveryAdapter adapter = new DeliveryAdapter();
         adapter.setViewModel(model);
-
         rvDeliveries.setAdapter(adapter);
 
         model.getDeliveries().observe(this, new Observer<List<Delivery>>() {
@@ -85,6 +83,14 @@ public class MainActivity extends AppCompatActivity{
                 adapter.setItems(deliveries);
             }
         });
+
+        model.getMode().observe(this, new Observer<Mode>() {
+            @Override
+            public void onChanged(@Nullable Mode mode) {
+                adapter.setMode(mode);
+            }
+        });
+
         model.getIsReloading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean isLoading) {
@@ -105,7 +111,7 @@ public class MainActivity extends AppCompatActivity{
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(adapter);
-        spinner.setSelection(model.getMode().ordinal());
+        spinner.setSelection(model.getMode().getValue().ordinal());
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

@@ -21,6 +21,7 @@ public class DeliveriesViewModel extends AndroidViewModel {
     private Repository mRepository;
 
     private MutableLiveData<Boolean> isReloading = new MutableLiveData<>();
+    private MutableLiveData<Mode> mMode = new MutableLiveData<>();
 
     private LiveData<List<Delivery>> mDeliveries;
     private Set<String> mSelectedDeliveriesIds = new HashSet<>();
@@ -31,6 +32,7 @@ public class DeliveriesViewModel extends AndroidViewModel {
         mRepository = repository;
 
         isReloading.postValue(false);
+        mMode.setValue(mRepository.getMode());
 
         mDeliveries = mRepository.getDeliveries();
     }
@@ -55,11 +57,12 @@ public class DeliveriesViewModel extends AndroidViewModel {
         mSelectedDeliveriesIds.remove(delivery.getId());
     }
 
-    public Mode getMode(){
-        return mRepository.getMode();
+    public MutableLiveData<Mode> getMode(){
+        return mMode;
     }
 
     public void setMode(@NonNull Mode mode){
+        mMode.setValue(mode);
         mRepository.setMode(mode);
     }
 
