@@ -7,7 +7,6 @@ import java.util.List;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ReloadDataCallback;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;

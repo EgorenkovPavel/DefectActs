@@ -16,7 +16,6 @@ import android.view.View;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.DefectsAdapter;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveryViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;

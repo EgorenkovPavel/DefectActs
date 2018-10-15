@@ -2,8 +2,6 @@ package ru.a7flowers.pegorenkov.defectacts.data;
 
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;

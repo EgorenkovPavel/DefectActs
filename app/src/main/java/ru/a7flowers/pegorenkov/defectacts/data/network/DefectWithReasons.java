@@ -1,18 +1,15 @@
 package ru.a7flowers.pegorenkov.defectacts.data.network;
 
-import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Relation;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 public class DefectWithReasons{

@@ -3,7 +3,6 @@ package ru.a7flowers.pegorenkov.defectacts;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.support.annotation.Nullable;
 
 public class PrefActivity extends PreferenceActivity {
 

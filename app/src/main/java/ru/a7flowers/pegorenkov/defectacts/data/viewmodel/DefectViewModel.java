@@ -12,7 +12,6 @@ import java.util.List;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;

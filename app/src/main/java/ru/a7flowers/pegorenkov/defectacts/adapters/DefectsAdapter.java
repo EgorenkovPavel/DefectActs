@@ -10,7 +10,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 
 public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHolder> {
