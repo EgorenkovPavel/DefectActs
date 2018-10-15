@@ -10,7 +10,9 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ReloadDataCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.local.LocalDataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.NetworkDataSource;
 
 public class Repository {
 

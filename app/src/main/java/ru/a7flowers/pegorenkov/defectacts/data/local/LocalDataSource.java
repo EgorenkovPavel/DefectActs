@@ -1,4 +1,4 @@
-package ru.a7flowers.pegorenkov.defectacts.data;
+package ru.a7flowers.pegorenkov.defectacts.data.local;
 
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import ru.a7flowers.pegorenkov.defectacts.data.AppExecutors;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ClearDatabaseCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;

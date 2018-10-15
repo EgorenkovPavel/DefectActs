@@ -1,4 +1,4 @@
-package ru.a7flowers.pegorenkov.defectacts.data;
+package ru.a7flowers.pegorenkov.defectacts.data.network;
 
 import android.util.Log;
 
@@ -20,6 +20,8 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.a7flowers.pegorenkov.defectacts.BuildConfig;
+import ru.a7flowers.pegorenkov.defectacts.data.AppExecutors;
+import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDeliveriesCallback;
@@ -30,8 +32,6 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.UploadPhotosCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DeliveryApi;
 
 public class NetworkDataSource {
 

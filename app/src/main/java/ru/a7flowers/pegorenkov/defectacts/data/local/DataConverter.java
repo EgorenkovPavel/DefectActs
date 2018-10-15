@@ -1,4 +1,4 @@
-package ru.a7flowers.pegorenkov.defectacts.data;
+package ru.a7flowers.pegorenkov.defectacts.data.local;
 
 import android.arch.persistence.room.TypeConverter;
 

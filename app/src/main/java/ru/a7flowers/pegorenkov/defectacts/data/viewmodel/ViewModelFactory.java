@@ -5,10 +5,10 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import ru.a7flowers.pegorenkov.defectacts.data.AppDatabase;
-import ru.a7flowers.pegorenkov.defectacts.data.LocalDataSource;
-import ru.a7flowers.pegorenkov.defectacts.data.NetworkDataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
+import ru.a7flowers.pegorenkov.defectacts.data.local.AppDatabase;
+import ru.a7flowers.pegorenkov.defectacts.data.local.LocalDataSource;
+import ru.a7flowers.pegorenkov.defectacts.data.network.NetworkDataSource;
 
 public class ViewModelFactory extends ViewModelProvider.AndroidViewModelFactory {
 
