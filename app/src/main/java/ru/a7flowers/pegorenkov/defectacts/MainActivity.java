@@ -152,9 +152,16 @@ public class MainActivity extends AppCompatActivity{
         String[] deliveriesIds = model.getSelectedDeliveryIds();
         if(deliveriesIds.length == 0) return;
 
-        Intent i = new Intent(this, DeliveryActivity.class);
-        i.putExtra(DeliveryActivity.DELIVERY, deliveriesIds);
-        startActivity(i);
+        Mode mode = model.getMode().getValue();
+        if (mode == Mode.DEFECTS) {
+            Intent i = new Intent(this, DeliveryDefectActivity.class);
+            i.putExtra(DeliveryDefectActivity.DELIVERY, deliveriesIds);
+            startActivity(i);
+        }else if(mode == Mode.DIFFERENCIES){
+            Intent i = new Intent(this, DeliveryDiffActivity.class);
+            i.putExtra(DeliveryDiffActivity.DELIVERY, deliveriesIds);
+            startActivity(i);
+        }
     }
 
 }

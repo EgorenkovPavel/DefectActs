@@ -12,6 +12,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.local.LocalDataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 import ru.a7flowers.pegorenkov.defectacts.data.network.NetworkDataSource;
 
 public class Repository {
@@ -228,4 +229,8 @@ public class Repository {
         });
     }
 
+    public LiveData<List<Diff>> getDiffGoods(String[] deliveryIds) {
+        //TODO load diffs
+        return mLocalDataSource.getDiffGoods(deliveryIds);
+    }
 }

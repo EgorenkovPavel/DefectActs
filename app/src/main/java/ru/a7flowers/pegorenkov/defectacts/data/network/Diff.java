@@ -1,6 +1,6 @@
 package ru.a7flowers.pegorenkov.defectacts.data.network;
 
-public class Difference {
+public class Diff {
 
     private String id;
 
@@ -30,9 +30,9 @@ public class Difference {
 
     private int bulk;
 
-    public Difference(String id, String series, String title, String suplier, String country,
-                      String comment, int quantity, int photoQuantity, String deliveryId,
-                      int diameter, int length, int weigth, int budgeonAmount, int bulk) {
+    public Diff(String id, String series, String title, String suplier, String country,
+                String comment, int quantity, int photoQuantity, String deliveryId,
+                int diameter, int length, int weigth, int budgeonAmount, int bulk) {
         this.id = id;
         this.series = series;
         this.title = title;

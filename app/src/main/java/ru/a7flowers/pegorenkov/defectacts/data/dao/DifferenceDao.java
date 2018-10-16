@@ -9,10 +9,8 @@ import android.arch.persistence.room.Transaction;
 
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DifferenceEntity;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
-import ru.a7flowers.pegorenkov.defectacts.data.network.Difference;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 
 @Dao
 public interface DifferenceDao {
@@ -27,7 +25,7 @@ public interface DifferenceDao {
             "ON differencies.series = goods.series " +
             "AND differencies.deliveryId = goods.deliveryId " +
             "WHERE differencies.deliveryId IN (:deliveryIds)")
-    LiveData<List<Difference>> loadDifferencies(String[] deliveryIds);
+    LiveData<List<Diff>> loadDifferencies(String[] deliveryIds);
 
     @Transaction
     @Query("SELECT differencies.*, " +
@@ -39,7 +37,7 @@ public interface DifferenceDao {
             "ON differencies.series = goods.series " +
             "AND differencies.deliveryId = goods.deliveryId " +
             "WHERE differencies.id = :defectId")
-    Difference loadDifference(String defectId);
+    Diff loadDifference(String defectId);
 
     @Transaction
     @Query("SELECT differencies.*, " +
@@ -50,7 +48,7 @@ public interface DifferenceDao {
             "INNER JOIN goods as goods " +
             "ON differencies.series = goods.series " +
             "AND differencies.deliveryId = goods.deliveryId ")
-    LiveData<List<Difference>> loadDifferencies();
+    LiveData<List<Diff>> loadDifferencies();
 
     @Query("SELECT * FROM differencies WHERE id = :diffId")
     DifferenceEntity getDifferenceById(int diffId);

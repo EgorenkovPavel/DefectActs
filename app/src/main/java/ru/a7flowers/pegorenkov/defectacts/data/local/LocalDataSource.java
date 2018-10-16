@@ -17,6 +17,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 
 public class LocalDataSource {
 
@@ -80,6 +81,11 @@ public class LocalDataSource {
     public LiveData<List<DefectWithReasons>> getDefectGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery defects");
         return mDb.defectDao().loadDefects(deliveryIds);
+    }
+
+    public LiveData<List<Diff>> getDiffGoods(String[] deliveryIds) {
+        Log.d(TAG, "Get delivery diffs");
+        return mDb.differenceDao().loadDifferencies(deliveryIds);
     }
 
     public void getDefectReasons(final String defectId, final LoadReasonsCallback callback) {

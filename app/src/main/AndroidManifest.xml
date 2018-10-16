@@ -24,7 +24,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DeliveryActivity"
+            android:name=".DeliveryDefectActivity"
+            android:label="@string/delivery"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".DeliveryDiffActivity"
             android:label="@string/delivery"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
@@ -35,11 +44,11 @@
         <activity
             android:name=".DefectActivity"
             android:label="@string/defect"
-            android:parentActivityName=".DeliveryActivity"
+            android:parentActivityName=".DeliveryDefectActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DeliveryActivity" />
+                android:value=".DeliveryDefectActivity" />
         </activity>
         <activity
             android:name=".ReasonsActivity"
