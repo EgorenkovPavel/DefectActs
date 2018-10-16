@@ -21,7 +21,8 @@ import android.widget.Spinner;
 
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.adapters.DeliveryAdapter;
+import ru.a7flowers.pegorenkov.defectacts.adapters.DeliveryDefectAdapter;
+import ru.a7flowers.pegorenkov.defectacts.adapters.DeliveryDiffAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.Mode;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveriesViewModel;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        RecyclerView rvDeliveries = findViewById(R.id.rvDeliveries);
+        final RecyclerView rvDeliveries = findViewById(R.id.rvDeliveries);
         rvDeliveries.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -73,21 +74,27 @@ public class MainActivity extends AppCompatActivity{
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         rvDeliveries.addItemDecoration(itemDecor);
 
-        final DeliveryAdapter adapter = new DeliveryAdapter();
-        adapter.setViewModel(model);
-        rvDeliveries.setAdapter(adapter);
+        final DeliveryDefectAdapter defectAdapter = new DeliveryDefectAdapter();
+        defectAdapter.setViewModel(model);
+
+        final DeliveryDiffAdapter diffAdapter = new DeliveryDiffAdapter();
+        diffAdapter.setViewModel(model);
 
         model.getDeliveries().observe(this, new Observer<List<Delivery>>() {
             @Override
             public void onChanged(@Nullable List<Delivery> deliveries) {
-                adapter.setItems(deliveries);
+                defectAdapter.setItems(deliveries);
+                diffAdapter.setItems(deliveries);
             }
         });
 
         model.getMode().observe(this, new Observer<Mode>() {
             @Override
             public void onChanged(@Nullable Mode mode) {
-                adapter.setMode(mode);
+                if (mode == Mode.DEFECTS)
+                    rvDeliveries.setAdapter(defectAdapter);
+                else
+                    rvDeliveries.setAdapter(diffAdapter);
             }
         });
 

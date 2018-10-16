@@ -1,8 +1,6 @@
 package ru.a7flowers.pegorenkov.defectacts.adapters;
 
-import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,22 +18,20 @@ import ru.a7flowers.pegorenkov.defectacts.data.Mode;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveriesViewModel;
 
-public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.DeliveryHolder>{
+public class DeliveryDiffAdapter extends RecyclerView.Adapter<DeliveryDiffAdapter.DeliveryHolder>{
 
     private DeliveriesViewModel mViewModel;
     private List<Delivery> items;
-    private Mode mMode;
 
     public void setViewModel(DeliveriesViewModel viewModel) {
         mViewModel = viewModel;
-
     }
 
     @NonNull
     @Override
     public DeliveryHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_delivery, viewGroup, false);
+                .inflate(R.layout.item_delivery_diff, viewGroup, false);
 
         return new DeliveryHolder(v);
     }
@@ -49,17 +45,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
 
         viewHolder.tvNumber.setText(delivery.getNumber());
         viewHolder.tvDate.setText(format.format(delivery.getDate()));
-
-        if (mMode.equals(Mode.DEFECTS) && delivery.isDefectActExist()){
-            viewHolder.ivActExist.setVisibility(View.VISIBLE);
-            viewHolder.ivActExist.setImageResource(R.drawable.bug);
-        }else if(mMode.equals(Mode.DIFFERENCIES) && delivery.isDifferenceActExist()){
-            viewHolder.ivActExist.setVisibility(View.VISIBLE);
-            viewHolder.ivActExist.setImageResource(R.drawable.swap);
-        }else{
-            viewHolder.ivActExist.setVisibility(View.INVISIBLE);
-        }
-
+        viewHolder.ivActExist.setVisibility(delivery.isDifferenceActExist() ? View.VISIBLE : View.INVISIBLE);
         viewHolder.cbSelected.setChecked(mViewModel.isDeliverySelected(delivery));
     }
 
@@ -70,11 +56,6 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
 
     public void setItems(List<Delivery> deliveries){
         items = deliveries;
-        notifyDataSetChanged();
-    }
-
-    public void setMode(Mode mode){
-        mMode = mode;
         notifyDataSetChanged();
     }
 
