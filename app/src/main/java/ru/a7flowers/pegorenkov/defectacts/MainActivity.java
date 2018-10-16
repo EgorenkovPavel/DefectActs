@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity{
             public void onChanged(@Nullable Mode mode) {
                 if (mode == Mode.DEFECTS)
                     rvDeliveries.setAdapter(defectAdapter);
-                else
+                else if (mode == Mode.DIFFERENCIES)
                     rvDeliveries.setAdapter(diffAdapter);
             }
         });
