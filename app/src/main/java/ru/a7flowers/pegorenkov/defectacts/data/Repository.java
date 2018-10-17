@@ -147,7 +147,7 @@ public class Repository {
         });
     }
 
-    // DEFECT
+    // DIFF
     public void getDefect(String defectId, LoadDefectCallback callback){
         mLocalDataSource.getDefect(defectId, callback);
     }

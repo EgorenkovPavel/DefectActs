@@ -27,5 +27,6 @@
     <string name="clear">Clear</string>
     <string name="settings">Settings</string>
     <string name="increment">Increment</string>
+    <string name="difference">Difference</string>
 
 </resources>

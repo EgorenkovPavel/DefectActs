@@ -237,4 +237,7 @@ public class DefectViewModel extends AndroidViewModel{
         return mDefectWriteoff;
     }
 
+    public void setPhotoPath(String photoPath) {
+        photoPaths.add(photoPath);
+    }
 }

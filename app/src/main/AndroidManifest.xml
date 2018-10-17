@@ -51,6 +51,15 @@
                 android:value=".DeliveryDefectActivity" />
         </activity>
         <activity
+            android:name=".DiffActivity"
+            android:label="@string/difference"
+            android:parentActivityName=".DeliveryDiffActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DeliveryDiffActivity" />
+        </activity>
+        <activity
             android:name=".ReasonsActivity"
             android:label="@string/reasons"
             android:parentActivityName=".DefectActivity"

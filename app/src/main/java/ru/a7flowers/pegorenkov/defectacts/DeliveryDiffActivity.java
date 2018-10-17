@@ -15,11 +15,8 @@ import android.view.View;
 
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.adapters.DefectsAdapter;
 import ru.a7flowers.pegorenkov.defectacts.adapters.DiffsAdapter;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
-import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveryDefectViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveryDiffViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 
@@ -50,8 +47,8 @@ public class DeliveryDiffActivity extends AppCompatActivity implements DiffsAdap
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(DeliveryDiffActivity.this, DefectActivity.class);
-                i.putExtra(DefectActivity.DELIVERY, model.getDeliveryIds());
+                Intent i = new Intent(DeliveryDiffActivity.this, DiffActivity.class);
+                i.putExtra(DiffActivity.DELIVERY, model.getDeliveryIds());
                 startActivity(i);
             }
         });
@@ -82,9 +79,9 @@ public class DeliveryDiffActivity extends AppCompatActivity implements DiffsAdap
 
     @Override
     public void onDiffClick(Diff diff) {
-        Intent i = new Intent(this, DefectActivity.class);
-        i.putExtra(DefectActivity.DELIVERY, model.getDeliveryIds());
-        i.putExtra(DefectActivity.DEFECT, diff.getId());
+        Intent i = new Intent(this, DiffActivity.class);
+        i.putExtra(DiffActivity.DELIVERY, model.getDeliveryIds());
+        i.putExtra(DiffActivity.DIFF, diff.getId());
         startActivity(i);
     }
 }

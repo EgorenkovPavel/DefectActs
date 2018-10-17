@@ -41,6 +41,8 @@ public class Good {
     @NonNull
     private String deliveryId;
 
+    private String deliveryNumber;
+
     public Good(String series, String good, String suplier, String country, int deliveryQuantity, String deliveryId) {
         this.series = series;
         this.good = good;
@@ -72,5 +74,14 @@ public class Good {
 
     public String getDeliveryId() {
         return deliveryId;
+    }
+
+    public String getDeliveryNumber() {
+        return deliveryNumber;
+    }
+
+    public void setDeliveryNumber(String deliveryNumber) {
+        this.deliveryNumber = deliveryNumber;
+        //TODO define oun class and rename this entity (only for db and network)
     }
 }

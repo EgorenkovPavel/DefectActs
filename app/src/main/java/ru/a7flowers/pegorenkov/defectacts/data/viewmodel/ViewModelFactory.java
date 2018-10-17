@@ -50,6 +50,8 @@ public class ViewModelFactory extends ViewModelProvider.AndroidViewModelFactory 
             return (T) new DeliveryDiffViewModel(mApplication, mRepository);
         else if (modelClass == DefectViewModel.class)
             return (T) new DefectViewModel(mApplication, mRepository);
+        else if (modelClass == DiffViewModel.class)
+            return (T) new DiffViewModel(mApplication, mRepository);
         else if (modelClass == ReasonsViewModel.class)
             return (T) new ReasonsViewModel(mApplication, mRepository);
 
