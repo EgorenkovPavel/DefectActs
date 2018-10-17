@@ -6,7 +6,6 @@
     <string name="photo">Photo</string>
     <string name="next">Next</string>
     <string name="barcode">Barcode</string>
-    <string name="increment">Increment</string>
     <string name="decrement">Decrement</string>
     <string name="reasons">Reasons</string>
     <string name="comment">Comment</string>
@@ -27,5 +26,6 @@
     <string name="pref_preffix">pref_preffix</string>
     <string name="clear">Clear</string>
     <string name="settings">Settings</string>
+    <string name="increment">Increment</string>
 
 </resources>

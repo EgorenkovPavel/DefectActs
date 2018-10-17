@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.view.LayoutInflater;
@@ -198,6 +199,13 @@ public class DefectActivity extends AppCompatActivity {
 
     private void findViews() {
 
+        View includeAmount = findViewById(R.id.includeAmount);
+        View includeWriteoff = findViewById(R.id.includeWriteoff);
+        TextView titleAmount = includeAmount.findViewById(R.id.lblTitle);
+        titleAmount.setText(R.string.amount);
+        TextView titleWriteoff = includeWriteoff.findViewById(R.id.lblTitle);
+        titleWriteoff.setText(R.string.writeoff);
+
         acSearch = findViewById(R.id.acSearch);
         tvSeries = findViewById(R.id.tvSeries);
         tvTitle = findViewById(R.id.tvTitle);
@@ -205,13 +213,15 @@ public class DefectActivity extends AppCompatActivity {
         tvCountry = findViewById(R.id.tvCountry);
         tvDelivery = findViewById(R.id.tvDelivery);
         tvReasons = findViewById(R.id.tvReasons);
-        etAmount = findViewById(R.id.etAmount);
-        etWriteoff = findViewById(R.id.etWriteoff);
         etComment = findViewById(R.id.etComment);
-        ImageButton btnAmountInc = findViewById(R.id.btnAmountInc);
-        ImageButton btnAmountDec = findViewById(R.id.btnAmountDec);
-        ImageButton btnWriteoffInc = findViewById(R.id.btnWriteoffInc);
-        ImageButton btnWriteoffDec = findViewById(R.id.btnWriteoffDec);
+
+        etAmount = includeAmount.findViewById(R.id.etAmount);
+        etWriteoff = includeWriteoff.findViewById(R.id.etAmount);
+
+        ImageButton btnAmountInc = includeAmount.findViewById(R.id.btnInc);
+        ImageButton btnAmountDec = includeAmount.findViewById(R.id.btnDec);
+        ImageButton btnWriteoffInc = includeWriteoff.findViewById(R.id.btnInc);
+        ImageButton btnWriteoffDec = includeWriteoff.findViewById(R.id.btnDec);
         ImageButton ibPhoto = findViewById(R.id.ibPhoto);
         ImageButton ibNext = findViewById(R.id.ibNext);
         ImageButton ibBarcode = findViewById(R.id.ibBarcode);
