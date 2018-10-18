@@ -1,12 +1,10 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
-import android.Manifest;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -29,9 +27,6 @@ import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 
 public class DiffActivity extends ItemActivity {
 
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int RC_HANDLE_CAMERA_PERM = 2;
-    private static final int RC_BARCODE_CAPTURE = 9001;
     public static final String DELIVERY = "delivery";
     public static final String DIFF = "diff";
 
@@ -234,7 +229,7 @@ public class DiffActivity extends ItemActivity {
         ibBarcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startBarcode(model.getGoods().getValue());
+                startBarcode();
 
             }
         });
@@ -257,6 +252,8 @@ public class DiffActivity extends ItemActivity {
     @Override
     public void onBarcodeScanned(String barcode) {
         acSearch.setText(barcode);
+        List<Good> goods = model.findGoodsByBarcode(barcode);
+        chooseGood(goods);
         Toast.makeText(this, barcode, Toast.LENGTH_LONG).show();
     }
 
@@ -274,6 +271,5 @@ public class DiffActivity extends ItemActivity {
     public void onPhotoTaken(String photoPath) {
         model.setPhotoPath(photoPath);
     }
-
 
 }

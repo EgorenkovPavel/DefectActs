@@ -39,7 +39,6 @@ public class ItemActivity extends AppCompatActivity{
     private static final int RC_BARCODE_CAPTURE = 9001;
 
     private String mCurrentPhotoPath;
-    private List<Good> mGoods;
 
     public void startPhoto(){
         checkPermissions(RC_HANDLE_CAMERA_PERM,
@@ -47,8 +46,7 @@ public class ItemActivity extends AppCompatActivity{
                         Manifest.permission.WRITE_EXTERNAL_STORAGE});
     }
 
-    public void startBarcode(List<Good> goods){
-        mGoods = goods;
+    public void startBarcode(){
         checkPermissions(RC_BARCODE_CAPTURE, new String[]{Manifest.permission.CAMERA});
     }
 
@@ -148,7 +146,8 @@ public class ItemActivity extends AppCompatActivity{
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        @SuppressLint("SimpleDateFormat") String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -170,7 +169,6 @@ public class ItemActivity extends AppCompatActivity{
                 if (intent != null) {
                     String barcode = intent.getStringExtra(BarcodeScannerActivity.BARCODE);
                     onBarcodeScanned(barcode);
-                    findGood(barcode);
                 } else {
                     onScanFailed();
                 }
@@ -183,15 +181,7 @@ public class ItemActivity extends AppCompatActivity{
         }
     }
 
-    private void findGood(String barcode){
-        final List<Good> selectedGoods = new ArrayList<>();
-
-        if(mGoods == null) return;
-        for (Good good:mGoods) {
-            if (good.getSeries().equals(barcode)){
-                selectedGoods.add(good);
-            }
-        }
+    public void chooseGood(final List<Good> selectedGoods){
 
         switch (selectedGoods.size()) {
             case 0:
@@ -227,6 +217,8 @@ public class ItemActivity extends AppCompatActivity{
     public void onPhotoTaken(String photoPath) {
 
     }
+
+    //TODO goods and photopath replace to viewmodel
 
     class DeliveryDialogAdapter extends ArrayAdapter<Good> {
 

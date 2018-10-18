@@ -41,15 +41,19 @@ public class Good {
     @NonNull
     private String deliveryId;
 
+    @ColumnInfo(name = "deliveryNumber")
+    @SerializedName("deliveryNumber")
     private String deliveryNumber;
 
-    public Good(String series, String good, String suplier, String country, int deliveryQuantity, String deliveryId) {
+    public Good(String series, String good, String suplier, String country, int deliveryQuantity,
+                String deliveryId, String deliveryNumber) {
         this.series = series;
         this.good = good;
         this.suplier = suplier;
         this.country = country;
         this.deliveryQuantity = deliveryQuantity;
         this.deliveryId = deliveryId;
+        this.deliveryNumber = deliveryNumber;
     }
 
     public String getSeries() {
@@ -80,8 +84,5 @@ public class Good {
         return deliveryNumber;
     }
 
-    public void setDeliveryNumber(String deliveryNumber) {
-        this.deliveryNumber = deliveryNumber;
-        //TODO define oun class and rename this entity (only for db and network)
-    }
+    //TODO define oun class and rename this entity (only for db and network)
 }

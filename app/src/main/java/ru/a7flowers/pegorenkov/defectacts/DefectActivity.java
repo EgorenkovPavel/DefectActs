@@ -1,50 +1,25 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.preference.PreferenceManager;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.GoodsSearchAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
@@ -54,9 +29,6 @@ import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 
 public class DefectActivity extends ItemActivity {
 
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int RC_HANDLE_CAMERA_PERM = 2;
-    private static final int RC_BARCODE_CAPTURE = 9001;
     public static final String DELIVERY = "delivery_id";
     public static final String DEFECT = "defect_key";
 
@@ -78,9 +50,6 @@ public class DefectActivity extends ItemActivity {
     private TextView tvDelivery;
     private AutoCompleteTextView acSearch;
 
-    private String suffix;
-    private String preffix;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,10 +58,6 @@ public class DefectActivity extends ItemActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        suffix = prefs.getString(getString(R.string.pref_suffix), "");
-        preffix = prefs.getString(getString(R.string.pref_preffix), "");
 
         model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DefectViewModel.class);
 
@@ -349,7 +314,7 @@ public class DefectActivity extends ItemActivity {
         ibBarcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startBarcode(model.getGoods().getValue());
+                startBarcode();
             }
         });
 
@@ -391,6 +356,8 @@ public class DefectActivity extends ItemActivity {
     @Override
     public void onBarcodeScanned(String barcode) {
         acSearch.setText(barcode);
+        List<Good> goods = model.findGoodsByBarcode(barcode);
+        chooseGood(goods);
         Toast.makeText(this, barcode, Toast.LENGTH_LONG).show();
     }
 

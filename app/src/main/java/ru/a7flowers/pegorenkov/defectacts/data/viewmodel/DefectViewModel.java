@@ -211,11 +211,6 @@ public class DefectViewModel extends AndroidViewModel{
         return mDefectDelivery;
     }
 
-    public String getDeliveryNumber(String deliveryId) {
-        //TODO add delivery number to defectWithReasons and Good
-        return mRepository.getDeliverNumber(deliveryId);
-    }
-
     public void setWriteoff(int value) {
         if(mDefectWriteoff.getValue() != value)
             mDefectWriteoff.postValue(value);
@@ -239,5 +234,18 @@ public class DefectViewModel extends AndroidViewModel{
 
     public void setPhotoPath(String photoPath) {
         photoPaths.add(photoPath);
+    }
+
+    public List<Good> findGoodsByBarcode(String barcode){
+        final List<Good> selectedGoods = new ArrayList<>();
+
+        if(mGoods == null) return selectedGoods;
+        for (Good good:mGoods.getValue()) {
+            if (good.getSeries().equals(barcode)){
+                selectedGoods.add(good);
+            }
+        }
+
+        return selectedGoods;
     }
 }

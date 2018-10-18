@@ -1,5 +1,7 @@
 package ru.a7flowers.pegorenkov.defectacts.data.network;
 
+import android.arch.persistence.room.Ignore;
+
 public class Diff {
 
     private String id;
@@ -47,6 +49,10 @@ public class Diff {
         this.weigth = weigth;
         this.budgeonAmount = budgeonAmount;
         this.bulk = bulk;
+    }
+
+    @Ignore
+    public Diff() {
     }
 
     public String getId() {
@@ -103,5 +109,45 @@ public class Diff {
 
     public int getBulk() {
         return bulk;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setSeries(String series) {
+        this.series = series;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public void setDeliveryId(String deliveryId) {
+        this.deliveryId = deliveryId;
+    }
+
+    public void setDiameter(Integer diameter) {
+        this.diameter = diameter;
+    }
+
+    public void setLength(Integer length) {
+        this.length = length;
+    }
+
+    public void setWeigth(Integer weigth) {
+        this.weigth = weigth;
+    }
+
+    public void setBudgeonAmount(Integer budgeonAmount) {
+        this.budgeonAmount = budgeonAmount;
+    }
+
+    public void setBulk(Integer bulk) {
+        this.bulk = bulk;
     }
 }

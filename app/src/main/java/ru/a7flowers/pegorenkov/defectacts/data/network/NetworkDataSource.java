@@ -83,9 +83,15 @@ public class NetworkDataSource {
         deliveries.enqueue(new Callback<List<Delivery>>() {
             @Override
             public void onResponse(Call<List<Delivery>> call, retrofit2.Response<List<Delivery>> response) {
-                Log.d(TAG, "End download deliveries - success");
+
                 List<Delivery> list = response.body();
-                callback.onDeliveriesLoaded(list);
+                if (list == null){
+                    Log.d(TAG, "End download deliveries - failed");
+                    callback.onDeliveriesLoadFailed();
+                }else{
+                    Log.d(TAG, "End download deliveries - success");
+                    callback.onDeliveriesLoaded(list);
+                }
             }
 
             @Override
@@ -124,9 +130,15 @@ public class NetworkDataSource {
         reasons.enqueue(new Callback<List<Reason>>() {
             @Override
             public void onResponse(Call<List<Reason>> call, retrofit2.Response<List<Reason>> response) {
-                Log.d(TAG, "End download reasons - success");
+
                 List<Reason> list = response.body();
-                callback.onReasonsLoaded(list);
+                if (list == null){
+                    Log.d(TAG, "End download reasons - failed");
+                    callback.onReasonsLoadFailed();
+                }else{
+                    Log.d(TAG, "End download reasons - success");
+                    callback.onReasonsLoaded(list);
+                }
             }
 
             @Override

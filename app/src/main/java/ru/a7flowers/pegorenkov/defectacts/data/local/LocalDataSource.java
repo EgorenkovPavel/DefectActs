@@ -7,6 +7,7 @@ import android.util.Log;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.AppExecutors;
+import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ClearDatabaseCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
@@ -193,6 +194,17 @@ public class LocalDataSource {
             public void run() {
                 DefectWithReasons defect = mDb.defectDao().loadDefect(defectId);
                 callback.onDefectLoaded(defect);
+            }
+        });
+    }
+
+    //DIFF
+    public void getDiff(final String diffId, final DataSource.LoadDiffCallback callback) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Diff diff = mDb.differenceDao().loadDifference(diffId);
+                callback.onDiffLoaded(diff);
             }
         });
     }

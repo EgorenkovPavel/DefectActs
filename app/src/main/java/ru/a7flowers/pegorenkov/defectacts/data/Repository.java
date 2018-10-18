@@ -2,6 +2,7 @@ package ru.a7flowers.pegorenkov.defectacts.data;
 
 import android.arch.lifecycle.LiveData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
@@ -91,6 +92,7 @@ public class Repository {
     }
 
     public String getDeliverNumber(String deliveryId){
+        //TODO delete method
         List<Delivery> list = mDeliveries.getValue();
 
         if (list == null) return "";
@@ -147,7 +149,7 @@ public class Repository {
         });
     }
 
-    // DIFF
+    // DEFECT
     public void getDefect(String defectId, LoadDefectCallback callback){
         mLocalDataSource.getDefect(defectId, callback);
     }
@@ -229,8 +231,17 @@ public class Repository {
         });
     }
 
+    //DIFF
+    public void getDiff(String diffId, DataSource.LoadDiffCallback callback){
+        mLocalDataSource.getDiff(diffId, callback);
+    }
+
     public LiveData<List<Diff>> getDiffGoods(String[] deliveryIds) {
         //TODO load diffs
         return mLocalDataSource.getDiffGoods(deliveryIds);
+    }
+
+    public void saveDiff(Diff diff, ArrayList<String> strings) {
+        //TODO
     }
 }
