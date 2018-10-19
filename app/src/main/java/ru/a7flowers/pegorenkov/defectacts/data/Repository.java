@@ -92,20 +92,6 @@ public class Repository {
         });
     }
 
-    public String getDeliverNumber(String deliveryId){
-        //TODO delete method
-        List<Delivery> list = mDeliveries.getValue();
-
-        if (list == null) return "";
-
-        for (Delivery delivery:list) {
-            if(delivery.getId().equals(deliveryId)){
-                return delivery.getNumber();
-            }
-        }
-        return "";
-    }
-
     // GOODS
     public LiveData<List<GoodEntity>> loadGoodEntities(String[] deliveryIds) {
         return mLocalDataSource.loadGoodEntities(deliveryIds);
@@ -252,24 +238,24 @@ public class Repository {
     }
 
     private void loadDiffsFromNetwork(String[] deliveryIds){
-        //TODO
-//        for (String deliveryId : deliveryIds) {
-//            mNetworkDataSource.loadDefectsWithReasons(deliveryId, new DataSource.LoadDefectsCallback() {
-//                @Override
-//                public void onDefectsLoaded(List<DefectWithReasons> defects) {
-//                    mLocalDataSource.saveDefectsServer(defects);
-//                }
-//
-//                @Override
-//                public void onDefectsLoadFailed() {
-//
-//                }
-//            });
-//        }
+        for (String deliveryId : deliveryIds) {
+            mNetworkDataSource.loadDifferencies(deliveryId, new DataSource.LoadDiffsCallback() {
+                @Override
+                public void onDiffsLoaded(List<Diff> diffs) {
+                    mLocalDataSource.saveDiffs(diffs);
+                }
+
+                @Override
+                public void onDiffsLoadFailed() {
+
+                }
+            });
+        }
     }
 
     public void saveDiff(Diff diff, ArrayList<String> strings) {
         //TODO
     }
 
+    //TODO create adapter entity to value
 }

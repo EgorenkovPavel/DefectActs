@@ -170,7 +170,7 @@ public class NetworkDataSource {
         });
     }
 
-    //DEFECTS WITH REASONS
+    //DEFECTS
     public void loadDefectsWithReasons(String deliveryId, final LoadDefectsCallback callback){
 
         Log.d(TAG, "Start download defects");
@@ -273,4 +273,28 @@ public class NetworkDataSource {
         });
 
     }
+
+    //DIFFS
+    public void loadDifferencies(String deliveryId, final DataSource.LoadDiffsCallback callback){
+
+        Log.d(TAG, "Start download diffs");
+        Call<List<Diff>> diffs = mDeliveryApi.getDiffs(deliveryId);
+        diffs.enqueue(new Callback<List<Diff>>() {
+            @Override
+            public void onResponse(Call<List<Diff>> call, retrofit2.Response<List<Diff>> response) {
+                Log.d(TAG, "End download diffs - success");
+                List<Diff> list = response.body();
+                callback.onDiffsLoaded(list);
+            }
+
+            @Override
+            public void onFailure(Call<List<Diff>> call, Throwable t) {
+                Log.d(TAG, "End download diffs - failed");
+                callback.onDiffsLoadFailed();
+            }
+        });
+    }
+
+
+    //TODO add own classes to network entities
 }

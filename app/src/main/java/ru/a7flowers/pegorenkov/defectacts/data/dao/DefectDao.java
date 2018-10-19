@@ -9,7 +9,7 @@ import android.arch.persistence.room.Transaction;
 
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 
 @Dao
@@ -51,11 +51,11 @@ public interface DefectDao {
     LiveData<List<DefectWithReasons>> loadDefectServer();
 
     @Query("SELECT * FROM defects WHERE id = :defectId")
-    Defect getDefectById(int defectId);
+    DefectEntity getDefectById(int defectId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertDefect(Defect defect);
+    void insertDefect(DefectEntity defect);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertDefects(List<Defect> defects);
+    void insertDefects(List<DefectEntity> defects);
 }

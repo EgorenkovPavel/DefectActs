@@ -13,6 +13,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 
 @Entity(tableName = "differencies",
 foreignKeys = {@ForeignKey(entity = Delivery.class, parentColumns = "id", childColumns = "deliveryId", onDelete = ForeignKey.CASCADE)},
@@ -83,15 +84,20 @@ public class DifferenceEntity implements Serializable{
     @Ignore
     public DifferenceEntity(){}
 
-//    @Ignore
-//    public DifferenceEntity(DefectWithReasons defectServer) {
-//        this.id = defectServer.getId();
-//        this.series = defectServer.getSeries();
-//        this.quantity = defectServer.getQuantity();
-//        this.photoQuantity = defectServer.getPhotoQuantity();
-//        this.deliveryId = defectServer.getDeliveryId();
-//        this.comment = defectServer.getComment();
-//    }
+    @Ignore
+    public DifferenceEntity(Diff diff) {
+        this.id = diff.getId();
+        this.series = diff.getSeries();
+        this.quantity = diff.getQuantity();
+        this.photoQuantity = diff.getPhotoQuantity();
+        this.deliveryId = diff.getDeliveryId();
+        this.comment = diff.getComment();
+        this.diameter = diff.getDiameter();
+        this.length = diff.getLength();
+        this.weigth = diff.getWeigth();
+        this.budgeonAmount = diff.getBudgeonAmount();
+        this.bulk = diff.getBulk();
+    }
 
     public String getComment() {
         return comment;

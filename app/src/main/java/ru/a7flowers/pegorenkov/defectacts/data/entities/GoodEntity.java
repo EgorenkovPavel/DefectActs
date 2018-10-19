@@ -88,9 +88,6 @@ public class GoodEntity {
         return deliveryNumber;
     }
 
-    //TODO define oun class and rename this entity (only for db and network)
-
-
     public void setSeries(@NonNull String series) {
         this.series = series;
     }

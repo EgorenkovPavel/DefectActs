@@ -29,6 +29,9 @@ public interface DeliveryApi {
     @GET("deliveries/{deliveryId}/defects")
     Call<List<DefectWithReasons>> getDefects(@Path("deliveryId") String deliveryId);
 
+    @GET("deliveries/{deliveryId}/defects")
+    Call<List<Diff>> getDiffs(@Path("deliveryId") String deliveryId);
+
     @GET("deliveries/{deliveryId}/defects/{defectId}")
     Call<DefectWithReasons> getDefect(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
 

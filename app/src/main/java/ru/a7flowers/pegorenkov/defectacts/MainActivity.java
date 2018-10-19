@@ -164,4 +164,6 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    //TODO add tabs with modes
+
 }

@@ -153,9 +153,11 @@ public class DiffActivity extends ItemActivity {
             list.add(50);
             list.add(60);
             addValueData(data, list, R.string.length);
+            addValueData(data, list, R.string.diameter);
+            addValueData(data, list, R.string.bulk);
             //addValueData(data, good.getLength(), R.string.length);
-            addValueData(data, good.getDiameter(), R.string.diameter);
-            addValueData(data, good.getBulk(), R.string.bulk);
+//            addValueData(data, good.getDiameter(), R.string.diameter);
+//            addValueData(data, good.getBulk(), R.string.bulk);
             addValueData(data, good.getBudgeonAmount(), R.string.budgeonAmount);
             addValueData(data, good.getWeigth(), R.string.weigth);
 

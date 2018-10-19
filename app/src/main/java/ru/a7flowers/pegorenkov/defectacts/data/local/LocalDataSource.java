@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.AppExecutors;
@@ -12,9 +13,10 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ClearDatabaseCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.SaveReasonsCallback;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DifferenceEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
@@ -45,14 +47,38 @@ public class LocalDataSource {
         return INSTANCE;
     }
 
-    public LiveData<List<Delivery>> getDeliveries() {
-        Log.d(TAG, "Get all deliveries");
-        return mDb.deliveryDao().loadAllDeliveries();
+    public void deleteAll(final ClearDatabaseCallback callback) {
+        //TODO add entities
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.deliveryDao().deleteAllDeliveries();
+                mDb.reasonDao().deleteAll();
+                callback.onDatabaseCleared();
+            }
+        });
     }
 
+    //REASONS
     public LiveData<List<Reason>> getReasons() {
         Log.d(TAG, "Get all reasons");
         return mDb.reasonDao().loadReasons();
+    }
+
+    public void saveReasons(final List<Reason> reasons) {
+        Log.d(TAG, "Insert reasons");
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.reasonDao().insertReasons(reasons);
+            }
+        });
+    }
+
+    //DELIVERIES
+    public LiveData<List<Delivery>> getDeliveries() {
+        Log.d(TAG, "Get all deliveries");
+        return mDb.deliveryDao().loadAllDeliveries();
     }
 
     public void saveDeliveries(final List<Delivery> deliveries){
@@ -75,6 +101,7 @@ public class LocalDataSource {
         });
     }
 
+    //GOODS
     public LiveData<List<GoodEntity>> loadGoodEntities(String[] deliveryIds) {
         Log.d(TAG, "Get delivery goods");
         return mDb.goodDao().loadGoodEntities(deliveryIds);
@@ -83,27 +110,6 @@ public class LocalDataSource {
     public LiveData<List<Good>> loadGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery goods");
         return mDb.goodDao().loadGoods(deliveryIds);
-    }
-
-    public LiveData<List<DefectWithReasons>> getDefectGoods(String[] deliveryIds) {
-        Log.d(TAG, "Get delivery defects");
-        return mDb.defectDao().loadDefects(deliveryIds);
-    }
-
-    public LiveData<List<Diff>> getDiffGoods(String[] deliveryIds) {
-        Log.d(TAG, "Get delivery diffs");
-        return mDb.differenceDao().loadDifferencies(deliveryIds);
-    }
-
-    public void getDefectReasons(final String defectId, final LoadReasonsCallback callback) {
-        Log.d(TAG, "Get delivery defect reasons");
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<Reason> reasons = mDb.defectReasonDao().loadReasons(defectId);
-                callback.onReasonsLoaded(reasons);
-            }
-        });
     }
 
     public void saveGoods(final List<GoodEntity> goods) {
@@ -118,7 +124,24 @@ public class LocalDataSource {
         });
     }
 
-    public void saveDefects(final List<Defect> defects) {
+    //DEFECTS
+    public LiveData<List<DefectWithReasons>> getDefectGoods(String[] deliveryIds) {
+        Log.d(TAG, "Get delivery defects");
+        return mDb.defectDao().loadDefects(deliveryIds);
+    }
+
+    public void getDefectReasons(final String defectId, final LoadReasonsCallback callback) {
+        Log.d(TAG, "Get delivery defect reasons");
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Reason> reasons = mDb.defectReasonDao().loadReasons(defectId);
+                callback.onReasonsLoaded(reasons);
+            }
+        });
+    }
+
+    public void saveDefects(final List<DefectEntity> defects) {
         Log.d(TAG, "Insert defects");
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
@@ -128,22 +151,12 @@ public class LocalDataSource {
         });
     }
 
-    public void saveDefect(final Defect defect) {
+    public void saveDefect(final DefectEntity defect) {
         Log.d(TAG, "Insert 1 defect");
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
                 mDb.defectDao().insertDefect(defect);
-            }
-        });
-    }
-
-    public void saveReasons(final List<Reason> reasons) {
-        Log.d(TAG, "Insert reasons");
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.reasonDao().insertReasons(reasons);
             }
         });
     }
@@ -160,17 +173,6 @@ public class LocalDataSource {
         });
     }
 
-    public void deleteAll(final ClearDatabaseCallback callback) {
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.deliveryDao().deleteAllDeliveries();
-                mDb.reasonDao().deleteAll();
-                callback.onDatabaseCleared();
-            }
-        });
-    }
-
     public void saveDefectsServer(final List<DefectWithReasons> defects) {
         if(defects == null) return;
 
@@ -183,7 +185,7 @@ public class LocalDataSource {
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
-                Defect defect = new Defect(defectServer);
+                DefectEntity defect = new DefectEntity(defectServer);
                 mDb.defectDao().insertDefect(defect);
 
                 List<DefectReason> list = defectServer.getReasons();
@@ -205,12 +207,30 @@ public class LocalDataSource {
     }
 
     //DIFF
+    public LiveData<List<Diff>> getDiffGoods(String[] deliveryIds) {
+        Log.d(TAG, "Get delivery diffs");
+        return mDb.differenceDao().loadDifferencies(deliveryIds);
+    }
+
     public void getDiff(final String diffId, final DataSource.LoadDiffCallback callback) {
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
                 Diff diff = mDb.differenceDao().loadDifference(diffId);
                 callback.onDiffLoaded(diff);
+            }
+        });
+    }
+
+    public void saveDiffs(final List<Diff> diffs){
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<DifferenceEntity> entities = new ArrayList<>();
+                for (Diff diff:diffs) {
+                    entities.add(new DifferenceEntity(diff));
+                }
+                mDb.differenceDao().insertDifferencies(entities);
             }
         });
     }

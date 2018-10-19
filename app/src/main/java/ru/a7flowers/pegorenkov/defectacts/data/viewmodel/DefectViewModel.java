@@ -11,8 +11,7 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
@@ -81,7 +80,7 @@ public class DefectViewModel extends AndroidViewModel{
                 mDefectComment.postValue(defect.getComment());
                 mDefectAmount.postValue(defect.getQuantity());
                 mDefectWriteoff.postValue(defect.getWriteoff());
-                mDefectDelivery.postValue(mRepository.getDeliverNumber(defect.getDeliveryId()));
+                mDefectDelivery.postValue(defect.getDeliveryNumber());
             }
 
             @Override
@@ -147,7 +146,7 @@ public class DefectViewModel extends AndroidViewModel{
         mDefectTitle.postValue(good.getGood());
         mDefectSuplier.postValue(good.getSuplier());
         mDefectCountry.postValue(good.getCountry());
-        mDefectDelivery.postValue(mRepository.getDeliverNumber(good.getDeliveryId()));
+        mDefectDelivery.postValue(good.getDeliveryNumber());
     }
 
     public void setAmount(int value){
@@ -168,7 +167,7 @@ public class DefectViewModel extends AndroidViewModel{
 
         if(mDefectSeries.getValue() == null || mDefectSeries.getValue() == "") return;
 
-        Defect defect = new Defect();
+        DefectEntity defect = new DefectEntity();
         defect.setId(mDefectId);
         defect.setQuantity(mDefectAmount.getValue());
         defect.setWriteoff(mDefectWriteoff.getValue());

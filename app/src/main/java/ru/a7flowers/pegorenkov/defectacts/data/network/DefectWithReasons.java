@@ -8,14 +8,14 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 public class DefectWithReasons{
 
 //    @Embedded
-//    private Defect mDefect;
+//    private DefectEntity mDefect;
 
     @SerializedName("id")
     private String id;
@@ -38,6 +38,9 @@ public class DefectWithReasons{
     @SerializedName("deliveryId")
     private String deliveryId;
 
+    @SerializedName("deliveryNumber")
+    private String deliveryNumber;
+
     @SerializedName("title")
     private String title;
 
@@ -55,7 +58,7 @@ public class DefectWithReasons{
     }
 
     @Ignore
-    public DefectWithReasons(Defect defect, List<Reason> reasons) {
+    public DefectWithReasons(DefectEntity defect, List<Reason> reasons) {
 //        mDefect = defect;
         setDefect(defect);
 
@@ -73,11 +76,11 @@ public class DefectWithReasons{
         mReasons = reasons;
     }
 
-    public Defect getDefect() {
-        return new Defect(id, series, quantity, writeoff, photoQuantity, deliveryId, comment);
+    public DefectEntity getDefect() {
+        return new DefectEntity(id, series, quantity, writeoff, photoQuantity, deliveryId, comment);
     }
 
-    public void setDefect(Defect defect) {
+    public void setDefect(DefectEntity defect) {
         this.id = defect.getId();
         this.deliveryId = defect.getDeliveryId();
         this.series = defect.getSeries();
@@ -165,5 +168,13 @@ public class DefectWithReasons{
 
     public void setWriteoff(int writeoff) {
         this.writeoff = writeoff;
+    }
+
+    public String getDeliveryNumber() {
+        return deliveryNumber;
+    }
+
+    public void setDeliveryNumber(String deliveryNumber) {
+        this.deliveryNumber = deliveryNumber;
     }
 }

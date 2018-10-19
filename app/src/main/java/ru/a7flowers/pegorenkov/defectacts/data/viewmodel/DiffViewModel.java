@@ -89,7 +89,7 @@ public class DiffViewModel extends AndroidViewModel {
                         good.setSuplier(diff.getSuplier());
                         good.setCountry(diff.getCountry());
                         good.setDeliveryId(diff.getDeliveryId());
-                        good.setDeliveryNumber(mRepository.getDeliverNumber(diff.getDeliveryId()));
+                        good.setDeliveryNumber(diff.getDeliveryId());
                     }
                 });
             }

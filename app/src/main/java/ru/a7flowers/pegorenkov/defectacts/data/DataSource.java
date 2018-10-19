@@ -46,6 +46,11 @@ public interface DataSource {
         void onDiffLoadFailed();
     }
 
+    interface LoadDiffsCallback{
+        void onDiffsLoaded(List<Diff> diffs);
+        void onDiffsLoadFailed();
+    }
+
     interface LoadReasonsCallback{
         void onReasonsLoaded(List<Reason> reasons);
         void onReasonsLoadFailed();

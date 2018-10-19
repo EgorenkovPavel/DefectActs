@@ -17,7 +17,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 @Entity(tableName = "defects",
 foreignKeys = {@ForeignKey(entity = Delivery.class, parentColumns = "id", childColumns = "deliveryId", onDelete = ForeignKey.CASCADE)},
 indices = {@Index("deliveryId"), @Index("series")})
-public class Defect implements Serializable{
+public class DefectEntity implements Serializable{
 
     @PrimaryKey
     @NonNull
@@ -48,7 +48,7 @@ public class Defect implements Serializable{
     @SerializedName("deliveryId")
     private String deliveryId;
 
-    public Defect(String id, String series, int quantity, int writeoff, int photoQuantity, String deliveryId, String comment) {
+    public DefectEntity(String id, String series, int quantity, int writeoff, int photoQuantity, String deliveryId, String comment) {
         this.id = id;
         this.series = series;
         this.quantity = quantity;
@@ -59,10 +59,10 @@ public class Defect implements Serializable{
     }
 
     @Ignore
-    public Defect(){}
+    public DefectEntity(){}
 
     @Ignore
-    public Defect(DefectWithReasons defectServer) {
+    public DefectEntity(DefectWithReasons defectServer) {
         this.id = defectServer.getId();
         this.series = defectServer.getSeries();
         this.quantity = defectServer.getQuantity();
