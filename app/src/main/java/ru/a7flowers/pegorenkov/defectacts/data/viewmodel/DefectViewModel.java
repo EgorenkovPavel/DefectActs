@@ -12,9 +12,10 @@ import java.util.List;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
 public class DefectViewModel extends AndroidViewModel{
 

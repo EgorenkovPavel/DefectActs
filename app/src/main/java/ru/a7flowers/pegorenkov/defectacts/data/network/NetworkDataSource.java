@@ -30,7 +30,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadGoodsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.UploadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.UploadPhotosCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 public class NetworkDataSource {
@@ -153,17 +153,17 @@ public class NetworkDataSource {
     public void loadGoods(String deliveryId, final LoadGoodsCallback callback){
 
         Log.d(TAG, "Start download goods");
-        Call<List<Good>> goods = mDeliveryApi.getGoods(deliveryId);
-        goods.enqueue(new Callback<List<Good>>() {
+        Call<List<GoodEntity>> goods = mDeliveryApi.getGoods(deliveryId);
+        goods.enqueue(new Callback<List<GoodEntity>>() {
             @Override
-            public void onResponse(Call<List<Good>> call, retrofit2.Response<List<Good>> response) {
+            public void onResponse(Call<List<GoodEntity>> call, retrofit2.Response<List<GoodEntity>> response) {
                 Log.d(TAG, "End download goods - success");
-                List<Good> list = response.body();
+                List<GoodEntity> list = response.body();
                 callback.onGoodsLoaded(list);
             }
 
             @Override
-            public void onFailure(Call<List<Good>> call, Throwable t) {
+            public void onFailure(Call<List<GoodEntity>> call, Throwable t) {
                 Log.d(TAG, "End download goods - failed");
                 callback.onGoodsLoadFailed();
             }

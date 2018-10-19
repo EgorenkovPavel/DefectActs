@@ -16,10 +16,27 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DifferenceEntity;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBudgeonAmountEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBulkEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueDiameterEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueLengthEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueWeigthEntity;
 
-@Database(entities = {Delivery.class, Good.class, Defect.class, DifferenceEntity.class, Reason.class, DefectReason.class}, version = 1, exportSchema = false)
+@Database(entities = {Delivery.class,
+        GoodEntity.class,
+        Defect.class,
+        DifferenceEntity.class,
+        Reason.class,
+        DefectReason.class,
+        ValueDiameterEntity.class,
+        ValueBulkEntity.class,
+        ValueLengthEntity.class,
+        ValueBudgeonAmountEntity.class,
+        ValueWeigthEntity.class},
+
+        version = 1, exportSchema = false)
 @TypeConverters({DataConverter.class})
 public abstract class AppDatabase extends RoomDatabase{
 

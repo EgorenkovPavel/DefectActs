@@ -3,6 +3,7 @@ package ru.a7flowers.pegorenkov.defectacts.data.entities;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.support.annotation.NonNull;
 
@@ -12,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
 primaryKeys = {"series", "deliveryId"},
 foreignKeys = {@ForeignKey(entity = Delivery.class, parentColumns = "id", childColumns = "deliveryId", onDelete = ForeignKey.CASCADE)},
 indices = {@Index("deliveryId"),@Index("series")})
-public class Good {
+public class GoodEntity {
 
     @NonNull
     @ColumnInfo(name = "series")
@@ -45,8 +46,8 @@ public class Good {
     @SerializedName("deliveryNumber")
     private String deliveryNumber;
 
-    public Good(String series, String good, String suplier, String country, int deliveryQuantity,
-                String deliveryId, String deliveryNumber) {
+    public GoodEntity(String series, String good, String suplier, String country, int deliveryQuantity,
+                      String deliveryId, String deliveryNumber) {
         this.series = series;
         this.good = good;
         this.suplier = suplier;
@@ -55,6 +56,9 @@ public class Good {
         this.deliveryId = deliveryId;
         this.deliveryNumber = deliveryNumber;
     }
+
+    @Ignore
+    public GoodEntity(){}
 
     public String getSeries() {
         return series;
@@ -85,4 +89,33 @@ public class Good {
     }
 
     //TODO define oun class and rename this entity (only for db and network)
+
+
+    public void setSeries(@NonNull String series) {
+        this.series = series;
+    }
+
+    public void setGood(String good) {
+        this.good = good;
+    }
+
+    public void setSuplier(String suplier) {
+        this.suplier = suplier;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setDeliveryQuantity(@NonNull int deliveryQuantity) {
+        this.deliveryQuantity = deliveryQuantity;
+    }
+
+    public void setDeliveryId(@NonNull String deliveryId) {
+        this.deliveryId = deliveryId;
+    }
+
+    public void setDeliveryNumber(String deliveryNumber) {
+        this.deliveryNumber = deliveryNumber;
+    }
 }

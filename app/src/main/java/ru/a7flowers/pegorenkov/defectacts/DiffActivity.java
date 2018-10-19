@@ -18,10 +18,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.GoodsSearchAdapter;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DiffViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 
@@ -31,6 +33,7 @@ public class DiffActivity extends ItemActivity {
     public static final String DIFF = "diff";
 
     private DiffViewModel model;
+
     private AutoCompleteTextView acSearch;
     private TextView tvSeries;
     private TextView tvTitle;
@@ -39,6 +42,8 @@ public class DiffActivity extends ItemActivity {
     private TextView tvDelivery;
     private EditText etComment;
     private EditText etAmount;
+    private EditTextDropdown[] values = new EditTextDropdown[5];
+
     private GoodsSearchAdapter adapter;
 
     @Override
@@ -63,6 +68,13 @@ public class DiffActivity extends ItemActivity {
                 model.start(deliveryIds);
             }
         }
+
+        model.getDiffGood().observe(this, new Observer<Good>() {
+            @Override
+            public void onChanged(@Nullable Good good) {
+                init(good);
+            }
+        });
 
         model.getGoods().observe(this, new Observer<List<Good>>() {
             @Override
@@ -93,39 +105,105 @@ public class DiffActivity extends ItemActivity {
                 }
             }
         });
-        model.getDiffSeries().observe(this, new Observer<String>() {
+
+        model.getDiffDiameter().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable String series) {
-                tvSeries.setText(series);
+            public void onChanged(@Nullable Integer integer) {
+
             }
         });
-        model.getDiffTitle().observe(this, new Observer<String>() {
+        model.getDiffLength().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                tvTitle.setText(s);
+            public void onChanged(@Nullable Integer integer) {
+
             }
         });
-        model.getDiffSuplier().observe(this, new Observer<String>() {
+        model.getDiffWeigth().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                tvSuplier.setText(s);
+            public void onChanged(@Nullable Integer integer) {
+
             }
         });
-        model.getDiffCountry().observe(this, new Observer<String>() {
+        model.getDiffBudgeonAmount().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                tvCountry.setText(s);
+            public void onChanged(@Nullable Integer integer) {
+
             }
         });
-        model.getDiffDelivery().observe(this, new Observer<String>() {
+        model.getDiffBulk().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                tvDelivery.setText(s);
+            public void onChanged(@Nullable Integer integer) {
+
             }
         });
     }
 
+    private void init(Good good){
+        if (good != null) {
+            tvSeries.setText(good.getSeries());
+            tvTitle.setText(good.getGood());
+            tvSuplier.setText(good.getSuplier());
+            tvCountry.setText(good.getCountry());
+            tvDelivery.setText(good.getDeliveryNumber());
+
+            List<ValueData> data = new ArrayList<>();
+
+            List<Integer> list = new ArrayList<>();
+            list.add(40);
+            list.add(50);
+            list.add(60);
+            addValueData(data, list, R.string.length);
+            //addValueData(data, good.getLength(), R.string.length);
+            addValueData(data, good.getDiameter(), R.string.diameter);
+            addValueData(data, good.getBulk(), R.string.bulk);
+            addValueData(data, good.getBudgeonAmount(), R.string.budgeonAmount);
+            addValueData(data, good.getWeigth(), R.string.weigth);
+
+            initValues(data);
+
+        }else{
+            tvSeries.setText("");
+            tvTitle.setText("");
+            tvSuplier.setText("");
+            tvCountry.setText("");
+            tvDelivery.setText("");
+
+            initValues(null);
+        }
+    }
+
+    private void addValueData(List<ValueData> data, List<Integer> list, int resLabel){
+        if (list != null && !list.isEmpty()) {
+            data.add(new ValueData(resLabel, list));
+        }
+    }
+
+    private void initValues(List<ValueData> data){
+        int i = 0;
+
+        if(data != null) {
+            for (; i < data.size(); i++) {
+                EditTextDropdown view = values[i];
+                view.setVisibility(View.VISIBLE);
+                view.setTitle(data.get(i).getLabel());
+                view.setList(data.get(i).getValues());
+                view.setValue(0);
+            }
+        }
+
+        for (;i<values.length;i++){
+            View view = values[i];
+            view.setVisibility(View.GONE);
+        }
+    }
+
     private void findViews() {
+
+        values[0] = findViewById(R.id.includeNum1);
+        values[1] = findViewById(R.id.includeNum2);
+        values[2] = findViewById(R.id.includeNum3);
+        values[3] = findViewById(R.id.includeNum4);
+        values[4] = findViewById(R.id.includeNum5);
 
         View includeAmount = findViewById(R.id.includeAmount);
         TextView titleAmount = includeAmount.findViewById(R.id.lblTitle);
@@ -270,6 +348,24 @@ public class DiffActivity extends ItemActivity {
     @Override
     public void onPhotoTaken(String photoPath) {
         model.setPhotoPath(photoPath);
+    }
+
+    private class ValueData{
+        private List<Integer> values;
+        private int label;
+
+        public ValueData(int label, List<Integer> values) {
+            this.values = values;
+            this.label = label;
+        }
+
+        public List<Integer> getValues() {
+            return values;
+        }
+
+        public int getLabel() {
+            return label;
+        }
     }
 
 }

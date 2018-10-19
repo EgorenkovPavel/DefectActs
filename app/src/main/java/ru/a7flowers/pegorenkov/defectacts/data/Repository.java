@@ -9,11 +9,12 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ReloadDataCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.local.LocalDataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.network.NetworkDataSource;
 
 public class Repository {
@@ -106,6 +107,10 @@ public class Repository {
     }
 
     // GOODS
+    public LiveData<List<GoodEntity>> loadGoodEntities(String[] deliveryIds) {
+        return mLocalDataSource.loadGoodEntities(deliveryIds);
+    }
+
     public LiveData<List<Good>> loadGoods(String[] deliveryIds) {
         return mLocalDataSource.loadGoods(deliveryIds);
     }
@@ -114,7 +119,7 @@ public class Repository {
         for (String deliveryId : deliveryIds) {
             mNetworkDataSource.loadGoods(deliveryId, new DataSource.LoadGoodsCallback() {
                 @Override
-                public void onGoodsLoaded(List<Good> goods) {
+                public void onGoodsLoaded(List<GoodEntity> goods) {
                     mLocalDataSource.saveGoods(goods);
                 }
 
@@ -124,6 +129,10 @@ public class Repository {
                 }
             });
         }
+    }
+
+    public void getGood(String deliveryId, String series, DataSource.LoadGoodCallback callback) {
+        mLocalDataSource.getGood(deliveryId, series, callback);
     }
 
     // REASONS
@@ -237,11 +246,30 @@ public class Repository {
     }
 
     public LiveData<List<Diff>> getDiffGoods(String[] deliveryIds) {
-        //TODO load diffs
+        loadGoodsFromNetwork(deliveryIds);
+        loadDiffsFromNetwork(deliveryIds);
         return mLocalDataSource.getDiffGoods(deliveryIds);
+    }
+
+    private void loadDiffsFromNetwork(String[] deliveryIds){
+        //TODO
+//        for (String deliveryId : deliveryIds) {
+//            mNetworkDataSource.loadDefectsWithReasons(deliveryId, new DataSource.LoadDefectsCallback() {
+//                @Override
+//                public void onDefectsLoaded(List<DefectWithReasons> defects) {
+//                    mLocalDataSource.saveDefectsServer(defects);
+//                }
+//
+//                @Override
+//                public void onDefectsLoadFailed() {
+//
+//                }
+//            });
+//        }
     }
 
     public void saveDiff(Diff diff, ArrayList<String> strings) {
         //TODO
     }
+
 }

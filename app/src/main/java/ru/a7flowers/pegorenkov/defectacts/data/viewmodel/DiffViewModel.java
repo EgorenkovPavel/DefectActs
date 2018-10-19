@@ -11,10 +11,9 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
 public class DiffViewModel extends AndroidViewModel {
 
@@ -26,14 +25,9 @@ public class DiffViewModel extends AndroidViewModel {
 
 
     private String mDiffId;
-    private String mDiffDeliveryId;
-    private MutableLiveData<String> mDiffTitle = new MutableLiveData<>();
-    private MutableLiveData<String> mDiffSuplier = new MutableLiveData<>();
-    private MutableLiveData<String> mDiffCountry = new MutableLiveData<>();
-    private MutableLiveData<String> mDiffDelivery = new MutableLiveData<>();
+    private MutableLiveData<Good> mDiffGood = new MutableLiveData<>();
     private MutableLiveData<Integer> mDiffAmount = new MutableLiveData<>();
     private MutableLiveData<String> mDiffComment = new MutableLiveData<>();
-    private MutableLiveData<String> mDiffSeries = new MutableLiveData<>();
 
     private MutableLiveData<Integer> mDiffDiameter = new MutableLiveData<>();
     private MutableLiveData<Integer> mDiffLength = new MutableLiveData<>();
@@ -52,13 +46,9 @@ public class DiffViewModel extends AndroidViewModel {
 
     private void init(){
         mDiffId = "";
-        mDiffTitle.postValue("");
-        mDiffSuplier.postValue("");
-        mDiffCountry.postValue("");
-        mDiffDelivery.postValue("");
+        mDiffGood.postValue(null);
         mDiffComment.postValue("");
         mDiffAmount.postValue(0);
-        mDiffSeries.postValue("");
 
         mDiffDiameter.postValue(0);
         mDiffLength.postValue(0);
@@ -80,15 +70,28 @@ public class DiffViewModel extends AndroidViewModel {
 
         mRepository.getDiff(diffId, new DataSource.LoadDiffCallback() {
             @Override
-            public void onDiffLoaded(Diff diff) {
-                mDiffSeries.postValue(diff.getSeries());
-                mDiffTitle.postValue(diff.getTitle());
-                mDiffSuplier.postValue(diff.getSuplier());
-                mDiffCountry.postValue(diff.getCountry());
-                mDiffDeliveryId = diff.getDeliveryId();
+            public void onDiffLoaded(final Diff diff) {
+
                 mDiffComment.postValue(diff.getComment());
                 mDiffAmount.postValue(diff.getQuantity());
-                mDiffDelivery.postValue(mRepository.getDeliverNumber(diff.getDeliveryId()));
+
+                mRepository.getGood(diff.getDeliveryId(), diff.getSeries(), new DataSource.LoadGoodCallback() {
+                    @Override
+                    public void onGoodLoaded(Good good) {
+                        mDiffGood.setValue(good);
+                    }
+
+                    @Override
+                    public void onGoodLoadFailed() {
+                        GoodEntity good = new GoodEntity();
+                        good.setSeries(diff.getSeries());
+                        good.setGood(diff.getTitle());
+                        good.setSuplier(diff.getSuplier());
+                        good.setCountry(diff.getCountry());
+                        good.setDeliveryId(diff.getDeliveryId());
+                        good.setDeliveryNumber(mRepository.getDeliverNumber(diff.getDeliveryId()));
+                    }
+                });
             }
 
             @Override
@@ -104,12 +107,7 @@ public class DiffViewModel extends AndroidViewModel {
     }
 
     public void setGood(Good good) {
-        mDiffSeries.postValue(good.getSeries());
-        mDiffDeliveryId = good.getDeliveryId();
-        mDiffTitle.postValue(good.getGood());
-        mDiffSuplier.postValue(good.getSuplier());
-        mDiffCountry.postValue(good.getCountry());
-        mDiffDelivery.postValue(mRepository.getDeliverNumber(good.getDeliveryId()));
+        mDiffGood.setValue(good);
     }
 
     public void setAmount(int value) {
@@ -135,14 +133,17 @@ public class DiffViewModel extends AndroidViewModel {
     }
 
     public void saveDiff() {
-        if(mDiffSeries.getValue() == null || mDiffSeries.getValue().isEmpty()) return;
+
+        Good good = mDiffGood.getValue();
+        if(mDiffGood.getValue() == null) return;
 
         Diff diff = new Diff();
         diff.setId(mDiffId);
         diff.setQuantity(mDiffAmount.getValue());
-        diff.setSeries(mDiffSeries.getValue());
         diff.setComment(mDiffComment.getValue());
-        diff.setDeliveryId(mDiffDeliveryId);
+        diff.setDeliveryId(good.getDeliveryId());
+        diff.setSeries(good.getSeries());
+
         diff.setDiameter(mDiffDiameter.getValue());
         diff.setLength(mDiffLength.getValue());
         diff.setWeigth(mDiffWeigth.getValue());
@@ -152,6 +153,10 @@ public class DiffViewModel extends AndroidViewModel {
         mRepository.saveDiff(diff, new ArrayList<>(photoPaths));
 
         init();
+    }
+
+    public MutableLiveData<Good> getDiffGood() {
+        return mDiffGood;
     }
 
     public LiveData<List<Good>> getGoods() {
@@ -164,26 +169,6 @@ public class DiffViewModel extends AndroidViewModel {
 
     public LiveData<String> getDiffComment() {
         return mDiffComment;
-    }
-
-    public LiveData<String> getDiffSeries() {
-        return mDiffSeries;
-    }
-
-    public LiveData<String> getDiffTitle() {
-        return mDiffTitle;
-    }
-
-    public LiveData<String> getDiffSuplier() {
-        return mDiffSuplier;
-    }
-
-    public LiveData<String> getDiffCountry() {
-        return mDiffCountry;
-    }
-
-    public LiveData<String> getDiffDelivery() {
-        return mDiffDelivery;
     }
 
     public void setPhotoPath(String photoPath) {
@@ -203,23 +188,23 @@ public class DiffViewModel extends AndroidViewModel {
         return selectedGoods;
     }
 
-    public MutableLiveData<Integer> getmDiffDiameter() {
+    public MutableLiveData<Integer> getDiffDiameter() {
         return mDiffDiameter;
     }
 
-    public MutableLiveData<Integer> getmDiffLength() {
+    public MutableLiveData<Integer> getDiffLength() {
         return mDiffLength;
     }
 
-    public MutableLiveData<Integer> getmDiffWeigth() {
+    public MutableLiveData<Integer> getDiffWeigth() {
         return mDiffWeigth;
     }
 
-    public MutableLiveData<Integer> getmDiffBudgeonAmount() {
+    public MutableLiveData<Integer> getDiffBudgeonAmount() {
         return mDiffBudgeonAmount;
     }
 
-    public MutableLiveData<Integer> getmDiffBulk() {
+    public MutableLiveData<Integer> getDiffBulk() {
         return mDiffBulk;
     }
 }

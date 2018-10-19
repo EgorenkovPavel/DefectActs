@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -43,10 +42,10 @@
         layout="@layout/edit_text_inc_dec"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/includeNum5"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/includeNum3" />
 
@@ -94,65 +93,81 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <include
+    <!--<include-->
+    <!--android:id="@+id/includeNum1"-->
+    <!--layout="@layout/edittext_dropdown"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginStart="16dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--app:layout_constraintEnd_toStartOf="@+id/includeNum2"-->
+    <!--app:layout_constraintHorizontal_bias="0.5"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/includeSearch" />-->
+
+    <ru.a7flowers.pegorenkov.defectacts.EditTextDropdown
         android:id="@+id/includeNum1"
-        layout="@layout/edittext_dropdown"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/includeNum2"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/includeSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/includeSearch"
+        tools:layout_height="60dp" />
 
-    <include
+    <ru.a7flowers.pegorenkov.defectacts.EditTextDropdown
         android:id="@+id/includeNum3"
-        layout="@layout/edittext_dropdown"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/includeNum4"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/includeNum1" />
+        app:layout_constraintTop_toBottomOf="@+id/includeNum1"
+        tools:layout_height="60dp" />
 
-    <include
+    <ru.a7flowers.pegorenkov.defectacts.EditTextDropdown
         android:id="@+id/includeNum4"
-        layout="@layout/edittext_dropdown"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/includeNum3"
-        app:layout_constraintTop_toTopOf="@+id/includeNum3" />
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/includeNum3"
+        tools:layout_height="60dp" />
 
-    <include
+    <ru.a7flowers.pegorenkov.defectacts.EditTextDropdown
         android:id="@+id/includeNum5"
-        layout="@layout/edittext_dropdown"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/includeAmount"
-        app:layout_constraintTop_toTopOf="@+id/includeAmount" />
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/includeAmount"
+        tools:layout_height="60dp" />
 
-    <include
+    <ru.a7flowers.pegorenkov.defectacts.EditTextDropdown
         android:id="@+id/includeNum2"
-        layout="@layout/edittext_dropdown"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/includeNum1"
-        app:layout_constraintTop_toTopOf="@+id/includeNum1" />
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/includeNum1"
+        tools:layout_height="60dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
 </android.support.constraint.ConstraintLayout>

@@ -3,10 +3,11 @@ package ru.a7flowers.pegorenkov.defectacts.data;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
 public interface DataSource {
 
@@ -21,8 +22,13 @@ public interface DataSource {
     }
 
     interface LoadGoodsCallback{
-        void onGoodsLoaded(List<Good> goods);
+        void onGoodsLoaded(List<GoodEntity> goods);
         void onGoodsLoadFailed();
+    }
+
+    interface LoadGoodCallback{
+        void onGoodLoaded(Good good);
+        void onGoodLoadFailed();
     }
 
     interface LoadDefectsCallback{

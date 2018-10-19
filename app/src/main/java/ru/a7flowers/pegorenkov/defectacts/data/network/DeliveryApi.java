@@ -9,7 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 public interface DeliveryApi {
@@ -24,7 +24,7 @@ public interface DeliveryApi {
     Call<Delivery> getDelivery(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/goods")
-    Call<List<Good>> getGoods(@Path("deliveryId") String deliveryId);
+    Call<List<GoodEntity>> getGoods(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/defects")
     Call<List<DefectWithReasons>> getDefects(@Path("deliveryId") String deliveryId);

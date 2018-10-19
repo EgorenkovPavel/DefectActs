@@ -15,10 +15,11 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.SaveReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
 public class LocalDataSource {
 
@@ -74,6 +75,11 @@ public class LocalDataSource {
         });
     }
 
+    public LiveData<List<GoodEntity>> loadGoodEntities(String[] deliveryIds) {
+        Log.d(TAG, "Get delivery goods");
+        return mDb.goodDao().loadGoodEntities(deliveryIds);
+    }
+
     public LiveData<List<Good>> loadGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery goods");
         return mDb.goodDao().loadGoods(deliveryIds);
@@ -100,7 +106,7 @@ public class LocalDataSource {
         });
     }
 
-    public void saveGoods(final List<Good> goods) {
+    public void saveGoods(final List<GoodEntity> goods) {
         if(goods == null) return;
 
         Log.d(TAG, "Insert goods");
@@ -208,4 +214,15 @@ public class LocalDataSource {
             }
         });
     }
+
+    public void getGood(final String deliveryId, final String series, final DataSource.LoadGoodCallback callback) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Good good = mDb.goodDao().loadGood(deliveryId, series);
+                callback.onGoodLoaded(good);
+            }
+        });
+    }
+
 }

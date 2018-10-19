@@ -30,7 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
 public class ItemActivity extends AppCompatActivity{
 
