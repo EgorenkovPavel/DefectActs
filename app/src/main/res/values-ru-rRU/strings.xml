@@ -28,4 +28,10 @@
     <string name="pref_preffix">Префикс</string>
     <string name="clear">Очистить</string>
     <string name="settings">Настройки</string>
+    <string name="difference">Пересорт</string>
+    <string name="length">Длина</string>
+    <string name="diameter">Диаметр</string>
+    <string name="bulk">Объем</string>
+    <string name="budgeonAmount">Количество бутонов</string>
+    <string name="weigth">Вес</string>
 </resources>
