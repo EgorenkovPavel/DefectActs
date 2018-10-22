@@ -78,18 +78,19 @@ public class DiffViewModel extends AndroidViewModel {
                 mRepository.getGood(diff.getDeliveryId(), diff.getSeries(), new DataSource.LoadGoodCallback() {
                     @Override
                     public void onGoodLoaded(Good good) {
-                        mDiffGood.setValue(good);
+                        mDiffGood.postValue(good);
                     }
 
                     @Override
                     public void onGoodLoadFailed() {
-                        GoodEntity good = new GoodEntity();
+                        Good good = new Good();
                         good.setSeries(diff.getSeries());
                         good.setGood(diff.getTitle());
                         good.setSuplier(diff.getSuplier());
                         good.setCountry(diff.getCountry());
                         good.setDeliveryId(diff.getDeliveryId());
                         good.setDeliveryNumber(diff.getDeliveryId());
+                        mDiffGood.postValue(good);
                     }
                 });
             }

@@ -22,11 +22,21 @@ public interface GoodDao {
     GoodEntity loadGoodEntity(String deliveryId, String series);
 
     @Transaction
-    @Query("SELECT * FROM goods WHERE deliveryid IN (:deliveryIds) ")
+    @Query("SELECT goods.*, " +
+            "deliveries.number as deliveryNumber " +
+            "FROM goods as goods " +
+            "INNER JOIN deliveries as deliveries " +
+            "ON deliveryId = id " +
+            "WHERE deliveryid IN (:deliveryIds) ")
     LiveData<List<Good>> loadGoods(String[] deliveryIds);
 
     @Transaction
-    @Query("SELECT * FROM goods WHERE deliveryid =:deliveryId AND series =:series ")
+    @Query("SELECT goods.*, " +
+            "deliveries.number as deliveryNumber " +
+            "FROM goods as goods " +
+            "INNER JOIN deliveries as deliveries " +
+            "ON deliveryId = id " +
+            "WHERE deliveryid =:deliveryId AND series =:series ")
     Good loadGood(String deliveryId, String series);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -2,6 +2,8 @@ package ru.a7flowers.pegorenkov.defectacts.data.network;
 
 import android.arch.persistence.room.Ignore;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Diff {
 
     private String id;
