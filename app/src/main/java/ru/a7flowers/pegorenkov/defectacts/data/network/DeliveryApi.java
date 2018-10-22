@@ -29,7 +29,7 @@ public interface DeliveryApi {
     @GET("deliveries/{deliveryId}/defects")
     Call<List<DefectWithReasons>> getDefects(@Path("deliveryId") String deliveryId);
 
-    @GET("deliveries/{deliveryId}/defects")
+    @GET("deliveries/{deliveryId}/differencies")
     Call<List<Diff>> getDiffs(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/defects/{defectId}")
@@ -40,6 +40,9 @@ public interface DeliveryApi {
 
     @POST("deliveries/{deliveryId}/defects")
     Call<String> setDefect(@Path("deliveryId") String deliveryId, @Body DefectWithReasons defect);
+
+    @POST("deliveries/{deliveryId}/differencies")
+    Call<String> setDiff(@Path("deliveryId") String deliveryId, @Body Diff diff);
 
     @POST("deliveries/{deliveryId}/defects/{defectId}/photo")
     Call<Boolean> setPhoto(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId, @Body RequestBody photo);

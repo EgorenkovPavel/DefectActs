@@ -80,4 +80,9 @@ public interface DataSource {
         void onDataReloaded();
         void onDataReloadingFailed();
     }
+
+    interface UploadDiffCallback {
+        void onDiffUploaded(Diff diff);
+        void onDiffUploadingFailed();
+    }
 }

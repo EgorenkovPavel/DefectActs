@@ -196,12 +196,12 @@ public class Repository {
                 mNetworkDataSource.savePhotos(defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
                     @Override
                     public void onPhotosUploaded() {
-                        refreshDataAfterSaving(defect);
+                        refreshDataAfterSavingDefect(defect);
                     }
 
                     @Override
                     public void onPhotosUploadingFailed() {
-                        refreshDataAfterSaving(defect);
+                        refreshDataAfterSavingDefect(defect);
                     }
                 });
             }
@@ -239,7 +239,7 @@ public class Repository {
         mLocalDataSource.getDefectReasons(defectId, callback);
     }
 
-    private void refreshDataAfterSaving(DefectWithReasons defect){
+    private void refreshDataAfterSavingDefect(DefectWithReasons defect){
         mNetworkDataSource.loadDelivery(defect.getDeliveryId(), new DataSource.LoadDeliveryCallback() {
             @Override
             public void onDeliveryLoaded(Delivery delivery) {
@@ -292,7 +292,31 @@ public class Repository {
         }
     }
 
-    public void saveDiff(Diff diff, ArrayList<String> strings) {
+    public void saveDiff(Diff diff, final ArrayList<String> photoPaths) {
+        mNetworkDataSource.saveDiff(diff, new DataSource.UploadDiffCallback() {
+            @Override
+            public void onDiffUploaded(final Diff diff) {
+                mNetworkDataSource.savePhotos(diff.getDeliveryId(), diff.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
+                    @Override
+                    public void onPhotosUploaded() {
+                        refreshDataAfterSavingDiff(diff);
+                    }
+
+                    @Override
+                    public void onPhotosUploadingFailed() {
+                        refreshDataAfterSavingDiff(diff);
+                    }
+                });
+            }
+
+            @Override
+            public void onDiffUploadingFailed() {
+
+            }
+        });
+    }
+
+    private void refreshDataAfterSavingDiff(Diff diff){
         //TODO
     }
 

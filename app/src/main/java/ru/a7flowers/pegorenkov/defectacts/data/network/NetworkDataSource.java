@@ -295,6 +295,26 @@ public class NetworkDataSource {
         });
     }
 
+    public void saveDiff(final Diff diff, final DataSource.UploadDiffCallback callback) {
+
+        Log.d(TAG, "Start upload diff");
+
+        Call<String> responce = mDeliveryApi.setDiff(diff.getDeliveryId(), diff);
+        responce.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                Log.d(TAG, "End upload defect - success");
+                diff.setId(response.body());
+                callback.onDiffUploaded(diff);
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d(TAG, "End upload defect - failed");
+                callback.onDiffUploadingFailed();
+            }
+        });
+    }
 
     //TODO add own classes to network entities
 }
