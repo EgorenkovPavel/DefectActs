@@ -153,17 +153,17 @@ public class NetworkDataSource {
     public void loadGoods(String deliveryId, final LoadGoodsCallback callback){
 
         Log.d(TAG, "Start download goods");
-        Call<List<GoodEntity>> goods = mDeliveryApi.getGoods(deliveryId);
-        goods.enqueue(new Callback<List<GoodEntity>>() {
+        Call<List<Good>> goods = mDeliveryApi.getGoods(deliveryId);
+        goods.enqueue(new Callback<List<Good>>() {
             @Override
-            public void onResponse(Call<List<GoodEntity>> call, retrofit2.Response<List<GoodEntity>> response) {
+            public void onResponse(Call<List<Good>> call, retrofit2.Response<List<Good>> response) {
                 Log.d(TAG, "End download goods - success");
-                List<GoodEntity> list = response.body();
+                List<Good> list = response.body();
                 callback.onGoodsLoaded(list);
             }
 
             @Override
-            public void onFailure(Call<List<GoodEntity>> call, Throwable t) {
+            public void onFailure(Call<List<Good>> call, Throwable t) {
                 Log.d(TAG, "End download goods - failed");
                 callback.onGoodsLoadFailed();
             }

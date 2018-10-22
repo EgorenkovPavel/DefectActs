@@ -22,7 +22,7 @@ public interface DataSource {
     }
 
     interface LoadGoodsCallback{
-        void onGoodsLoaded(List<GoodEntity> goods);
+        void onGoodsLoaded(List<Good> goods);
         void onGoodsLoadFailed();
     }
 

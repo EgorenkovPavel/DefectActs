@@ -11,6 +11,11 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ReloadDataCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBudgeonAmountEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBulkEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueDiameterEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueLengthEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueWeigthEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.local.LocalDataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
@@ -105,8 +110,42 @@ public class Repository {
         for (String deliveryId : deliveryIds) {
             mNetworkDataSource.loadGoods(deliveryId, new DataSource.LoadGoodsCallback() {
                 @Override
-                public void onGoodsLoaded(List<GoodEntity> goods) {
-                    mLocalDataSource.saveGoods(goods);
+                public void onGoodsLoaded(List<Good> goods) {
+                    List<GoodEntity> goodEntityList = new ArrayList<>();
+                    List<ValueDiameterEntity> diameters = new ArrayList<>();
+                    List<ValueLengthEntity> lengths = new ArrayList<>();
+                    List<ValueWeigthEntity> weigths = new ArrayList<>();
+                    List<ValueBudgeonAmountEntity> budgeonAmounts = new ArrayList<>();
+                    List<ValueBulkEntity> bulks = new ArrayList<>();
+
+                    for (Good good:goods) {
+                        goodEntityList.add(new GoodEntity(good.getSeries(), good.getGood(),
+                                good.getSuplier(), good.getCountry(), good.getDeliveryQuantity(),
+                                good.getDeliveryId(), good.getDeliveryNumber()));
+
+                        for (Integer value:good.getDiameter()) {
+                            diameters.add(new ValueDiameterEntity(good.getSeries(), value));
+                        }
+                        for (Integer value:good.getLength()) {
+                            lengths.add(new ValueLengthEntity(good.getSeries(), value));
+                        }
+                        for (Integer value:good.getWeigth()) {
+                            weigths.add(new ValueWeigthEntity(good.getSeries(), value));
+                        }
+                        for (Integer value:good.getBudgeonAmount()) {
+                            budgeonAmounts.add(new ValueBudgeonAmountEntity(good.getSeries(), value));
+                        }
+                        for (Integer value:good.getBulk()) {
+                            bulks.add(new ValueBulkEntity(good.getSeries(), value));
+                        }
+                    }
+
+                    mLocalDataSource.saveGoods(goodEntityList);
+                    mLocalDataSource.saveDiameters(diameters);
+                    mLocalDataSource.saveLengths(lengths);
+                    mLocalDataSource.saveWeigths(weigths);
+                    mLocalDataSource.saveBudgeonAmounts(budgeonAmounts);
+                    mLocalDataSource.saveBulks(bulks);
                 }
 
                 @Override

@@ -24,7 +24,7 @@ public interface DeliveryApi {
     Call<Delivery> getDelivery(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/goods")
-    Call<List<GoodEntity>> getGoods(@Path("deliveryId") String deliveryId);
+    Call<List<Good>> getGoods(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/defects")
     Call<List<DefectWithReasons>> getDefects(@Path("deliveryId") String deliveryId);

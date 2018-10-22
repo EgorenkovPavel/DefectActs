@@ -19,6 +19,11 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DifferenceEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBudgeonAmountEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBulkEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueDiameterEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueLengthEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueWeigthEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
@@ -48,12 +53,17 @@ public class LocalDataSource {
     }
 
     public void deleteAll(final ClearDatabaseCallback callback) {
-        //TODO add entities
+
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
                 mDb.deliveryDao().deleteAllDeliveries();
                 mDb.reasonDao().deleteAll();
+                mDb.goodDao().deleteAllBudgeonsAmounts();
+                mDb.goodDao().deleteAllBulks();
+                mDb.goodDao().deleteAllDiameters();
+                mDb.goodDao().deleteAllLengths();
+                mDb.goodDao().deleteAllWeigths();
                 callback.onDatabaseCleared();
             }
         });
@@ -245,4 +255,49 @@ public class LocalDataSource {
         });
     }
 
+    //VALUES
+    public void saveDiameters(final List<ValueDiameterEntity> diameters) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.goodDao().insertDiameters(diameters);
+            }
+        });
+    }
+
+    public void saveLengths(final List<ValueLengthEntity> lengths) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.goodDao().insertLengths(lengths);
+            }
+        });
+    }
+
+    public void saveWeigths(final List<ValueWeigthEntity> weigths) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.goodDao().insertWeigths(weigths);
+            }
+        });
+    }
+
+    public void saveBudgeonAmounts(final List<ValueBudgeonAmountEntity> budgeonAmounts) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.goodDao().insertBudgeonAmounts(budgeonAmounts);
+            }
+        });
+    }
+
+    public void saveBulks(final List<ValueBulkEntity> bulks) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.goodDao().insertBulk(bulks);
+            }
+        });
+    }
 }
