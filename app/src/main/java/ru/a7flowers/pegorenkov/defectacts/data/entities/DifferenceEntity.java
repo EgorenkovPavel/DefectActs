@@ -12,7 +12,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 
 @Entity(tableName = "differencies",

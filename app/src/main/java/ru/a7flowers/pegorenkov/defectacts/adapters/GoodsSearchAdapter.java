@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
 public class GoodsSearchAdapter extends ArrayAdapter<Good> {

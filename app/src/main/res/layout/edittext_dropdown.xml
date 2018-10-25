@@ -28,7 +28,8 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Title" />
+        tools:text="Title"
+        android:labelFor="@id/acText"/>
 
     <ImageButton
         android:id="@+id/btnDropdown"
@@ -42,6 +43,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/acText"
         app:layout_constraintEnd_toEndOf="@+id/acText"
         app:layout_constraintTop_toTopOf="@+id/acText"
-        app:srcCompat="@android:drawable/arrow_down_float" />
+        app:srcCompat="@android:drawable/arrow_down_float"
+        android:contentDescription="@string/dropdown" />
 
 </android.support.constraint.ConstraintLayout>

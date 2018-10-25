@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 
 public class DeliveryDiffViewModel extends AndroidViewModel {

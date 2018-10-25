@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.GoodsSearchAdapter;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DefectViewModel;

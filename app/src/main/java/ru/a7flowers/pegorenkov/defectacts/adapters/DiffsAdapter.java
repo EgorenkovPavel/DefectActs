@@ -10,7 +10,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 
 public class DiffsAdapter extends RecyclerView.Adapter<DiffsAdapter.DiffHolder> {

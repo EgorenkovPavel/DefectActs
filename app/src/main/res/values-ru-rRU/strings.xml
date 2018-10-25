@@ -23,7 +23,6 @@
     <string name="country">Страна</string>
     <string name="choose_delivery">Выберите доставку</string>
     <string name="writeoff">Списано</string>
-    <string name="title_activity_settings">Настройки</string>
     <string name="pref_suffix">Суффикс</string>
     <string name="pref_preffix">Префикс</string>
     <string name="clear">Очистить</string>

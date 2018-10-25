@@ -30,7 +30,6 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadGoodsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.UploadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.UploadPhotosCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 public class NetworkDataSource {
