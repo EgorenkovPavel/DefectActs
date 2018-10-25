@@ -71,6 +71,9 @@ public class DiffViewModel extends AndroidViewModel {
             @Override
             public void onDiffLoaded(final Diff diff) {
 
+                //TODO Problem: loading good and diff independently. When to set length value to view?
+                //using rxjava or call model when draw includes
+
                 mDiffComment.postValue(diff.getComment());
                 mDiffAmount.postValue(diff.getQuantity());
 
