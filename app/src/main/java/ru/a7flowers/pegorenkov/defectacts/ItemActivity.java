@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -38,8 +39,24 @@ public class ItemActivity extends AppCompatActivity{
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int RC_HANDLE_CAMERA_PERM = 2;
     private static final int RC_BARCODE_CAPTURE = 9001;
+    private static final String PHOTO_PATH_KEY = "photo_path_key";
 
     private String mCurrentPhotoPath;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(PHOTO_PATH_KEY)){
+            mCurrentPhotoPath = savedInstanceState.getString(PHOTO_PATH_KEY);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(PHOTO_PATH_KEY, mCurrentPhotoPath);
+        super.onSaveInstanceState(outState);
+    }
 
     public void startPhoto(){
         checkPermissions(RC_HANDLE_CAMERA_PERM,
@@ -218,8 +235,6 @@ public class ItemActivity extends AppCompatActivity{
     public void onPhotoTaken(String photoPath) {
 
     }
-
-    //TODO goods and photopath replace to viewmodel
 
     class DeliveryDialogAdapter extends ArrayAdapter<Good> {
 

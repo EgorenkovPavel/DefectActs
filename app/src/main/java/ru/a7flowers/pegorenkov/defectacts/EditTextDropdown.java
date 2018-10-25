@@ -1,6 +1,7 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,10 +10,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
 public class EditTextDropdown extends ConstraintLayout{
 
@@ -86,7 +91,11 @@ public class EditTextDropdown extends ConstraintLayout{
         btnDropdown.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                acText.showDropDown();
+                if (acText.isPopupShowing()) {
+                    acText.dismissDropDown();
+                }else{
+                    acText.showDropDown();
+                }
             }
         });
     }

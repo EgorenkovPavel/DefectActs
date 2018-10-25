@@ -255,6 +255,16 @@ public class LocalDataSource {
         });
     }
 
+    public void saveDiff(final Diff diff) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                DifferenceEntity differenceEntity = new DifferenceEntity(diff);
+                mDb.differenceDao().insertDifference(differenceEntity);
+            }
+        });
+    }
+
     //VALUES
     public void saveDiameters(final List<ValueDiameterEntity> diameters) {
         mAppExecutors.discIO().execute(new Runnable() {

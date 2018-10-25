@@ -25,7 +25,7 @@
         </activity>
         <activity
             android:name=".DeliveryDefectActivity"
-            android:label="@string/delivery"
+            android:label="@string/defects"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
             <meta-data
@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name=".DeliveryDiffActivity"
-            android:label="@string/delivery"
+            android:label="@string/differencies"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
             <meta-data

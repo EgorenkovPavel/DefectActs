@@ -33,5 +33,7 @@
     <string name="bulk">Bulk</string>
     <string name="budgeonAmount">Budgeon amount</string>
     <string name="weigth">Weigth</string>
+    <string name="defects">Defects</string>
+    <string name="differencies">Differencies</string>
 
 </resources>

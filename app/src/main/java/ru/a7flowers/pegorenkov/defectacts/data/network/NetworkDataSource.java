@@ -316,5 +316,25 @@ public class NetworkDataSource {
         });
     }
 
+    public void loadDiff(String deliveryId, String diffId, final DataSource.LoadDiffCallback callback){
+
+        Log.d(TAG, "Start download 1 diff");
+        Call<Diff> defect = mDeliveryApi.getDiff(deliveryId, diffId);
+        defect.enqueue(new Callback<Diff>() {
+            @Override
+            public void onResponse(Call<Diff> call, retrofit2.Response<Diff> response) {
+                Log.d(TAG, "End download 1 diff - success");
+                Diff diff = response.body();
+                callback.onDiffLoaded(diff);
+            }
+
+            @Override
+            public void onFailure(Call<Diff> call, Throwable t) {
+                Log.d(TAG, "End download 1 diff - failed");
+                callback.onDiffLoadFailed();
+            }
+        });
+    }
+
     //TODO add own classes to network entities
 }

@@ -34,4 +34,6 @@
     <string name="bulk">Объем</string>
     <string name="budgeonAmount">Количество бутонов</string>
     <string name="weigth">Вес</string>
+    <string name="defects">Дефекты</string>
+    <string name="differencies">Пересорты</string>
 </resources>

@@ -317,7 +317,30 @@ public class Repository {
     }
 
     private void refreshDataAfterSavingDiff(Diff diff){
-        //TODO
+        mNetworkDataSource.loadDelivery(diff.getDeliveryId(), new DataSource.LoadDeliveryCallback() {
+            @Override
+            public void onDeliveryLoaded(Delivery delivery) {
+                mLocalDataSource.saveDelivery(delivery);
+            }
+
+            @Override
+            public void onDeliveryLoadFailed() {
+
+            }
+        });
+
+        mNetworkDataSource.loadDiff(diff.getDeliveryId(), diff.getId(), new DataSource.LoadDiffCallback() {
+            @Override
+            public void onDiffLoaded(Diff diff) {
+                mLocalDataSource.saveDiff(diff);
+            }
+
+            @Override
+            public void onDiffLoadFailed() {
+
+            }
+        });
+
     }
 
     //TODO create adapter entity to value
