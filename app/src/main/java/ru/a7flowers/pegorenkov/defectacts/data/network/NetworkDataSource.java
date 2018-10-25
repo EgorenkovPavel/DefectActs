@@ -231,7 +231,7 @@ public class NetworkDataSource {
         });
     }
 
-    public void savePhotos(final String deliveryId, final String defectId, final List<String> photoPaths, final UploadPhotosCallback callback) {
+    public void saveDefectPhotos(final String deliveryId, final String defectId, final List<String> photoPaths, final UploadPhotosCallback callback) {
 
         mAppExecutors.networkIO().execute(new Runnable() {
             @Override
@@ -256,7 +256,7 @@ public class NetworkDataSource {
                     if (buf == null) continue;
 
                     RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
-                    Call<Boolean> responce = mDeliveryApi.setPhoto(deliveryId, defectId, requestBody);
+                    Call<Boolean> responce = mDeliveryApi.setDefectPhoto(deliveryId, defectId, requestBody);
                     try {
                         responce.execute();
                     } catch (IOException e) {
@@ -333,6 +333,48 @@ public class NetworkDataSource {
                 callback.onDiffLoadFailed();
             }
         });
+    }
+
+    public void saveDiffPhotos(final String deliveryId, final String diffId, final List<String> photoPaths, final UploadPhotosCallback callback) {
+
+        mAppExecutors.networkIO().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                boolean success = true;
+
+                for (String path : photoPaths) {
+
+                    byte[] buf = null;
+
+                    try {
+                        InputStream in = new FileInputStream(new File(path));
+                        buf = new byte[in.available()];
+                        while (in.read(buf) != -1) ;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        success = false;
+                        break;
+                    }
+
+                    if (buf == null) continue;
+
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
+                    Call<Boolean> responce = mDeliveryApi.setDiffPhoto(deliveryId, diffId, requestBody);
+                    try {
+                        responce.execute();
+                    } catch (IOException e) {
+                        success = false;
+                        e.printStackTrace();
+                    }
+                }
+                if (success)
+                    callback.onPhotosUploaded();
+                else
+                    callback.onPhotosUploadingFailed();
+            }
+        });
+
     }
 
     //TODO add own classes to network entities

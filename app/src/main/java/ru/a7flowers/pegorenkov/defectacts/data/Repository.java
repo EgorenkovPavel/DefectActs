@@ -193,7 +193,7 @@ public class Repository {
         mNetworkDataSource.saveDefectWithReasons(defect, new DataSource.UploadDefectCallback() {
             @Override
             public void onDefectUploaded(final DefectWithReasons defect) {
-                mNetworkDataSource.savePhotos(defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
+                mNetworkDataSource.saveDefectPhotos(defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
                     @Override
                     public void onPhotosUploaded() {
                         refreshDataAfterSavingDefect(defect);
@@ -296,7 +296,7 @@ public class Repository {
         mNetworkDataSource.saveDiff(diff, new DataSource.UploadDiffCallback() {
             @Override
             public void onDiffUploaded(final Diff diff) {
-                mNetworkDataSource.savePhotos(diff.getDeliveryId(), diff.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
+                mNetworkDataSource.saveDiffPhotos(diff.getDeliveryId(), diff.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
                     @Override
                     public void onPhotosUploaded() {
                         refreshDataAfterSavingDiff(diff);

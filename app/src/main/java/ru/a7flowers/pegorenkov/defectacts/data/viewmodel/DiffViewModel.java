@@ -74,6 +74,12 @@ public class DiffViewModel extends AndroidViewModel {
                 mDiffComment.postValue(diff.getComment());
                 mDiffAmount.postValue(diff.getQuantity());
 
+                mDiffLength.postValue(diff.getLength());
+                mDiffDiameter.postValue(diff.getDiameter());
+                mDiffWeigth.postValue(diff.getWeigth());
+                mDiffBudgeonAmount.postValue(diff.getBudgeonAmount());
+                mDiffBulk.postValue(diff.getBulk());
+
                 mRepository.getGood(diff.getDeliveryId(), diff.getSeries(), new DataSource.LoadGoodCallback() {
                     @Override
                     public void onGoodLoaded(Good good) {
@@ -206,5 +212,30 @@ public class DiffViewModel extends AndroidViewModel {
 
     public MutableLiveData<Integer> getDiffBulk() {
         return mDiffBulk;
+    }
+
+    public void setDiffDiameter(int diameter) {
+        if(mDiffDiameter.getValue() != diameter)
+            mDiffDiameter.postValue(diameter);
+    }
+
+    public void setDiffLength(int length) {
+        if(mDiffLength.getValue() != length)
+            mDiffLength.postValue(length);
+    }
+
+    public void setDiffWeigth(int weigth) {
+        if(mDiffWeigth.getValue() != weigth)
+        mDiffWeigth.postValue(weigth);
+    }
+
+    public void setDiffBudgeonAmount(int budgeonAmount) {
+        if(mDiffBudgeonAmount.getValue() != budgeonAmount)
+        mDiffBudgeonAmount.postValue(budgeonAmount);
+    }
+
+    public void setDiffBulk(int bulk) {
+        if(mDiffBulk.getValue() != bulk)
+        mDiffBulk.postValue(bulk);
     }
 }

@@ -34,7 +34,7 @@ public interface DeliveryApi {
     @GET("deliveries/{deliveryId}/defects/{defectId}")
     Call<DefectWithReasons> getDefect(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
 
-    @GET("deliveries/{deliveryId}/differencies/[diffId]")
+    @GET("deliveries/{deliveryId}/differencies/{diffId}")
     Call<Diff> getDiff(@Path("deliveryId") String deliveryId, @Path("diffId") String diffId);
 
 //    @GET("deliveries/{deliveryId}/defects/{defectId}/reasons")
@@ -47,6 +47,9 @@ public interface DeliveryApi {
     Call<String> setDiff(@Path("deliveryId") String deliveryId, @Body Diff diff);
 
     @POST("deliveries/{deliveryId}/defects/{defectId}/photo")
-    Call<Boolean> setPhoto(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId, @Body RequestBody photo);
+    Call<Boolean> setDefectPhoto(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId, @Body RequestBody photo);
+
+    @POST("deliveries/{deliveryId}/differencies/{diffId}/photo")
+    Call<Boolean> setDiffPhoto(@Path("deliveryId") String deliveryId, @Path("diffId") String diffId, @Body RequestBody photo);
 
 }

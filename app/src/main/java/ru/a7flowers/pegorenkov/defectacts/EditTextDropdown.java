@@ -122,6 +122,6 @@ public class EditTextDropdown extends ConstraintLayout{
     }
 
     public interface TextChangeListener{
-        void onTextChanged(int number);
+        void onTextChanged(int value);
     }
 }
