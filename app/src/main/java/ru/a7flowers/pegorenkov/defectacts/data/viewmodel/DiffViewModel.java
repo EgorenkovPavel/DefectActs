@@ -27,11 +27,11 @@ public class DiffViewModel extends AndroidViewModel {
     private MutableLiveData<Integer> mDiffAmount = new MutableLiveData<>();
     private MutableLiveData<String> mDiffComment = new MutableLiveData<>();
 
-    private MutableLiveData<Integer> mDiffDiameter = new MutableLiveData<>();
-    private MutableLiveData<Integer> mDiffLength = new MutableLiveData<>();
-    private MutableLiveData<Integer> mDiffWeigth = new MutableLiveData<>();
-    private MutableLiveData<Integer> mDiffBudgeonAmount = new MutableLiveData<>();
-    private MutableLiveData<Integer> mDiffBulk = new MutableLiveData<>();
+    private int mDiffDiameter;
+    private int mDiffLength;
+    private int mDiffWeigth;
+    private int mDiffBudgeonAmount;
+    private int mDiffBulk;
 
     private List<String> photoPaths = new ArrayList<>();
 
@@ -48,11 +48,11 @@ public class DiffViewModel extends AndroidViewModel {
         mDiffComment.postValue("");
         mDiffAmount.postValue(0);
 
-        mDiffDiameter.postValue(0);
-        mDiffLength.postValue(0);
-        mDiffWeigth.postValue(0);
-        mDiffBudgeonAmount.postValue(0);
-        mDiffBulk.postValue(0);
+//        mDiffDiameter.postValue(0);
+//        mDiffLength.setValue(0);
+//        mDiffWeigth.postValue(0);
+//        mDiffBudgeonAmount.postValue(0);
+//        mDiffBulk.postValue(0);
 
         photoPaths = new ArrayList<>();
     }
@@ -76,11 +76,11 @@ public class DiffViewModel extends AndroidViewModel {
                 mDiffComment.postValue(diff.getComment());
                 mDiffAmount.postValue(diff.getQuantity());
 
-                mDiffLength.postValue(diff.getLength());
-                mDiffDiameter.postValue(diff.getDiameter());
-                mDiffWeigth.postValue(diff.getWeigth());
-                mDiffBudgeonAmount.postValue(diff.getBudgeonAmount());
-                mDiffBulk.postValue(diff.getBulk());
+                mDiffLength = diff.getLength();
+                mDiffDiameter = diff.getDiameter();
+                mDiffWeigth = diff.getWeigth();
+                mDiffBudgeonAmount = diff.getBudgeonAmount();
+                mDiffBulk = diff.getBulk();
 
                 mRepository.getGood(diff.getDeliveryId(), diff.getSeries(), new DataSource.LoadGoodCallback() {
                     @Override
@@ -152,11 +152,11 @@ public class DiffViewModel extends AndroidViewModel {
         diff.setDeliveryId(good.getDeliveryId());
         diff.setSeries(good.getSeries());
 
-        diff.setDiameter(mDiffDiameter.getValue());
-        diff.setLength(mDiffLength.getValue());
-        diff.setWeigth(mDiffWeigth.getValue());
-        diff.setBudgeonAmount(mDiffBudgeonAmount.getValue());
-        diff.setBulk(mDiffBulk.getValue());
+        diff.setDiameter(mDiffDiameter);
+        diff.setLength(mDiffLength);
+        diff.setWeigth(mDiffWeigth);
+        diff.setBudgeonAmount(mDiffBudgeonAmount);
+        diff.setBulk(mDiffBulk);
 
         mRepository.saveDiff(diff, new ArrayList<>(photoPaths));
 
@@ -196,48 +196,43 @@ public class DiffViewModel extends AndroidViewModel {
         return selectedGoods;
     }
 
-    public MutableLiveData<Integer> getDiffDiameter() {
+    public int getDiffDiameter() {
         return mDiffDiameter;
     }
 
-    public MutableLiveData<Integer> getDiffLength() {
+    public int getDiffLength() {
         return mDiffLength;
     }
 
-    public MutableLiveData<Integer> getDiffWeigth() {
+    public int getDiffWeigth() {
         return mDiffWeigth;
     }
 
-    public MutableLiveData<Integer> getDiffBudgeonAmount() {
+    public int getDiffBudgeonAmount() {
         return mDiffBudgeonAmount;
     }
 
-    public MutableLiveData<Integer> getDiffBulk() {
+    public int getDiffBulk() {
         return mDiffBulk;
     }
 
     public void setDiffDiameter(int diameter) {
-        if(mDiffDiameter.getValue() != diameter)
-            mDiffDiameter.postValue(diameter);
+        mDiffDiameter = diameter;
     }
 
     public void setDiffLength(int length) {
-        if(mDiffLength.getValue() != length)
-            mDiffLength.postValue(length);
+        mDiffLength = length;
     }
 
     public void setDiffWeigth(int weigth) {
-        if(mDiffWeigth.getValue() != weigth)
-        mDiffWeigth.postValue(weigth);
+        mDiffWeigth = weigth;
     }
 
     public void setDiffBudgeonAmount(int budgeonAmount) {
-        if(mDiffBudgeonAmount.getValue() != budgeonAmount)
-        mDiffBudgeonAmount.postValue(budgeonAmount);
+        mDiffBudgeonAmount = budgeonAmount;
     }
 
     public void setDiffBulk(int bulk) {
-        if(mDiffBulk.getValue() != bulk)
-        mDiffBulk.postValue(bulk);
+        mDiffBulk = bulk;
     }
 }
