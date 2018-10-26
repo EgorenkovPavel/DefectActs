@@ -22,7 +22,6 @@ public class DiffViewModel extends AndroidViewModel {
     private String[] mDeliveryIds;
     private LiveData<List<Good>> mGoods;
 
-
     private String mDiffId;
     private MutableLiveData<Good> mDiffGood = new MutableLiveData<>();
     private MutableLiveData<Integer> mDiffAmount = new MutableLiveData<>();
