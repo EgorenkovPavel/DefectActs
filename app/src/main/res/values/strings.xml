@@ -35,5 +35,6 @@
     <string name="defects">Defects</string>
     <string name="differencies">Differencies</string>
     <string name="dropdown">dropdown</string>
+    <string name="dialog_no_photo">No photo. Continue?</string>
 
 </resources>

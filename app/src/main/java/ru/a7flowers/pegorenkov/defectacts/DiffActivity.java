@@ -1,10 +1,13 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
+import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
@@ -311,9 +314,12 @@ public class DiffActivity extends ItemActivity {
         ibNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                model.saveDiff();
-                acSearch.setText("");
-                acSearch.requestFocus();
+
+                if (model.getPhotoCount().getValue() == 0){
+                    getDialogNoPhoto().show();
+                }else{
+                    saveDiff();
+                }
             }
         });
 
@@ -361,6 +367,31 @@ public class DiffActivity extends ItemActivity {
     @Override
     public void onPhotoTaken(String photoPath) {
         model.setPhotoPath(photoPath);
+    }
+
+    private Dialog getDialogNoPhoto(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(DiffActivity.this);
+        builder.setMessage(R.string.dialog_no_photo)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        saveDiff();
+                    }
+                })
+        .setNeutralButton(R.string.photo, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startPhoto();
+            }
+        });
+        return builder.create();
+    }
+
+    private void saveDiff(){
+        model.saveDiff();
+        acSearch.setText("");
+        acSearch.requestFocus();
     }
 
     private class ValueData{
