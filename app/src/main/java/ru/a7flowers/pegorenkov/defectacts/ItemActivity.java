@@ -3,6 +3,7 @@ package ru.a7flowers.pegorenkov.defectacts;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +34,8 @@ import java.util.Map;
 
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
+import static android.support.v7.app.AlertDialog.*;
+
 public class ItemActivity extends AppCompatActivity{
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -55,6 +58,24 @@ public class ItemActivity extends AppCompatActivity{
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(PHOTO_PATH_KEY, mCurrentPhotoPath);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        getBackPressedDialog().show();
+    }
+
+    private Dialog getBackPressedDialog(){
+        Builder builder = new Builder(this);
+        builder.setMessage(R.string.dialog_back_pressed)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ItemActivity.super.onBackPressed();
+                    }
+                });
+        return builder.create();
     }
 
     public void startPhoto(){

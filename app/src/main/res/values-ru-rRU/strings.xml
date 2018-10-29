@@ -35,4 +35,7 @@
     <string name="weigth">Вес</string>
     <string name="defects">Дефекты</string>
     <string name="differencies">Пересорты</string>
+    <string name="dropdown">Выпадающий список</string>
+    <string name="dialog_no_photo">Нет фото. Продолжить?</string>
+    <string name="dialog_back_pressed">Данные будут потеряны. Продолжить?</string>
 </resources>

@@ -36,5 +36,6 @@
     <string name="differencies">Differencies</string>
     <string name="dropdown">dropdown</string>
     <string name="dialog_no_photo">No photo. Continue?</string>
+    <string name="dialog_back_pressed">Data not saved. Continue?</string>
 
 </resources>
