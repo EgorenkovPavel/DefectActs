@@ -35,6 +35,7 @@ public class DefectViewModel extends AndroidViewModel{
     private MutableLiveData<String> mDefectComment = new MutableLiveData<>();
     private MutableLiveData<String> mDefectSeries = new MutableLiveData<>();
     private MutableLiveData<List<Reason>> mDefectReasons = new MutableLiveData<>();
+    private MutableLiveData<Integer> mPhotoCount = new MutableLiveData<>();
     private List<String> photoPaths = new ArrayList<>();
 
     private String currentPhotoPath;
@@ -57,6 +58,7 @@ public class DefectViewModel extends AndroidViewModel{
         mDefectWriteoff.postValue(0);
         mDefectSeries.postValue("");
         mDefectReasons.postValue(new ArrayList<Reason>());
+        mPhotoCount.postValue(0);
         photoPaths = new ArrayList<>();
     }
 
@@ -81,6 +83,7 @@ public class DefectViewModel extends AndroidViewModel{
                 mDefectAmount.postValue(defect.getQuantity());
                 mDefectWriteoff.postValue(defect.getWriteoff());
                 mDefectDelivery.postValue(defect.getDeliveryNumber());
+                mPhotoCount.postValue(0);
             }
 
             @Override
@@ -228,12 +231,17 @@ public class DefectViewModel extends AndroidViewModel{
         mDefectWriteoff.postValue(value);
     }
 
+    public MutableLiveData<Integer> getmPhotoCount() {
+        return mPhotoCount;
+    }
+
     public MutableLiveData<Integer> getDefectWriteoff() {
         return mDefectWriteoff;
     }
 
     public void setPhotoPath(String photoPath) {
         photoPaths.add(photoPath);
+        mPhotoCount.postValue(photoPaths.size());
     }
 
     public List<Good> findGoodsByBarcode(String barcode){

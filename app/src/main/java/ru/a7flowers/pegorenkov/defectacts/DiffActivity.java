@@ -43,6 +43,7 @@ public class DiffActivity extends ItemActivity {
     private TextView tvDelivery;
     private EditText etComment;
     private EditText etAmount;
+    private TextView tvPhotoCount;
     private EditTextDropdown[] values = new EditTextDropdown[5];
 
     private GoodsSearchAdapter adapter;
@@ -107,6 +108,12 @@ public class DiffActivity extends ItemActivity {
             }
         });
 
+        model.getPhotoCount().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer count) {
+                tvPhotoCount.setText(String.valueOf(count));
+            }
+        });
     }
 
     private void init(Good good){
@@ -221,6 +228,7 @@ public class DiffActivity extends ItemActivity {
         tvCountry = findViewById(R.id.tvCountry);
         tvDelivery = findViewById(R.id.tvDelivery);
         etComment = findViewById(R.id.etComment);
+        tvPhotoCount = findViewById(R.id.tvPhotoCount);
 
         etAmount = includeAmount.findViewById(R.id.etAmount);
 

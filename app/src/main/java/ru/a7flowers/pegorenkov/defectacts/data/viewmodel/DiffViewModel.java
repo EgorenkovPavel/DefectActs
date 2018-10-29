@@ -26,6 +26,7 @@ public class DiffViewModel extends AndroidViewModel {
     private MutableLiveData<Good> mDiffGood = new MutableLiveData<>();
     private MutableLiveData<Integer> mDiffAmount = new MutableLiveData<>();
     private MutableLiveData<String> mDiffComment = new MutableLiveData<>();
+    private MutableLiveData<Integer> mPhotoCount = new MutableLiveData<>();
 
     private int mDiffDiameter;
     private int mDiffLength;
@@ -47,6 +48,7 @@ public class DiffViewModel extends AndroidViewModel {
         mDiffGood.postValue(null);
         mDiffComment.postValue("");
         mDiffAmount.postValue(0);
+        mPhotoCount.postValue(0);
 
 //        mDiffDiameter.postValue(0);
 //        mDiffLength.setValue(0);
@@ -75,6 +77,7 @@ public class DiffViewModel extends AndroidViewModel {
 
                 mDiffComment.postValue(diff.getComment());
                 mDiffAmount.postValue(diff.getQuantity());
+                mPhotoCount.postValue(0);
 
                 mDiffLength = diff.getLength();
                 mDiffDiameter = diff.getDiameter();
@@ -181,6 +184,11 @@ public class DiffViewModel extends AndroidViewModel {
 
     public void setPhotoPath(String photoPath) {
         photoPaths.add(photoPath);
+        mPhotoCount.postValue(photoPaths.size());
+    }
+
+    public MutableLiveData<Integer> getPhotoCount() {
+        return mPhotoCount;
     }
 
     public List<Good> findGoodsByBarcode(String barcode) {

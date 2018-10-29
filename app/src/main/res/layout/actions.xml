@@ -48,4 +48,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/barcode_scan" />
 
+    <TextView
+        android:id="@+id/tvPhotoCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ibBarcode"
+        app:layout_constraintStart_toStartOf="@+id/ibPhoto"
+        tools:text="12" />
+
 </android.support.constraint.ConstraintLayout>

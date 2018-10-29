@@ -9,10 +9,11 @@
         android:id="@+id/lblSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:labelFor="@id/acSearch"
         android:text="@string/search"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:labelFor="@id/acSearch"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <AutoCompleteTextView
         android:id="@+id/acSearch"

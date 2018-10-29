@@ -49,6 +49,7 @@ public class DefectActivity extends ItemActivity {
     private TextView tvCountry;
     private TextView tvDelivery;
     private AutoCompleteTextView acSearch;
+    private TextView tvPhotoCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +160,12 @@ public class DefectActivity extends ItemActivity {
                 tvReasons.setText(text.toString());
             }
         });
+        model.getmPhotoCount().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer count) {
+                tvPhotoCount.setText(String.valueOf(count));
+            }
+        });
     }
 
     private void findViews() {
@@ -178,6 +185,7 @@ public class DefectActivity extends ItemActivity {
         tvDelivery = findViewById(R.id.tvDelivery);
         tvReasons = findViewById(R.id.tvReasons);
         etComment = findViewById(R.id.etComment);
+        tvPhotoCount = findViewById(R.id.tvPhotoCount);
 
         etAmount = includeAmount.findViewById(R.id.etAmount);
         etWriteoff = includeWriteoff.findViewById(R.id.etAmount);
