@@ -10,7 +10,7 @@ import android.arch.persistence.room.Transaction;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 
 @Dao
 public interface DefectDao {
@@ -28,7 +28,7 @@ public interface DefectDao {
             "INNER JOIN deliveries as deliveries " +
             "ON defects.deliveryId = deliveries.id " +
             "WHERE defects.deliveryId IN (:deliveryIds)")
-    LiveData<List<DefectWithReasons>> loadDefects(String[] deliveryIds);
+    LiveData<List<Defect>> loadDefects(String[] deliveryIds);
 
     @Transaction
     @Query("SELECT defects.*, " +
@@ -43,7 +43,7 @@ public interface DefectDao {
             "INNER JOIN deliveries as deliveries " +
             "ON defects.deliveryId = deliveries.id " +
             "WHERE defects.id = :defectId")
-    DefectWithReasons loadDefect(String defectId);
+    Defect loadDefect(String defectId);
 
     @Transaction
     @Query("SELECT defects.*, " +
@@ -57,7 +57,7 @@ public interface DefectDao {
             "AND defects.deliveryId = goods.deliveryId " +
             "INNER JOIN deliveries as deliveries " +
             "ON defects.deliveryId = deliveries.id ")
-    LiveData<List<DefectWithReasons>> loadDefectServer();
+    LiveData<List<Defect>> loadDefectServer();
 
     @Query("SELECT * FROM defects WHERE id = :defectId")
     DefectEntity getDefectById(int defectId);

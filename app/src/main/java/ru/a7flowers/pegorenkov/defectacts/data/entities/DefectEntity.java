@@ -12,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 
 @Entity(tableName = "defects",
 foreignKeys = {@ForeignKey(entity = Delivery.class, parentColumns = "id", childColumns = "deliveryId", onDelete = ForeignKey.CASCADE)},
@@ -62,7 +62,7 @@ public class DefectEntity implements Serializable{
     public DefectEntity(){}
 
     @Ignore
-    public DefectEntity(DefectWithReasons defectServer) {
+    public DefectEntity(Defect defectServer) {
         this.id = defectServer.getId();
         this.series = defectServer.getSeries();
         this.quantity = defectServer.getQuantity();

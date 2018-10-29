@@ -16,7 +16,7 @@ import android.view.View;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.DefectsAdapter;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveryDefectViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 
@@ -68,9 +68,9 @@ public class DeliveryDefectActivity extends AppCompatActivity implements Defects
 
         rvDefects.setAdapter(adapter);
 
-        model.getDefects().observe(this, new Observer<List<DefectWithReasons>>() {
+        model.getDefects().observe(this, new Observer<List<Defect>>() {
             @Override
-            public void onChanged(@Nullable List<DefectWithReasons> defects) {
+            public void onChanged(@Nullable List<Defect> defects) {
                 adapter.setItems(defects);
             }
         });
@@ -78,7 +78,7 @@ public class DeliveryDefectActivity extends AppCompatActivity implements Defects
     }
 
     @Override
-    public void onDefectClick(DefectWithReasons defect) {
+    public void onDefectClick(Defect defect) {
         Intent i = new Intent(this, DefectActivity.class);
         i.putExtra(DefectActivity.DELIVERY, model.getDeliveryIds());
         i.putExtra(DefectActivity.DEFECT, defect.getId());

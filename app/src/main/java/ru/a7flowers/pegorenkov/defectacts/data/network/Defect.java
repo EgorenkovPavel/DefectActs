@@ -12,7 +12,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
-public class DefectWithReasons{
+public class Defect {
 
 //    @Embedded
 //    private DefectEntity mDefect;
@@ -54,11 +54,11 @@ public class DefectWithReasons{
     @Relation(parentColumn = "id", entityColumn = "defectId", entity = DefectReason.class)
     private List<DefectReason> mReasons;
 
-    public DefectWithReasons() {
+    public Defect() {
     }
 
     @Ignore
-    public DefectWithReasons(DefectEntity defect, List<Reason> reasons) {
+    public Defect(DefectEntity defect, List<Reason> reasons) {
 //        mDefect = defect;
         setDefect(defect);
 

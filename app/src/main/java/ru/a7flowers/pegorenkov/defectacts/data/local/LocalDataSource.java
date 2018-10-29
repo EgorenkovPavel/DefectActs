@@ -12,7 +12,6 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ClearDatabaseCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
-import ru.a7flowers.pegorenkov.defectacts.data.DataSource.SaveReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
@@ -24,7 +23,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBulkEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueDiameterEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueLengthEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueWeigthEntity;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
@@ -112,11 +111,6 @@ public class LocalDataSource {
     }
 
     //GOODS
-    public LiveData<List<GoodEntity>> loadGoodEntities(String[] deliveryIds) {
-        Log.d(TAG, "Get delivery goods");
-        return mDb.goodDao().loadGoodEntities(deliveryIds);
-    }
-
     public LiveData<List<Good>> loadGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery goods");
         return mDb.goodDao().loadGoods(deliveryIds);
@@ -135,7 +129,7 @@ public class LocalDataSource {
     }
 
     //DEFECTS
-    public LiveData<List<DefectWithReasons>> getDefectGoods(String[] deliveryIds) {
+    public LiveData<List<Defect>> getDefectGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery defects");
         return mDb.defectDao().loadDefects(deliveryIds);
     }
@@ -151,47 +145,15 @@ public class LocalDataSource {
         });
     }
 
-    public void saveDefects(final List<DefectEntity> defects) {
-        Log.d(TAG, "Insert defects");
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.defectDao().insertDefects(defects);
-            }
-        });
-    }
-
-    public void saveDefect(final DefectEntity defect) {
-        Log.d(TAG, "Insert 1 defect");
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.defectDao().insertDefect(defect);
-            }
-        });
-    }
-
-    public void saveDefectReasons(final String defectId, final List<DefectReason> reasons, final SaveReasonsCallback callback) {
-        Log.d(TAG, "Insert defect reasons");
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.defectReasonDao().deleteReasons(defectId);
-                mDb.defectReasonDao().insertReasons(reasons);
-                callback.onReasonsSaved();
-            }
-        });
-    }
-
-    public void saveDefectsServer(final List<DefectWithReasons> defects) {
+    public void saveDefectsServer(final List<Defect> defects) {
         if(defects == null) return;
 
-        for (DefectWithReasons defectServer:defects) {
+        for (Defect defectServer:defects) {
             saveDefectServer(defectServer);
         }
     }
 
-    public void saveDefectServer(final DefectWithReasons defectServer) {
+    public void saveDefectServer(final Defect defectServer) {
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -210,7 +172,7 @@ public class LocalDataSource {
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
-                DefectWithReasons defect = mDb.defectDao().loadDefect(defectId);
+                Defect defect = mDb.defectDao().loadDefect(defectId);
                 callback.onDefectLoaded(defect);
             }
         });

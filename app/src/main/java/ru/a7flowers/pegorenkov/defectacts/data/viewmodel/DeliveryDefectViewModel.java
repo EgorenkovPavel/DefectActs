@@ -8,14 +8,14 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 
 public class DeliveryDefectViewModel extends AndroidViewModel {
 
     private Repository mRepository;
 
     private String[] mDeliveries;
-    private LiveData<List<DefectWithReasons>> mDefects;
+    private LiveData<List<Defect>> mDefects;
 
     public DeliveryDefectViewModel(@NonNull Application application, Repository repository) {
         super(application);
@@ -27,7 +27,7 @@ public class DeliveryDefectViewModel extends AndroidViewModel {
         mDefects = mRepository.getDefectGoods(mDeliveries);
     }
 
-    public LiveData<List<DefectWithReasons>> getDefects() {
+    public LiveData<List<Defect>> getDefects() {
         return mDefects;
     }
 

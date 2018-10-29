@@ -13,7 +13,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
 public class DefectViewModel extends AndroidViewModel{
@@ -73,7 +73,7 @@ public class DefectViewModel extends AndroidViewModel{
 
         mRepository.getDefect(defectId, new DataSource.LoadDefectCallback() {
             @Override
-            public void onDefectLoaded(DefectWithReasons defect) {
+            public void onDefectLoaded(Defect defect) {
                 mDefectSeries.postValue(defect.getSeries());
                 mDefectTitle.postValue(defect.getTitle());
                 mDefectSuplier.postValue(defect.getSuplier());
@@ -178,7 +178,7 @@ public class DefectViewModel extends AndroidViewModel{
         defect.setComment(mDefectComment.getValue());
         defect.setDeliveryId(mDefectDeliveryId);
 
-        DefectWithReasons defectWithReasons = new DefectWithReasons(defect, mDefectReasons.getValue());
+        Defect defectWithReasons = new Defect(defect, mDefectReasons.getValue());
 
         mRepository.saveDefect(defectWithReasons,
                 new ArrayList<>(photoPaths));

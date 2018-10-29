@@ -4,7 +4,7 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
@@ -31,12 +31,12 @@ public interface DataSource {
     }
 
     interface LoadDefectsCallback{
-        void onDefectsLoaded(List<DefectWithReasons> defects);
+        void onDefectsLoaded(List<Defect> defects);
         void onDefectsLoadFailed();
     }
 
     interface LoadDefectCallback{
-        void onDefectLoaded(DefectWithReasons defect);
+        void onDefectLoaded(Defect defect);
         void onDefectLoadFailed();
     }
 
@@ -61,7 +61,7 @@ public interface DataSource {
     }
 
     interface UploadDefectCallback{
-        void onDefectUploaded(DefectWithReasons defect);
+        void onDefectUploaded(Defect defect);
         void onDefectUploadingFailed();
     }
 

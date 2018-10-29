@@ -26,13 +26,13 @@ public interface DeliveryApi {
     Call<List<Good>> getGoods(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/defects")
-    Call<List<DefectWithReasons>> getDefects(@Path("deliveryId") String deliveryId);
+    Call<List<Defect>> getDefects(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/differencies")
     Call<List<Diff>> getDiffs(@Path("deliveryId") String deliveryId);
 
     @GET("deliveries/{deliveryId}/defects/{defectId}")
-    Call<DefectWithReasons> getDefect(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
+    Call<Defect> getDefect(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
 
     @GET("deliveries/{deliveryId}/differencies/{diffId}")
     Call<Diff> getDiff(@Path("deliveryId") String deliveryId, @Path("diffId") String diffId);
@@ -41,7 +41,7 @@ public interface DeliveryApi {
 //    Call<List<DefectReason>> getDefectReasons(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
 
     @POST("deliveries/{deliveryId}/defects")
-    Call<String> setDefect(@Path("deliveryId") String deliveryId, @Body DefectWithReasons defect);
+    Call<String> setDefect(@Path("deliveryId") String deliveryId, @Body Defect defect);
 
     @POST("deliveries/{deliveryId}/differencies")
     Call<String> setDiff(@Path("deliveryId") String deliveryId, @Body Diff diff);

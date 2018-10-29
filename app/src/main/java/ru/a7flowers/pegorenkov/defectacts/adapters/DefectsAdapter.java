@@ -10,15 +10,15 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
-import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 
 public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHolder> {
 
-    private List<DefectWithReasons> mDefects;
+    private List<Defect> mDefects;
     private OnDefectClickListener listener;
 
     public interface OnDefectClickListener{
-        void onDefectClick(DefectWithReasons defect);
+        void onDefectClick(Defect defect);
     }
 
     @NonNull
@@ -31,7 +31,7 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
     @Override
     public void onBindViewHolder(@NonNull DefectHolder holder, int position) {
 
-        DefectWithReasons defect = mDefects.get(position);
+        Defect defect = mDefects.get(position);
 
         holder.tvSeries.setText(defect.getSeries());
         holder.tvGood.setText(defect.getTitle());
@@ -47,7 +47,7 @@ public class DefectsAdapter extends RecyclerView.Adapter<DefectsAdapter.DefectHo
         return mDefects == null ? 0 : mDefects.size();
     }
 
-    public void setItems(List<DefectWithReasons> defects){
+    public void setItems(List<Defect> defects){
         mDefects = defects;
         notifyDataSetChanged();
     }

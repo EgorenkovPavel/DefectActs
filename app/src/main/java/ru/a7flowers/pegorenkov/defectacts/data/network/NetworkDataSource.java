@@ -173,17 +173,17 @@ public class NetworkDataSource {
     public void loadDefectsWithReasons(String deliveryId, final LoadDefectsCallback callback){
 
         Log.d(TAG, "Start download defects");
-        Call<List<DefectWithReasons>> defects = mDeliveryApi.getDefects(deliveryId);
-        defects.enqueue(new Callback<List<DefectWithReasons>>() {
+        Call<List<Defect>> defects = mDeliveryApi.getDefects(deliveryId);
+        defects.enqueue(new Callback<List<Defect>>() {
             @Override
-            public void onResponse(Call<List<DefectWithReasons>> call, retrofit2.Response<List<DefectWithReasons>> response) {
+            public void onResponse(Call<List<Defect>> call, retrofit2.Response<List<Defect>> response) {
                 Log.d(TAG, "End download defects - success");
-                List<DefectWithReasons> list = response.body();
+                List<Defect> list = response.body();
                 callback.onDefectsLoaded(list);
             }
 
             @Override
-            public void onFailure(Call<List<DefectWithReasons>> call, Throwable t) {
+            public void onFailure(Call<List<Defect>> call, Throwable t) {
                 Log.d(TAG, "End download defects - failed");
                 callback.onDefectsLoadFailed();
             }
@@ -193,24 +193,24 @@ public class NetworkDataSource {
     public void loadDefectWithReasons(String deliveryId, String defectId, final LoadDefectCallback callback){
 
         Log.d(TAG, "Start download 1 defect");
-        Call<DefectWithReasons> defect = mDeliveryApi.getDefect(deliveryId, defectId);
-        defect.enqueue(new Callback<DefectWithReasons>() {
+        Call<Defect> defect = mDeliveryApi.getDefect(deliveryId, defectId);
+        defect.enqueue(new Callback<Defect>() {
             @Override
-            public void onResponse(Call<DefectWithReasons> call, retrofit2.Response<DefectWithReasons> response) {
+            public void onResponse(Call<Defect> call, retrofit2.Response<Defect> response) {
                 Log.d(TAG, "End download 1 defect - success");
-                DefectWithReasons defectServer = response.body();
+                Defect defectServer = response.body();
                 callback.onDefectLoaded(defectServer);
             }
 
             @Override
-            public void onFailure(Call<DefectWithReasons> call, Throwable t) {
+            public void onFailure(Call<Defect> call, Throwable t) {
                 Log.d(TAG, "End download 1 defect - failed");
                 callback.onDefectLoadFailed();
             }
         });
     }
 
-    public void saveDefectWithReasons(final DefectWithReasons defect, final UploadDefectCallback callback) {
+    public void saveDefectWithReasons(final Defect defect, final UploadDefectCallback callback) {
 
         Log.d(TAG, "Start upload defect");
 
