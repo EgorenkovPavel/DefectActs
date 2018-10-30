@@ -48,15 +48,15 @@ public class DefectViewModel extends AndroidViewModel{
 
     private void init(){
         mDefectId = "";
-        mDefectTitle.postValue("");
-        mDefectSuplier.postValue("");
-        mDefectCountry.postValue("");
-        mDefectDelivery.postValue("");
-        mDefectComment.postValue("");
-        mDefectAmount.postValue(0);
-        mDefectWriteoff.postValue(0);
-        mDefectSeries.postValue("");
-        mDefectReasons.postValue(new ArrayList<Reason>());
+        mDefectTitle.setValue("");
+        mDefectSuplier.setValue("");
+        mDefectCountry.setValue("");
+        mDefectDelivery.setValue("");
+        mDefectComment.setValue("");
+        mDefectAmount.setValue(0);
+        mDefectWriteoff.setValue(0);
+        mDefectSeries.setValue("");
+        mDefectReasons.setValue(new ArrayList<Reason>());
         photoPaths = new ArrayList<>();
     }
 
@@ -155,7 +155,8 @@ public class DefectViewModel extends AndroidViewModel{
     }
 
     public void setComment(String text){
-        if(!mDefectComment.getValue().equals(text))
+        String value = mDefectComment.getValue();
+        if(value == null || !value.equals(text))
             mDefectComment.postValue(text);
     }
 
