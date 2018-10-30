@@ -119,6 +119,15 @@ public class LocalDataSource {
         });
     }
 
+    public void setDiffActExists(final String deliveryId) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.deliveryDao().setDiffActExist(deliveryId);
+            }
+        });
+    }
+
     //GOODS
     public LiveData<List<Good>> loadGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery goods");

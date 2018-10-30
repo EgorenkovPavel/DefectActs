@@ -131,7 +131,7 @@ public class Repository {
                         for (Integer value:good.getBudgeonAmount()) {
                             budgeonAmounts.add(new ValueBudgeonAmountEntity(good.getSeries(), value));
                         }
-                        for (Integer value:good.getBulk()) {
+                        for (Float value:good.getBulk()) {
                             bulks.add(new ValueBulkEntity(good.getSeries(), value));
                         }
                     }
@@ -186,7 +186,7 @@ public class Repository {
 
     public void saveDefect(Defect defect, final List<String> photoPaths){
 
-        mNetworkDataSource.saveDefectWithReasons(defect, new DataSource.UploadDefectCallback() {
+        mNetworkDataSource.saveDefect(defect, new DataSource.UploadDefectCallback() {
             @Override
             public void onDefectUploaded(final Defect defect) {
                 mNetworkDataSource.saveDefectPhotos(defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
@@ -217,7 +217,7 @@ public class Repository {
 
     private void loadDefectsFromNetwork(String[] deliveryIds){
         for (String deliveryId : deliveryIds) {
-            mNetworkDataSource.loadDefectsWithReasons(deliveryId, new DataSource.LoadDefectsCallback() {
+            mNetworkDataSource.loadDefects(deliveryId, new DataSource.LoadDefectsCallback() {
                 @Override
                 public void onDefectsLoaded(List<Defect> defects) {
                     mLocalDataSource.saveDefectsServer(defects);
@@ -250,7 +250,7 @@ public class Repository {
 //            }
 //        });
 
-        mNetworkDataSource.loadDefectWithReasons(defect.getDeliveryId(), defect.getId(), new LoadDefectCallback() {
+        mNetworkDataSource.loadDefect(defect.getDeliveryId(), defect.getId(), new LoadDefectCallback() {
             @Override
             public void onDefectLoaded(Defect defect) {
                 mLocalDataSource.saveDefectServer(defect);
@@ -276,7 +276,7 @@ public class Repository {
 
     private void loadDiffsFromNetwork(String[] deliveryIds){
         for (String deliveryId : deliveryIds) {
-            mNetworkDataSource.loadDifferencies(deliveryId, new DataSource.LoadDiffsCallback() {
+            mNetworkDataSource.loadDiff(deliveryId, new DataSource.LoadDiffsCallback() {
                 @Override
                 public void onDiffsLoaded(List<Diff> diffs) {
                     mLocalDataSource.saveDiffs(diffs);
@@ -315,17 +315,18 @@ public class Repository {
     }
 
     private void refreshDataAfterSavingDiff(Diff diff){
-        mNetworkDataSource.loadDelivery(diff.getDeliveryId(), new DataSource.LoadDeliveryCallback() {
-            @Override
-            public void onDeliveryLoaded(Delivery delivery) {
-                mLocalDataSource.saveDelivery(delivery);
-            }
-
-            @Override
-            public void onDeliveryLoadFailed() {
-
-            }
-        });
+        mLocalDataSource.setDiffActExists(diff.getDeliveryId());
+//        mNetworkDataSource.loadDelivery(diff.getDeliveryId(), new DataSource.LoadDeliveryCallback() {
+//            @Override
+//            public void onDeliveryLoaded(Delivery delivery) {
+//                mLocalDataSource.saveDelivery(delivery);
+//            }
+//
+//            @Override
+//            public void onDeliveryLoadFailed() {
+//
+//            }
+//        });
 
         mNetworkDataSource.loadDiff(diff.getDeliveryId(), diff.getId(), new DataSource.LoadDiffCallback() {
             @Override

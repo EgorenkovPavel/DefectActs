@@ -35,7 +35,7 @@ public class Good {
     @Relation(parentColumn = "series", entityColumn = "series", entity = ValueBudgeonAmountEntity.class, projection = {"value"})
     private List<Integer> budgeonAmount;
     @Relation(parentColumn = "series", entityColumn = "series", entity = ValueBulkEntity.class, projection = {"value"})
-    private List<Integer> bulk;
+    private List<Float> bulk;
 
     public String getSeries() {
         return series;
@@ -125,11 +125,11 @@ public class Good {
         this.budgeonAmount = budgeonAmount;
     }
 
-    public List<Integer> getBulk() {
+    public List<Float> getBulk() {
         return bulk;
     }
 
-    public void setBulk(List<Integer> bulk) {
+    public void setBulk(List<Float> bulk) {
         this.bulk = bulk;
     }
 }

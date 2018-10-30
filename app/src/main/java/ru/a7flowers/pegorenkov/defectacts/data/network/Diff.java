@@ -30,11 +30,11 @@ public class Diff {
 
     private int budgeonAmount;
 
-    private int bulk;
+    private float bulk;
 
     public Diff(String id, String series, String title, String suplier, String country,
                 String comment, int quantity, int photoQuantity, String deliveryId,
-                float diameter, int length, int weigth, int budgeonAmount, int bulk) {
+                float diameter, int length, int weigth, int budgeonAmount, float bulk) {
         this.id = id;
         this.series = series;
         this.title = title;
@@ -107,7 +107,7 @@ public class Diff {
         return budgeonAmount;
     }
 
-    public int getBulk() {
+    public float getBulk() {
         return bulk;
     }
 
@@ -147,7 +147,7 @@ public class Diff {
         this.budgeonAmount = budgeonAmount;
     }
 
-    public void setBulk(Integer bulk) {
+    public void setBulk(float bulk) {
         this.bulk = bulk;
     }
 

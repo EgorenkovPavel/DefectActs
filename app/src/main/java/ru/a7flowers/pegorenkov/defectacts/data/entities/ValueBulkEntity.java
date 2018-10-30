@@ -11,9 +11,9 @@ public class ValueBulkEntity {
     @ColumnInfo(name = "series")
     private String series;
     @ColumnInfo(name = "value")
-    private int value;
+    private float value;
 
-    public ValueBulkEntity(String series, int value) {
+    public ValueBulkEntity(String series, float value) {
         this.series = series;
         this.value = value;
     }
@@ -22,7 +22,7 @@ public class ValueBulkEntity {
         return series;
     }
 
-    public int getValue() {
+    public float getValue() {
         return value;
     }
 }

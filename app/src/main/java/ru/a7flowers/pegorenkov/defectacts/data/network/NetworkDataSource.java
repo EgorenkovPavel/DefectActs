@@ -170,7 +170,7 @@ public class NetworkDataSource {
     }
 
     //DEFECTS
-    public void loadDefectsWithReasons(String deliveryId, final LoadDefectsCallback callback){
+    public void loadDefects(String deliveryId, final LoadDefectsCallback callback){
 
         Log.d(TAG, "Start download defects");
         Call<List<Defect>> defects = mDeliveryApi.getDefects(deliveryId);
@@ -190,7 +190,7 @@ public class NetworkDataSource {
         });
     }
 
-    public void loadDefectWithReasons(String deliveryId, String defectId, final LoadDefectCallback callback){
+    public void loadDefect(String deliveryId, String defectId, final LoadDefectCallback callback){
 
         Log.d(TAG, "Start download 1 defect");
         Call<Defect> defect = mDeliveryApi.getDefect(deliveryId, defectId);
@@ -210,7 +210,7 @@ public class NetworkDataSource {
         });
     }
 
-    public void saveDefectWithReasons(final Defect defect, final UploadDefectCallback callback) {
+    public void saveDefect(final Defect defect, final UploadDefectCallback callback) {
 
         Log.d(TAG, "Start upload defect");
 
@@ -274,7 +274,7 @@ public class NetworkDataSource {
     }
 
     //DIFFS
-    public void loadDifferencies(String deliveryId, final DataSource.LoadDiffsCallback callback){
+    public void loadDiff(String deliveryId, final DataSource.LoadDiffsCallback callback){
 
         Log.d(TAG, "Start download diffs");
         Call<List<Diff>> diffs = mDeliveryApi.getDiffs(deliveryId);

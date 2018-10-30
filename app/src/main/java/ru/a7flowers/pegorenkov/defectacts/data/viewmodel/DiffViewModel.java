@@ -32,7 +32,7 @@ public class DiffViewModel extends AndroidViewModel {
     private int mDiffLength;
     private int mDiffWeigth;
     private int mDiffBudgeonAmount;
-    private int mDiffBulk;
+    private float mDiffBulk;
 
     private List<String> photoPaths = new ArrayList<>();
 
@@ -223,7 +223,7 @@ public class DiffViewModel extends AndroidViewModel {
         return mDiffBudgeonAmount;
     }
 
-    public int getDiffBulk() {
+    public float getDiffBulk() {
         return mDiffBulk;
     }
 
