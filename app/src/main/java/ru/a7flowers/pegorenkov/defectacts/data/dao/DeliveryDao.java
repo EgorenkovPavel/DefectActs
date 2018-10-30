@@ -28,4 +28,10 @@ public interface DeliveryDao {
     @Query("DELETE FROM deliveries")
     void deleteAllDeliveries();
 
+    @Query("UPDATE deliveries SET defectActExist = 1 WHERE id = :deliveryId")
+    void setDefectActExist(String deliveryId);
+
+    @Query("UPDATE deliveries SET differenceActExist = 1 WHERE id = :deliveryId")
+    void setDiffActExist(String deliveryId);
+
 }

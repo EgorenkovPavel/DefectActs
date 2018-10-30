@@ -28,7 +28,7 @@ public class DiffViewModel extends AndroidViewModel {
     private MutableLiveData<String> mDiffComment = new MutableLiveData<>();
     private MutableLiveData<Integer> mPhotoCount = new MutableLiveData<>();
 
-    private int mDiffDiameter;
+    private float mDiffDiameter;
     private int mDiffLength;
     private int mDiffWeigth;
     private int mDiffBudgeonAmount;
@@ -154,6 +154,9 @@ public class DiffViewModel extends AndroidViewModel {
         diff.setComment(mDiffComment.getValue());
         diff.setDeliveryId(good.getDeliveryId());
         diff.setSeries(good.getSeries());
+        diff.setTitle(good.getGood());
+        diff.setCountry(good.getCountry());
+        diff.setSuplier(good.getSuplier());
 
         diff.setDiameter(mDiffDiameter);
         diff.setLength(mDiffLength);
@@ -204,7 +207,7 @@ public class DiffViewModel extends AndroidViewModel {
         return selectedGoods;
     }
 
-    public int getDiffDiameter() {
+    public float getDiffDiameter() {
         return mDiffDiameter;
     }
 
@@ -224,7 +227,7 @@ public class DiffViewModel extends AndroidViewModel {
         return mDiffBulk;
     }
 
-    public void setDiffDiameter(int diameter) {
+    public void setDiffDiameter(float diameter) {
         mDiffDiameter = diameter;
     }
 

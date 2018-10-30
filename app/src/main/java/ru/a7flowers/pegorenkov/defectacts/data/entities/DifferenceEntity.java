@@ -46,7 +46,7 @@ public class DifferenceEntity implements Serializable{
 
     @ColumnInfo(name = "diameter")
     @SerializedName("diameter")
-    private int diameter;
+    private float diameter;
 
     @ColumnInfo(name = "length")
     @SerializedName("length")
@@ -66,7 +66,7 @@ public class DifferenceEntity implements Serializable{
 
     public DifferenceEntity(String id, String series, int quantity, int photoQuantity,
                             String deliveryId, String comment,
-                            int diameter, int length, int weigth, int budgeonAmount, int bulk) {
+                            float diameter, int length, int weigth, int budgeonAmount, int bulk) {
         this.id = id;
         this.series = series;
         this.quantity = quantity;
@@ -142,7 +142,7 @@ public class DifferenceEntity implements Serializable{
         this.id = id;
     }
 
-    public int getDiameter() {
+    public float getDiameter() {
         return diameter;
     }
 

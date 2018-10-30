@@ -14,14 +14,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class EditTextDropdown extends ConstraintLayout{
+public class EditTextDropdown<T extends Number> extends ConstraintLayout{
 
     private TextView tvTitle;
     private AutoCompleteTextView acText;
     private ImageButton btnDropdown;
     private TextChangeListener listener;
-    private int value;
-    private ArrayAdapter<Integer> adapter;
+    private String value;
+    private ArrayAdapter<T> adapter;
 
     public EditTextDropdown(Context context) {
         super(context);
@@ -63,20 +63,20 @@ public class EditTextDropdown extends ConstraintLayout{
 
             @Override
             public void afterTextChanged(Editable editable) {
-                int val = getValueFromText();
-                if(value != val){
+                String val = getValueFromText();
+                if(value.equals(val)){
                     if (listener != null) listener.onTextChanged(val);
                     value = val;
                 }
             }
         });
 
-        adapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_dropdown_item_1line);
+        adapter = new ArrayAdapter<T>(getContext(), android.R.layout.simple_dropdown_item_1line);
         acText.setAdapter(adapter);
         acText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                value = adapter.getItem(i);
+                value = adapter.getItem(i).toString();
                 acText.setText(String.valueOf(value));
                 if (listener != null) listener.onTextChanged(value);
             }
@@ -94,12 +94,12 @@ public class EditTextDropdown extends ConstraintLayout{
         });
     }
 
-    private int getValueFromText(){
+    private String getValueFromText(){
         String text = String.valueOf(acText.getText());
         if (text.isEmpty()){
-            return 0;
+            return "0";
         }else {
-            return Integer.parseInt(text);
+            return text;
         }
     }
 
@@ -111,17 +111,17 @@ public class EditTextDropdown extends ConstraintLayout{
         tvTitle.setText(res);
     }
 
-    public void setValue(int value){
-        this.value = value;
-        acText.setText(String.valueOf(value));
+    public void setValue(T value){
+        this.value = value == null ? "" : value.toString();
+        acText.setText(this.value);
     }
 
-    public void setList(List<Integer> list){
+    public void setList(List<T> list){
         adapter.clear();
         adapter.addAll(list);
     }
 
     public interface TextChangeListener{
-        void onTextChanged(int value);
+        void onTextChanged(String value);
     }
 }

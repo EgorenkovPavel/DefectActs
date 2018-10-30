@@ -27,7 +27,7 @@ public class Good {
     private String deliveryNumber;
 
     @Relation(parentColumn = "series", entityColumn = "series", entity = ValueDiameterEntity.class, projection = {"value"})
-    private List<Integer> diameter;
+    private List<Float> diameter;
     @Relation(parentColumn = "series", entityColumn = "series", entity = ValueLengthEntity.class, projection = {"value"})
     private List<Integer> length;
     @Relation(parentColumn = "series", entityColumn = "series", entity = ValueWeigthEntity.class, projection = {"value"})
@@ -93,11 +93,11 @@ public class Good {
         this.deliveryNumber = deliveryNumber;
     }
 
-    public List<Integer> getDiameter() {
+    public List<Float> getDiameter() {
         return diameter;
     }
 
-    public void setDiameter(List<Integer> diameter) {
+    public void setDiameter(List<Float> diameter) {
         this.diameter = diameter;
     }
 

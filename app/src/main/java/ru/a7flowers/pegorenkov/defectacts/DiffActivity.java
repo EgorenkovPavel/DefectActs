@@ -133,40 +133,40 @@ public class DiffActivity extends ItemActivity {
                     model.getDiffLength(),
                     new TextChangeListener() {
                 @Override
-                public void onTextChanged(int value) {
-                    model.setDiffLength(value);
+                public void onTextChanged(String value) {
+                    model.setDiffLength(Integer.parseInt(value));
                 }
             });
             addValueData(data, good.getDiameter(), R.string.diameter,
                     model.getDiffDiameter(),
                     new TextChangeListener() {
                 @Override
-                public void onTextChanged(int value) {
-                    model.setDiffDiameter(value);
+                public void onTextChanged(String value) {
+                    model.setDiffDiameter(Float.parseFloat(value));
                 }
             });
             addValueData(data, good.getBulk(), R.string.bulk,
                     model.getDiffBulk(),
                     new TextChangeListener() {
                 @Override
-                public void onTextChanged(int value) {
-                    model.setDiffBulk(value);
+                public void onTextChanged(String value) {
+                    model.setDiffBulk(Integer.parseInt(value));
                 }
             });
             addValueData(data, good.getBudgeonAmount(), R.string.budgeonAmount,
                     model.getDiffBudgeonAmount(),
                     new TextChangeListener() {
                 @Override
-                public void onTextChanged(int value) {
-                    model.setDiffBudgeonAmount(value);
+                public void onTextChanged(String value) {
+                    model.setDiffBudgeonAmount(Integer.parseInt(value));
                 }
             });
             addValueData(data, good.getWeigth(), R.string.weigth,
                     model.getDiffWeigth(),
                     new TextChangeListener() {
                 @Override
-                public void onTextChanged(int value) {
-                    model.setDiffWeigth(value);
+                public void onTextChanged(String value) {
+                    model.setDiffWeigth(Integer.parseInt(value));
                 }
             });
 
@@ -183,12 +183,12 @@ public class DiffActivity extends ItemActivity {
         }
     }
 
-    private void addValueData(List<ValueData> data, List<Integer> list,
+    private <T extends Number> void addValueData(List<ValueData> data, List<T> list,
                               int resLabel,
-                              int value,
+                              T value,
                               TextChangeListener listener){
         if (list != null && !list.isEmpty()) {
-            data.add(new ValueData(resLabel, list, value, listener));
+            data.add(new ValueData<T>(resLabel, list, value, listener));
         }
     }
 
@@ -394,20 +394,20 @@ public class DiffActivity extends ItemActivity {
         acSearch.requestFocus();
     }
 
-    private class ValueData{
-        private List<Integer> values;
+    private class ValueData<T extends Number>{
+        private List<T> values;
         private int label;
         private TextChangeListener listener;
-        private int value;
+        private T value;
 
-        public ValueData(int label, List<Integer> values, int vslue, TextChangeListener listener) {
+        public ValueData(int label, List<T> values, T vslue, TextChangeListener listener) {
             this.values = values;
             this.label = label;
             this.value = value;
             this.listener = listener;
         }
 
-        public List<Integer> getValues() {
+        public List<T> getValues() {
             return values;
         }
 
@@ -419,7 +419,7 @@ public class DiffActivity extends ItemActivity {
             return listener;
         }
 
-        public int getValue() {
+        public T getValue() {
             return value;
         }
     }

@@ -119,7 +119,7 @@ public class Repository {
                                 good.getSuplier(), good.getCountry(), good.getDeliveryQuantity(),
                                 good.getDeliveryId(), good.getDeliveryNumber()));
 
-                        for (Integer value:good.getDiameter()) {
+                        for (Float value:good.getDiameter()) {
                             diameters.add(new ValueDiameterEntity(good.getSeries(), value));
                         }
                         for (Integer value:good.getLength()) {
@@ -236,17 +236,19 @@ public class Repository {
     }
 
     private void refreshDataAfterSavingDefect(Defect defect){
-        mNetworkDataSource.loadDelivery(defect.getDeliveryId(), new DataSource.LoadDeliveryCallback() {
-            @Override
-            public void onDeliveryLoaded(Delivery delivery) {
-                mLocalDataSource.saveDelivery(delivery);
-            }
 
-            @Override
-            public void onDeliveryLoadFailed() {
-
-            }
-        });
+        mLocalDataSource.setDefectActExists(defect.getDeliveryId());
+        //        mNetworkDataSource.loadDelivery(defect.getDeliveryId(), new DataSource.LoadDeliveryCallback() {
+//            @Override
+//            public void onDeliveryLoaded(Delivery delivery) {
+//                mLocalDataSource.saveDelivery(delivery);
+//            }
+//
+//            @Override
+//            public void onDeliveryLoadFailed() {
+//
+//            }
+//        });
 
         mNetworkDataSource.loadDefectWithReasons(defect.getDeliveryId(), defect.getId(), new LoadDefectCallback() {
             @Override

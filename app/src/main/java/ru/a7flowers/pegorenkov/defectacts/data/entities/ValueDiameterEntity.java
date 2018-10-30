@@ -11,9 +11,9 @@ public class ValueDiameterEntity {
     @ColumnInfo(name = "series")
     private String series;
     @ColumnInfo(name = "value")
-    private int value;
+    private float value;
 
-    public ValueDiameterEntity(String series, int value) {
+    public ValueDiameterEntity(String series, float value) {
         this.series = series;
         this.value = value;
     }
@@ -22,7 +22,7 @@ public class ValueDiameterEntity {
         return series;
     }
 
-    public int getValue() {
+    public float getValue() {
         return value;
     }
 }
