@@ -236,31 +236,8 @@ public class Repository {
     }
 
     private void refreshDataAfterSavingDefect(Defect defect){
-
         mLocalDataSource.setDefectActExists(defect.getDeliveryId());
-        //        mNetworkDataSource.loadDelivery(defect.getDeliveryId(), new DataSource.LoadDeliveryCallback() {
-//            @Override
-//            public void onDeliveryLoaded(Delivery delivery) {
-//                mLocalDataSource.saveDelivery(delivery);
-//            }
-//
-//            @Override
-//            public void onDeliveryLoadFailed() {
-//
-//            }
-//        });
-
-        mNetworkDataSource.loadDefect(defect.getDeliveryId(), defect.getId(), new LoadDefectCallback() {
-            @Override
-            public void onDefectLoaded(Defect defect) {
-                mLocalDataSource.saveDefectServer(defect);
-            }
-
-            @Override
-            public void onDefectLoadFailed() {
-
-            }
-        });
+        mLocalDataSource.saveDefectServer(defect);
     }
 
     //DIFF
@@ -316,30 +293,7 @@ public class Repository {
 
     private void refreshDataAfterSavingDiff(Diff diff){
         mLocalDataSource.setDiffActExists(diff.getDeliveryId());
-//        mNetworkDataSource.loadDelivery(diff.getDeliveryId(), new DataSource.LoadDeliveryCallback() {
-//            @Override
-//            public void onDeliveryLoaded(Delivery delivery) {
-//                mLocalDataSource.saveDelivery(delivery);
-//            }
-//
-//            @Override
-//            public void onDeliveryLoadFailed() {
-//
-//            }
-//        });
-
-        mNetworkDataSource.loadDiff(diff.getDeliveryId(), diff.getId(), new DataSource.LoadDiffCallback() {
-            @Override
-            public void onDiffLoaded(Diff diff) {
-                mLocalDataSource.saveDiff(diff);
-            }
-
-            @Override
-            public void onDiffLoadFailed() {
-
-            }
-        });
-
+        mLocalDataSource.saveDiff(diff);
     }
 
     //TODO create adapter entity to value
