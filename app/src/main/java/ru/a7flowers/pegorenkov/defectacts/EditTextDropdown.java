@@ -64,7 +64,7 @@ public class EditTextDropdown<T extends Number> extends ConstraintLayout{
             @Override
             public void afterTextChanged(Editable editable) {
                 String val = getValueFromText();
-                if(value.equals(val)){
+                if(!value.equals(val)){
                     if (listener != null) listener.onTextChanged(val);
                     value = val;
                 }

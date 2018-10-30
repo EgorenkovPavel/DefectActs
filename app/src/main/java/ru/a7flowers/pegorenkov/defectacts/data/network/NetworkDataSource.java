@@ -379,7 +379,7 @@ public class NetworkDataSource {
 
     //TODO add own classes to network entities
 
-    //TODO uploading dig photos!!!
+    //TODO uploading big photos!!!
 //    public String sendFileToServer(String filename, String targetUrl) {
 //        String response = "error";
 //        Log.e("Image filename", filename);

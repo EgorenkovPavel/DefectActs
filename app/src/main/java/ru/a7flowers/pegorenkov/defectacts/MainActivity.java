@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity{
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        TabLayout tabs = findViewById(R.id.tabs);
+        final TabLayout tabs = findViewById(R.id.tabs);
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -111,10 +111,15 @@ public class MainActivity extends AppCompatActivity{
         model.getMode().observe(this, new Observer<Mode>() {
             @Override
             public void onChanged(@Nullable Mode mode) {
-                if (mode == Mode.DEFECTS)
+                if (mode == Mode.DEFECTS) {
                     rvDeliveries.setAdapter(defectAdapter);
-                else if (mode == Mode.DIFFERENCIES)
+                    TabLayout.Tab tab = tabs.getTabAt(0);
+                    tab.select();
+                }else if (mode == Mode.DIFFERENCIES) {
                     rvDeliveries.setAdapter(diffAdapter);
+                    TabLayout.Tab tab = tabs.getTabAt(1);
+                    tab.select();
+                }
             }
         });
 

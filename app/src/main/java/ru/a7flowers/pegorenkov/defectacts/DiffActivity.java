@@ -400,7 +400,7 @@ public class DiffActivity extends ItemActivity {
         private TextChangeListener listener;
         private T value;
 
-        public ValueData(int label, List<T> values, T vslue, TextChangeListener listener) {
+        public ValueData(int label, List<T> values, T value, TextChangeListener listener) {
             this.values = values;
             this.label = label;
             this.value = value;
