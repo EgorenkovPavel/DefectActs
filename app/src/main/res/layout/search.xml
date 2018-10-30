@@ -50,43 +50,51 @@
         android:id="@+id/lblSeries"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="@string/series"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSeries"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/acSearch" />
+        app:layout_constraintTop_toTopOf="@+id/tvSeries" />
 
     <TextView
         android:id="@+id/lblTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
         app:layout_constraintStart_toStartOf="@+id/lblSeries"
-        app:layout_constraintTop_toBottomOf="@+id/lblSeries" />
+        app:layout_constraintTop_toTopOf="@+id/tvTitle" />
 
     <TextView
         android:id="@+id/lblSuplier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/suplier"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSuplier"
         app:layout_constraintStart_toStartOf="@+id/lblTitle"
-        app:layout_constraintTop_toBottomOf="@+id/lblTitle" />
+        app:layout_constraintTop_toTopOf="@+id/tvSuplier" />
 
     <TextView
         android:id="@+id/lblCountry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/country"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCountry"
         app:layout_constraintStart_toStartOf="@+id/lblSuplier"
-        app:layout_constraintTop_toBottomOf="@+id/lblSuplier" />
+        app:layout_constraintTop_toTopOf="@+id/tvCountry" />
 
     <TextView
         android:id="@+id/lblDelivery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/delivery"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/lblCountry"
-        app:layout_constraintTop_toBottomOf="@+id/lblCountry" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCountry" />
 
     <android.support.constraint.Barrier
         android:id="@+id/barrier"
@@ -101,44 +109,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/lblSeries"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toEndOf="@+id/barrier"
-        app:layout_constraintTop_toTopOf="@+id/lblSeries"
+        app:layout_constraintTop_toBottomOf="@+id/acSearch"
         tools:text="55000541312313" />
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/lblTitle"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="@+id/tvSeries"
-        app:layout_constraintTop_toTopOf="@+id/lblTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvSeries"
         tools:text="Rose" />
 
     <TextView
         android:id="@+id/tvSuplier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/lblSuplier"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="@+id/tvTitle"
-        app:layout_constraintTop_toTopOf="@+id/lblSuplier"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
         tools:text="OZ" />
 
     <TextView
         android:id="@+id/tvCountry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/lblCountry"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="@+id/tvSuplier"
-        app:layout_constraintTop_toTopOf="@+id/lblCountry"
+        app:layout_constraintTop_toBottomOf="@+id/tvSuplier"
         tools:text="Belgium" />
 
     <TextView
         android:id="@+id/tvDelivery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintBottom_toBottomOf="@+id/lblDelivery"
         app:layout_constraintStart_toStartOf="@+id/tvCountry"
-        app:layout_constraintTop_toTopOf="@+id/lblDelivery"
+        app:layout_constraintTop_toBottomOf="@+id/tvCountry"
         tools:text="CTQ34223" />
 </android.support.constraint.ConstraintLayout>
