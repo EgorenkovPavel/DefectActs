@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -25,7 +26,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.GoodsSearchAdapter;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReasonEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DefectViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
@@ -89,33 +92,21 @@ public class DefectActivity extends ItemActivity {
         model.getDefectAmount().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer value) {
-                String text = String.valueOf(value);
-                if(!text.equals(etAmount.getText().toString())) {
-                    etAmount.setText(text);
-                    etAmount.setSelection(etAmount.getText().length());
-                }
+                fillEditText(etAmount, String.valueOf(value));
             }
         });
 
         model.getDefectWriteoff().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer value) {
-                String text = String.valueOf(value);
-                if(!text.equals(etWriteoff.getText().toString())) {
-                    etWriteoff.setText(text);
-                    etWriteoff.setSelection(etWriteoff.getText().length());
-                }
+                fillEditText(etWriteoff, String.valueOf(value));
             }
         });
 
         model.getDefectComment().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String comment) {
-                String text = String.valueOf(comment);
-                if(!text.equals(etComment.getText().toString())) {
-                    etComment.setText(comment);
-                    etComment.setSelection(etComment.getText().length());
-                }
+                fillEditText(etComment, comment);
             }
         });
         model.getDefectSeries().observe(this, new Observer<String>() {
@@ -169,6 +160,46 @@ public class DefectActivity extends ItemActivity {
                 tvPhotoCount.setText(String.valueOf(count));
             }
         });
+
+        model.getDefect().observe(this, new Observer<Defect>() {
+            @Override
+            public void onChanged(@Nullable Defect defect) {
+                fillByDefect(defect);
+                Log.d("DEFECT_ACTIVITY", defect == null ? "null" : String.valueOf(defect.getQuantity()));
+            }
+        });
+    }
+
+    private void fillByDefect(Defect defect){
+        if(defect == null){
+            tvReasons.setText("");
+        }else{
+            fillEditText(etAmount, String.valueOf(defect.getQuantity()));
+            fillEditText(etWriteoff, String.valueOf(defect.getWriteoff()));
+            fillEditText(etComment, defect.getComment());
+            tvSeries.setText(defect.getSeries());
+            tvTitle.setText(defect.getTitle());
+            tvSuplier.setText(defect.getSuplier());
+            tvCountry.setText(defect.getCountry());
+            tvDelivery.setText(defect.getDeliveryNumber());
+
+            StringBuilder text = new StringBuilder();
+            for (DefectReasonEntity reason: defect.getReasons()) {
+                text.append(reason.getTitle()).append("; ");
+            }
+            tvReasons.setText(text.toString());
+        }
+    }
+
+    private void fillEditText(EditText view, String text){
+        if (text == null) {
+            view.setText("");
+            return;
+        }
+        if(!text.equals(view.getText().toString())) {
+            view.setText(text);
+            view.setSelection(view.getText().length());
+        }
     }
 
     private void findViews() {

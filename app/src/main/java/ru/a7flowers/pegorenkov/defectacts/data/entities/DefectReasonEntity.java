@@ -11,7 +11,7 @@ primaryKeys = {"defectId", "reasonId"},
 foreignKeys = {@ForeignKey(entity = DefectEntity.class, parentColumns = "id", childColumns = "defectId", onDelete = ForeignKey.CASCADE),
 @ForeignKey(entity = Reason.class, parentColumns = "id", childColumns = "reasonId", onDelete = ForeignKey.CASCADE)},
 indices = {@Index("reasonId"), @Index("defectId")})
-public class DefectReason {
+public class DefectReasonEntity {
 
     @ColumnInfo(name = "defectId")
     @NonNull
@@ -21,9 +21,14 @@ public class DefectReason {
     @NonNull
     private String reasonId;
 
-    public DefectReason(String defectId, String reasonId) {
+    @ColumnInfo(name = "title")
+    @NonNull
+    private String title;
+
+    public DefectReasonEntity(String defectId, String reasonId, String title) {
         this.defectId = defectId;
         this.reasonId = reasonId;
+        this.title = title;
     }
 
     public String getDefectId() {
@@ -32,5 +37,10 @@ public class DefectReason {
 
     public String getReasonId() {
         return reasonId;
+    }
+
+    @NonNull
+    public String getTitle() {
+        return title;
     }
 }

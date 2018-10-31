@@ -13,7 +13,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ClearDatabaseCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReasonEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DifferenceEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
@@ -178,9 +178,10 @@ public class LocalDataSource {
                 DefectEntity defect = new DefectEntity(defectServer);
                 mDb.defectDao().insertDefect(defect);
 
-                List<DefectReason> list = defectServer.getReasons();
+                List<DefectReasonEntity> list = defectServer.getReasons();
                 mDb.defectReasonDao().deleteReasons(defectServer.getId());
                 if (list.isEmpty()) return;
+
                 mDb.defectReasonDao().insertReasons(list);
             }
         });

@@ -7,7 +7,7 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReasonEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 @Dao
@@ -21,10 +21,10 @@ public interface DefectReasonDao {
     List<Reason> loadReasons(String defectId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertReason(DefectReason reason);
+    void insertReason(DefectReasonEntity reason);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertReasons(List<DefectReason> reasons);
+    void insertReasons(List<DefectReasonEntity> reasons);
 
     @Query("DELETE FROM defectreasons WHERE defectId = :defectId")
     void deleteReasons(String defectId);

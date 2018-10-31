@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReasonEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
 public class Defect {
@@ -51,8 +51,8 @@ public class Defect {
     private String country;
 
     @SerializedName("reasons")
-    @Relation(parentColumn = "id", entityColumn = "defectId", entity = DefectReason.class)
-    private List<DefectReason> mReasons;
+    @Relation(parentColumn = "id", entityColumn = "defectId", entity = DefectReasonEntity.class)
+    private List<DefectReasonEntity> mReasons;
 
     public Defect() {
     }
@@ -64,15 +64,15 @@ public class Defect {
 
         mReasons = new ArrayList<>();
         for (Reason reason:reasons) {
-            mReasons.add(new DefectReason(defect.getId(), reason.getId()));
+            mReasons.add(new DefectReasonEntity(defect.getId(), reason.getId(), reason.getTitle()));
         }
     }
 
-    public List<DefectReason> getReasons() {
+    public List<DefectReasonEntity> getReasons() {
         return mReasons;
     }
 
-    public void setReasons(List<DefectReason> reasons) {
+    public void setReasons(List<DefectReasonEntity> reasons) {
         mReasons = reasons;
     }
 

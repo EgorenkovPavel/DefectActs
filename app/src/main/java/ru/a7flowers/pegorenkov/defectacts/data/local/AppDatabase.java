@@ -13,7 +13,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.dao.DifferenceDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.GoodDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.ReasonDao;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
-import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReasonEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DifferenceEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
@@ -29,7 +29,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueWeigthEntity;
         DefectEntity.class,
         DifferenceEntity.class,
         Reason.class,
-        DefectReason.class,
+        DefectReasonEntity.class,
         ValueDiameterEntity.class,
         ValueBulkEntity.class,
         ValueLengthEntity.class,

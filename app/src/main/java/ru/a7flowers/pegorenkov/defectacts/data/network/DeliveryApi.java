@@ -38,7 +38,7 @@ public interface DeliveryApi {
     Call<Diff> getDiff(@Path("deliveryId") String deliveryId, @Path("diffId") String diffId);
 
 //    @GET("deliveries/{deliveryId}/defects/{defectId}/reasons")
-//    Call<List<DefectReason>> getDefectReasons(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
+//    Call<List<DefectReasonEntity>> getDefectReasons(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
 
     @POST("deliveries/{deliveryId}/defects")
     Call<String> setDefect(@Path("deliveryId") String deliveryId, @Body Defect defect);

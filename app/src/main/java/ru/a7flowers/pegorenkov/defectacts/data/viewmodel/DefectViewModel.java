@@ -24,6 +24,8 @@ public class DefectViewModel extends AndroidViewModel{
     private LiveData<List<Good>> mGoods;
 
     // For defect
+    private MutableLiveData<Defect> mDefect = new MutableLiveData<>();
+
     private String mDefectId;
     private String mDefectDeliveryId;
     private MutableLiveData<String> mDefectTitle = new MutableLiveData<>();
@@ -35,11 +37,15 @@ public class DefectViewModel extends AndroidViewModel{
     private MutableLiveData<String> mDefectComment = new MutableLiveData<>();
     private MutableLiveData<String> mDefectSeries = new MutableLiveData<>();
     private MutableLiveData<List<Reason>> mDefectReasons = new MutableLiveData<>();
+
     private MutableLiveData<Integer> mPhotoCount = new MutableLiveData<>();
     private List<String> photoPaths = new ArrayList<>();
-
     private String currentPhotoPath;
 
+
+    public MutableLiveData<Defect> getDefect() {
+        return mDefect;
+    }
     //TODO add saving state
 
     //TODO add MutableLiveData<Defect>
@@ -62,6 +68,8 @@ public class DefectViewModel extends AndroidViewModel{
         mDefectWriteoff.postValue(0);
         mDefectSeries.postValue("");
         mDefectReasons.postValue(new ArrayList<Reason>());
+        mDefect.setValue(new Defect());
+
         mPhotoCount.postValue(0);
         photoPaths = new ArrayList<>();
     }
@@ -88,6 +96,8 @@ public class DefectViewModel extends AndroidViewModel{
                 mDefectWriteoff.postValue(defect.getWriteoff());
                 mDefectDelivery.postValue(defect.getDeliveryNumber());
                 mPhotoCount.postValue(0);
+
+                mDefect.postValue(defect);
             }
 
             @Override
@@ -127,6 +137,12 @@ public class DefectViewModel extends AndroidViewModel{
         int value = mDefectAmount.getValue();
         value++;
         mDefectAmount.postValue(value);
+
+        Defect defect = mDefect.getValue();
+        if(defect != null){
+            defect.setQuantity(value);
+            mDefect.setValue(defect);
+        }
     }
 
     public void decAmount(){
