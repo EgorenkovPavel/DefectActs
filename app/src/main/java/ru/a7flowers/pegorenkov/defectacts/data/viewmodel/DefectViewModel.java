@@ -40,6 +40,10 @@ public class DefectViewModel extends AndroidViewModel{
 
     private String currentPhotoPath;
 
+    //TODO add saving state
+
+    //TODO add MutableLiveData<Defect>
+
     public DefectViewModel(@NonNull Application application, Repository repository) {
         super(application);
         mRepository = repository;
