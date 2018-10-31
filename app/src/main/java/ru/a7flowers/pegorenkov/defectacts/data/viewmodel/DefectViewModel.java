@@ -12,6 +12,7 @@ import java.util.List;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReasonEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
@@ -26,18 +27,6 @@ public class DefectViewModel extends AndroidViewModel{
     // For defect
     private MutableLiveData<Defect> mDefect = new MutableLiveData<>();
 
-    private String mDefectId;
-    private String mDefectDeliveryId;
-    private MutableLiveData<String> mDefectTitle = new MutableLiveData<>();
-    private MutableLiveData<String> mDefectSuplier = new MutableLiveData<>();
-    private MutableLiveData<String> mDefectCountry = new MutableLiveData<>();
-    private MutableLiveData<String> mDefectDelivery = new MutableLiveData<>();
-    private MutableLiveData<Integer> mDefectAmount = new MutableLiveData<>();
-    private MutableLiveData<Integer> mDefectWriteoff = new MutableLiveData<>();
-    private MutableLiveData<String> mDefectComment = new MutableLiveData<>();
-    private MutableLiveData<String> mDefectSeries = new MutableLiveData<>();
-    private MutableLiveData<List<Reason>> mDefectReasons = new MutableLiveData<>();
-
     private MutableLiveData<Integer> mPhotoCount = new MutableLiveData<>();
     private List<String> photoPaths = new ArrayList<>();
     private String currentPhotoPath;
@@ -48,8 +37,6 @@ public class DefectViewModel extends AndroidViewModel{
     }
     //TODO add saving state
 
-    //TODO add MutableLiveData<Defect>
-
     public DefectViewModel(@NonNull Application application, Repository repository) {
         super(application);
         mRepository = repository;
@@ -58,16 +45,6 @@ public class DefectViewModel extends AndroidViewModel{
     }
 
     private void init(){
-        mDefectId = "";
-        mDefectTitle.postValue("");
-        mDefectSuplier.postValue("");
-        mDefectCountry.postValue("");
-        mDefectDelivery.postValue("");
-        mDefectComment.postValue("");
-        mDefectAmount.postValue(0);
-        mDefectWriteoff.postValue(0);
-        mDefectSeries.postValue("");
-        mDefectReasons.postValue(new ArrayList<Reason>());
         mDefect.setValue(new Defect());
 
         mPhotoCount.postValue(0);
@@ -81,20 +58,9 @@ public class DefectViewModel extends AndroidViewModel{
     public void start(String[] deliveryIds, final String defectId){
         loadDelivery(deliveryIds);
 
-        mDefectId = defectId;
-
         mRepository.getDefect(defectId, new DataSource.LoadDefectCallback() {
             @Override
             public void onDefectLoaded(Defect defect) {
-                mDefectSeries.postValue(defect.getSeries());
-                mDefectTitle.postValue(defect.getTitle());
-                mDefectSuplier.postValue(defect.getSuplier());
-                mDefectCountry.postValue(defect.getCountry());
-                mDefectDeliveryId = defect.getDeliveryId();
-                mDefectComment.postValue(defect.getComment());
-                mDefectAmount.postValue(defect.getQuantity());
-                mDefectWriteoff.postValue(defect.getWriteoff());
-                mDefectDelivery.postValue(defect.getDeliveryNumber());
                 mPhotoCount.postValue(0);
 
                 mDefect.postValue(defect);
@@ -102,19 +68,6 @@ public class DefectViewModel extends AndroidViewModel{
 
             @Override
             public void onDefectLoadFailed() {
-
-            }
-        });
-
-        mRepository.getDefectReasons(defectId, new DataSource.LoadReasonsCallback() {
-            @Override
-            public void onReasonsLoaded(List<Reason> reasons) {
-                if(reasons != null)
-                    mDefectReasons.postValue(reasons);
-            }
-
-            @Override
-            public void onReasonsLoadFailed() {
 
             }
         });
@@ -129,78 +82,68 @@ public class DefectViewModel extends AndroidViewModel{
         return mGoods;
     }
 
-    public LiveData<List<Reason>> getDefectReasons() {
-        return mDefectReasons;
-    }
-
     public void incAmount(){
-        int value = mDefectAmount.getValue();
-        value++;
-        mDefectAmount.postValue(value);
-
         Defect defect = mDefect.getValue();
-        if(defect != null){
-            defect.setQuantity(value);
-            mDefect.setValue(defect);
-        }
+        if(defect == null) return;
+
+        defect.setQuantity(defect.getQuantity()+1);
+        mDefect.setValue(defect);
+
     }
 
     public void decAmount(){
-        int value = mDefectAmount.getValue();
-        value = value == 0 ? 0 : value-1;
-        mDefectAmount.postValue(value);
-    }
+        Defect defect = mDefect.getValue();
+        if(defect == null) return;
 
-    public MutableLiveData<Integer> getDefectAmount() {
-        return mDefectAmount;
-    }
-
-    public MutableLiveData<String> getDefectComment() {
-        return mDefectComment;
-    }
-
-    public MutableLiveData<String> getDefectSeries() {
-        return mDefectSeries;
+        defect.setQuantity(Math.max(defect.getQuantity()-1, 0));
+        mDefect.setValue(defect);
     }
 
     public void setGood(Good good){
-        mDefectSeries.postValue(good.getSeries());
-        mDefectDeliveryId = good.getDeliveryId();
-        mDefectTitle.postValue(good.getGood());
-        mDefectSuplier.postValue(good.getSuplier());
-        mDefectCountry.postValue(good.getCountry());
-        mDefectDelivery.postValue(good.getDeliveryNumber());
+        Defect defect = mDefect.getValue();
+
+        defect.setSeries(good.getSeries());
+        defect.setDeliveryId(good.getDeliveryId());
+        defect.setTitle(good.getGood());
+        defect.setSuplier(good.getSuplier());
+        defect.setCountry(good.getCountry());
+        defect.setDeliveryNumber(good.getDeliveryNumber());
+
+        mDefect.setValue(defect);
     }
 
     public void setAmount(int value){
-        if(mDefectAmount.getValue() != value)
-            mDefectAmount.postValue(value);
+        Defect defect = mDefect.getValue();
+        if(defect == null) return;
+        defect.setQuantity(value);
+        mDefect.setValue(defect);
     }
 
-    public void setComment(String text){
-        if(!mDefectComment.getValue().equals(text))
-            mDefectComment.postValue(text);
+    public void setComment(String value){
+        Defect defect = mDefect.getValue();
+        if(defect == null) return;
+        defect.setComment(value);
+        mDefect.setValue(defect);
     }
 
     public void setDefectReasons(List<Reason> defectReasons) {
-        mDefectReasons.postValue(defectReasons);
+        Defect defect = mDefect.getValue();
+        if(defect == null) return;
+
+        List<DefectReasonEntity> reasons = new ArrayList<>();
+        for (Reason res:defectReasons) {
+            reasons.add(new DefectReasonEntity(defect.getId(), res.getId(), res.getTitle()));
+        }
+
+        defect.setReasons(reasons);
+        mDefect.setValue(defect);
     }
 
     public void saveDefect(){
+        Defect defect = mDefect.getValue();
+        if(defect == null) return;
 
-        if(mDefectSeries.getValue() == null || mDefectSeries.getValue() == "") return;
-
-        DefectEntity defect = new DefectEntity();
-        defect.setId(mDefectId);
-        defect.setQuantity(mDefectAmount.getValue());
-        defect.setWriteoff(mDefectWriteoff.getValue());
-        defect.setSeries(mDefectSeries.getValue());
-        defect.setComment(mDefectComment.getValue());
-        defect.setDeliveryId(mDefectDeliveryId);
-
-        Defect defectWithReasons = new Defect(defect, mDefectReasons.getValue());
-
-        mRepository.saveDefect(defectWithReasons,
+        mRepository.saveDefect(defect,
                 new ArrayList<>(photoPaths));
 
         init();
@@ -211,52 +154,45 @@ public class DefectViewModel extends AndroidViewModel{
     }
 
     public List<Reason> getDefectReasonsList(){
-        return mDefectReasons.getValue();
+        Defect defect = mDefect.getValue();
+        if (defect == null) return new ArrayList<>();
+
+        List<Reason> reasons = new ArrayList<>();
+        for (DefectReasonEntity res: defect.getReasons()) {
+            reasons.add(new Reason(res.getReasonId(), res.getTitle()));
+        }
+
+        return reasons;
     }
 
     public void savePhoto() {
         photoPaths.add(currentPhotoPath);
     }
 
-    public MutableLiveData<String> getDefectTitle() {
-        return mDefectTitle;
-    }
-
-    public MutableLiveData<String> getDefectSuplier() {
-        return mDefectSuplier;
-    }
-
-    public MutableLiveData<String> getDefectCountry() {
-        return mDefectCountry;
-    }
-
-    public MutableLiveData<String> getDefectDelivery() {
-        return mDefectDelivery;
-    }
-
     public void setWriteoff(int value) {
-        if(mDefectWriteoff.getValue() != value)
-            mDefectWriteoff.postValue(value);
+        Defect defect = mDefect.getValue();
+        if(defect == null) return;
+        defect.setWriteoff(value);
+        mDefect.setValue(defect);
     }
 
     public void incWriteoff() {
-        int value = mDefectWriteoff.getValue();
-        value++;
-        mDefectWriteoff.postValue(value);
+        Defect defect = mDefect.getValue();
+        if(defect == null) return;
+        defect.setQuantity(defect.getQuantity() + 1);
+        mDefect.setValue(defect);
     }
 
     public void decWriteoff() {
-        int value = mDefectWriteoff.getValue();
-        value = value == 0 ? 0 : value-1;
-        mDefectWriteoff.postValue(value);
+
+        Defect defect = mDefect.getValue();
+        if(defect == null) return;
+        defect.setQuantity(Math.max(defect.getQuantity() - 1, 0));
+        mDefect.setValue(defect);
     }
 
     public MutableLiveData<Integer> getPhotoCount() {
         return mPhotoCount;
-    }
-
-    public MutableLiveData<Integer> getDefectWriteoff() {
-        return mDefectWriteoff;
     }
 
     public void setPhotoPath(String photoPath) {

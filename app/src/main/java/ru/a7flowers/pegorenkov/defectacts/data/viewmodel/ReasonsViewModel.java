@@ -17,6 +17,8 @@ public class ReasonsViewModel extends AndroidViewModel {
     @SuppressWarnings("FieldCanBeLocal")
     private Repository mRepository;
 
+    //TODO rewrite ALL!!!!!!!!!
+
     private LiveData<List<Reason>> mReasons;
     private MutableLiveData<List<Reason>> mDefectReasons = new MutableLiveData<>();
 
@@ -34,13 +36,37 @@ public class ReasonsViewModel extends AndroidViewModel {
     }
 
     public void selectReason(Reason reason){
+        Reason res = getReasonById(reason.getId());
+        if (res == null) return;
+
+        Reason newRes = null;
         List<Reason> defectReasons = mDefectReasons.getValue();
-        if(defectReasons.contains(reason)){
-            defectReasons.remove(reason);
-        }else{
-            defectReasons.add(reason);
+        for (Reason defRes:defectReasons){
+            if(defRes.getId().equals(res.getId())){
+                newRes = defRes;
+                break;
+            }
         }
+        if(newRes != null){
+            defectReasons.remove(newRes);
+        }else{
+            defectReasons.add(res);
+        }
+//        if(defectReasons.contains(res)){
+//            defectReasons.remove(res);
+//        }else{
+//            defectReasons.add(res);
+//        }
         mDefectReasons.postValue(defectReasons);
+    }
+
+    private Reason getReasonById(String id){
+        List<Reason> reasons = mReasons.getValue();
+        for (Reason reason:reasons){
+            if(reason.getId().equals(id))
+                return reason;
+        }
+        return null;
     }
 
     public LiveData<List<Reason>> getReasons() {

@@ -89,71 +89,6 @@ public class DefectActivity extends ItemActivity {
             }
         });
 
-        model.getDefectAmount().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer value) {
-                fillEditText(etAmount, String.valueOf(value));
-            }
-        });
-
-        model.getDefectWriteoff().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer value) {
-                fillEditText(etWriteoff, String.valueOf(value));
-            }
-        });
-
-        model.getDefectComment().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String comment) {
-                fillEditText(etComment, comment);
-            }
-        });
-        model.getDefectSeries().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String series) {
-                tvSeries.setText(series);
-            }
-        });
-        model.getDefectTitle().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                tvTitle.setText(s);
-            }
-        });
-        model.getDefectSuplier().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                tvSuplier.setText(s);
-            }
-        });
-        model.getDefectCountry().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                tvCountry.setText(s);
-            }
-        });
-        model.getDefectDelivery().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                tvDelivery.setText(s);
-            }
-        });
-        model.getDefectReasons().observe(this, new Observer<List<Reason>>() {
-            @Override
-            public void onChanged(@Nullable List<Reason> reasons) {
-                if (reasons == null){
-                    tvReasons.setText("");
-                    return;
-                }
-
-                StringBuilder text = new StringBuilder();
-                for (Reason reason:reasons) {
-                    text.append(reason.getTitle()).append("; ");
-                }
-                tvReasons.setText(text.toString());
-            }
-        });
         model.getPhotoCount().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer count) {
@@ -164,31 +99,29 @@ public class DefectActivity extends ItemActivity {
         model.getDefect().observe(this, new Observer<Defect>() {
             @Override
             public void onChanged(@Nullable Defect defect) {
-                fillByDefect(defect);
-                Log.d("DEFECT_ACTIVITY", defect == null ? "null" : String.valueOf(defect.getQuantity()));
+                if (defect == null)
+                    fillByDefect(new Defect());
+                else
+                    fillByDefect(defect);
             }
         });
     }
 
     private void fillByDefect(Defect defect){
-        if(defect == null){
-            tvReasons.setText("");
-        }else{
-            fillEditText(etAmount, String.valueOf(defect.getQuantity()));
-            fillEditText(etWriteoff, String.valueOf(defect.getWriteoff()));
-            fillEditText(etComment, defect.getComment());
-            tvSeries.setText(defect.getSeries());
-            tvTitle.setText(defect.getTitle());
-            tvSuplier.setText(defect.getSuplier());
-            tvCountry.setText(defect.getCountry());
-            tvDelivery.setText(defect.getDeliveryNumber());
+        fillEditText(etAmount, String.valueOf(defect.getQuantity()));
+        fillEditText(etWriteoff, String.valueOf(defect.getWriteoff()));
+        fillEditText(etComment, defect.getComment());
+        tvSeries.setText(defect.getSeries());
+        tvTitle.setText(defect.getTitle());
+        tvSuplier.setText(defect.getSuplier());
+        tvCountry.setText(defect.getCountry());
+        tvDelivery.setText(defect.getDeliveryNumber());
 
-            StringBuilder text = new StringBuilder();
-            for (DefectReasonEntity reason: defect.getReasons()) {
-                text.append(reason.getTitle()).append("; ");
-            }
-            tvReasons.setText(text.toString());
+        StringBuilder text = new StringBuilder();
+        for (DefectReasonEntity reason : defect.getReasons()) {
+            text.append(reason.getTitle()).append("; ");
         }
+        tvReasons.setText(text.toString());
     }
 
     private void fillEditText(EditText view, String text){

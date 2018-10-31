@@ -52,7 +52,7 @@ public class Defect {
 
     @SerializedName("reasons")
     @Relation(parentColumn = "id", entityColumn = "defectId", entity = DefectReasonEntity.class)
-    private List<DefectReasonEntity> mReasons;
+    private List<DefectReasonEntity> mReasons = new ArrayList<>();
 
     public Defect() {
     }
