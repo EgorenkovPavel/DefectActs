@@ -11,6 +11,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 import ru.a7flowers.pegorenkov.defectacts.data.network.DefectWithReasons;
+import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DefectViewModel;
 
 public class Repository {
 
@@ -21,6 +22,8 @@ public class Repository {
 
     private LiveData<List<Delivery>> mDeliveries;
     private LiveData<List<Reason>> mReasons;
+
+    private DefectViewModel.ViewModelData savedData;
 
     private Repository(NetworkDataSource networkDataSource, LocalDataSource localDataSource){
         mNetworkDataSource = networkDataSource;
@@ -217,4 +220,11 @@ public class Repository {
         });
     }
 
+    public void setSavedData(DefectViewModel.ViewModelData savedData) {
+        this.savedData = savedData;
+    }
+
+    public DefectViewModel.ViewModelData getSavedData() {
+        return savedData;
+    }
 }
