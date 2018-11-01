@@ -7,7 +7,11 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
@@ -17,10 +21,8 @@ public class ReasonsViewModel extends AndroidViewModel {
     @SuppressWarnings("FieldCanBeLocal")
     private Repository mRepository;
 
-    //TODO rewrite ALL!!!!!!!!!
-
     private LiveData<List<Reason>> mReasons;
-    private MutableLiveData<List<Reason>> mDefectReasons = new MutableLiveData<>();
+    private Set<String> mDefectReasonsIds = new HashSet<>();
 
     public ReasonsViewModel(@NonNull Application application, Repository repository) {
         super(application);
@@ -28,53 +30,37 @@ public class ReasonsViewModel extends AndroidViewModel {
         mRepository = repository;
 
         mReasons = repository.getReasons();
-        mDefectReasons.postValue(new ArrayList<Reason>());
     }
 
-    public void setDefectReasons(List<Reason> reasons){
-        mDefectReasons.postValue(reasons);
-    }
-
-    public void selectReason(Reason reason){
-        Reason res = getReasonById(reason.getId());
-        if (res == null) return;
-
-        Reason newRes = null;
-        List<Reason> defectReasons = mDefectReasons.getValue();
-        for (Reason defRes:defectReasons){
-            if(defRes.getId().equals(res.getId())){
-                newRes = defRes;
-                break;
-            }
-        }
-        if(newRes != null){
-            defectReasons.remove(newRes);
-        }else{
-            defectReasons.add(res);
-        }
-//        if(defectReasons.contains(res)){
-//            defectReasons.remove(res);
-//        }else{
-//            defectReasons.add(res);
-//        }
-        mDefectReasons.postValue(defectReasons);
-    }
-
-    private Reason getReasonById(String id){
-        List<Reason> reasons = mReasons.getValue();
-        for (Reason reason:reasons){
-            if(reason.getId().equals(id))
-                return reason;
-        }
-        return null;
+    public void setDefectReasons(String[] reasons){
+        mDefectReasonsIds = new HashSet<>(Arrays.asList(reasons));
     }
 
     public LiveData<List<Reason>> getReasons() {
         return mReasons;
     }
 
-    public MutableLiveData<List<Reason>> getDefectReasons() {
-        return mDefectReasons;
+    public boolean isReasonSelected(Reason reason) {
+        return mDefectReasonsIds.contains(reason.getId());
     }
 
+    public void addSelectedReason(Reason reason) {
+        mDefectReasonsIds.add(reason.getId());
+    }
+
+    public void removeSelectedReason(Reason reason) {
+        mDefectReasonsIds.remove(reason.getId());
+    }
+
+    public List<Reason> getDefectReasons() {
+        List<Reason> reasons = mReasons.getValue();
+        List<Reason> selectedReasons = new ArrayList<>();
+
+        for (Reason reason:reasons) {
+            if(isReasonSelected(reason))
+                selectedReasons.add(reason);
+        }
+
+        return selectedReasons;
+    }
 }

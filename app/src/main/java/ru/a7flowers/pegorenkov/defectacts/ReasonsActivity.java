@@ -21,7 +21,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ReasonsViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
 
-public class ReasonsActivity extends AppCompatActivity implements ReasonsAdapter.OnReasonClickListener {
+public class ReasonsActivity extends AppCompatActivity {
 
     private ReasonsViewModel model;
 
@@ -50,7 +50,7 @@ public class ReasonsActivity extends AppCompatActivity implements ReasonsAdapter
             @Override
             public void onClick(View view) {
                 Intent i = new Intent();
-                i.putExtra(DefectActivity.SELECTED_REASONS, (Serializable) model.getDefectReasons().getValue());
+                i.putExtra(DefectActivity.SELECTED_REASONS, (Serializable) model.getDefectReasons());
 
                 setResult(RESULT_OK, i);
                 finish();
@@ -68,14 +68,12 @@ public class ReasonsActivity extends AppCompatActivity implements ReasonsAdapter
         rvReasons.addItemDecoration(itemDecoration);
 
         final ReasonsAdapter adapter = new ReasonsAdapter();
-
-        adapter.setOnReasonClickListener(this);
-
+        adapter.setModel(model);
         rvReasons.setAdapter(adapter);
 
         Intent i = getIntent();
-        if(i.hasExtra(DefectActivity.SELECTED_REASONS)) {
-            List<Reason> list = (List<Reason>) i.getExtras().get(DefectActivity.SELECTED_REASONS);
+        if (i.hasExtra(DefectActivity.SELECTED_REASONS)) {
+            String[] list = i.getExtras().getStringArray(DefectActivity.SELECTED_REASONS);
             model.setDefectReasons(list);
         }
 
@@ -85,16 +83,5 @@ public class ReasonsActivity extends AppCompatActivity implements ReasonsAdapter
                 adapter.setItems(reasons);
             }
         });
-        model.getDefectReasons().observe(this, new Observer<List<Reason>>() {
-            @Override
-            public void onChanged(@Nullable List<Reason> reasons) {
-                adapter.setSelectedItems(reasons);
-            }
-        });
-    }
-
-    @Override
-    public void onReasonClick(Reason reason) {
-        model.selectReason(reason);
     }
 }

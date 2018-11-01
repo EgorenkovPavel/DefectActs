@@ -17,7 +17,6 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 
 public class DeliveriesViewModel extends AndroidViewModel {
 
-    @SuppressWarnings("FieldCanBeLocal")
     private Repository mRepository;
 
     private MutableLiveData<Boolean> isReloading = new MutableLiveData<>();

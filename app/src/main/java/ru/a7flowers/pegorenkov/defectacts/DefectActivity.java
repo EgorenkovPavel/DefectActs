@@ -312,7 +312,7 @@ public class DefectActivity extends ItemActivity {
 
     private void chooseReason(){
         Intent i = new Intent(this, ReasonsActivity.class);
-        i.putExtra(SELECTED_REASONS, (Serializable) model.getDefectReasonsList());
+        i.putExtra(SELECTED_REASONS, model.getDefectReasonsList());
         startActivityForResult(i, SELECT_REASON);
     }
 

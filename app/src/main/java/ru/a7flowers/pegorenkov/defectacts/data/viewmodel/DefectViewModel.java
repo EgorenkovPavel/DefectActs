@@ -31,7 +31,6 @@ public class DefectViewModel extends AndroidViewModel{
     private List<String> photoPaths = new ArrayList<>();
     private String currentPhotoPath;
 
-
     public MutableLiveData<Defect> getDefect() {
         return mDefect;
     }
@@ -153,13 +152,14 @@ public class DefectViewModel extends AndroidViewModel{
         this.currentPhotoPath = currentPhotoPath;
     }
 
-    public List<Reason> getDefectReasonsList(){
+    public String[] getDefectReasonsList(){
         Defect defect = mDefect.getValue();
-        if (defect == null) return new ArrayList<>();
+        if (defect == null) return new String[0];
 
-        List<Reason> reasons = new ArrayList<>();
-        for (DefectReasonEntity res: defect.getReasons()) {
-            reasons.add(new Reason(res.getReasonId(), res.getTitle()));
+        List<DefectReasonEntity> list = defect.getReasons();
+        String[] reasons = new String[list.size()];
+        for (int i=0;i<list.size();i++){
+            reasons[i] = list.get(i).getReasonId();
         }
 
         return reasons;

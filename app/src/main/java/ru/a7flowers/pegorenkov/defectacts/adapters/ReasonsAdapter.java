@@ -13,16 +13,15 @@ import java.util.Set;
 
 import ru.a7flowers.pegorenkov.defectacts.R;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ReasonsViewModel;
 
 public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHolder> {
 
+    private ReasonsViewModel model;
     private List<Reason> mReasons;
-    private Set<String> mSelectedReasonsIds = new HashSet<>();
 
-    private OnReasonClickListener listener;
-
-    public interface OnReasonClickListener {
-        void onReasonClick(Reason reason);
+    public void setModel(ReasonsViewModel model) {
+        this.model = model;
     }
 
     @NonNull
@@ -38,7 +37,7 @@ public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHo
         Reason reason = mReasons.get(position);
 
         holder.cbReason.setText(reason.getTitle());
-        holder.cbReason.setChecked(mSelectedReasonsIds.contains(reason.getId()));
+        holder.cbReason.setChecked(model.isReasonSelected(reason));
     }
 
     @Override
@@ -49,24 +48,6 @@ public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHo
     public void setItems(List<Reason> reasons){
         mReasons = reasons;
         notifyDataSetChanged();
-    }
-
-    public void setSelectedItems(List<Reason> reasons){
-
-        if (reasons != null) {
-            mSelectedReasonsIds.clear();
-            for (Reason reason : reasons) {
-                mSelectedReasonsIds.add(reason.getId());
-            }
-        }else{
-            mSelectedReasonsIds.clear();
-        }
-
-        notifyDataSetChanged();
-    }
-
-    public void setOnReasonClickListener(OnReasonClickListener listener){
-        this.listener = listener;
     }
 
     class DefectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -84,7 +65,15 @@ public class ReasonsAdapter extends RecyclerView.Adapter<ReasonsAdapter.DefectHo
 
         @Override
         public void onClick(View view) {
-            listener.onReasonClick(mReasons.get(getAdapterPosition()));
+            if (!view.equals(cbReason))
+                cbReason.setChecked(!cbReason.isChecked());
+
+            Reason reason = mReasons.get(getAdapterPosition());
+            if(cbReason.isChecked()){
+                model.addSelectedReason(reason);
+            }else{
+                model.removeSelectedReason(reason);
+            }
         }
     }
 
