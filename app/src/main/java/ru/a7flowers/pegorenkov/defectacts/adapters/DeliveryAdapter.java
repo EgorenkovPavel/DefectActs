@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -82,6 +83,14 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
 
             cbSelected.setOnClickListener(this);
             itemView.setOnClickListener(this);
+
+            ivPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO
+                    Toast.makeText(view.getContext(), "Take photo", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         @Override
