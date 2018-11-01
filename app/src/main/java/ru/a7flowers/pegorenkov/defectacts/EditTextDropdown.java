@@ -20,7 +20,7 @@ public class EditTextDropdown<T extends Number> extends ConstraintLayout{
     private AutoCompleteTextView acText;
     private ImageButton btnDropdown;
     private TextChangeListener listener;
-    private String value;
+    private String value = "";
     private ArrayAdapter<T> adapter;
 
     public EditTextDropdown(Context context) {

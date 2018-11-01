@@ -29,7 +29,6 @@ public class DefectViewModel extends AndroidViewModel{
 
     private MutableLiveData<Integer> mPhotoCount = new MutableLiveData<>();
     private List<String> photoPaths = new ArrayList<>();
-    private String currentPhotoPath;
 
     public DefectViewModel(@NonNull Application application, Repository repository) {
         super(application);
@@ -46,7 +45,6 @@ public class DefectViewModel extends AndroidViewModel{
        data.setmGoods(mGoods);
        data.setmDefect(mDefect.getValue());
        data.setPhotoPaths(photoPaths);
-       data.setCurrentPhotoPath(currentPhotoPath);
 
        mRepository.saveDefectData(data);
     }
@@ -62,7 +60,6 @@ public class DefectViewModel extends AndroidViewModel{
         mDefect.setValue(data.getmDefect());
         photoPaths = data.getPhotoPaths();
         mPhotoCount.setValue(photoPaths.size());
-        currentPhotoPath = data.getCurrentPhotoPath();
 
         isNewViewModel = false;
     }
@@ -186,10 +183,6 @@ public class DefectViewModel extends AndroidViewModel{
         init();
     }
 
-    public void setCurrentPhotoPath(String currentPhotoPath) {
-        this.currentPhotoPath = currentPhotoPath;
-    }
-
     public String[] getDefectReasonsList(){
         Defect defect = mDefect.getValue();
         if (defect == null) return new String[0];
@@ -201,10 +194,6 @@ public class DefectViewModel extends AndroidViewModel{
         }
 
         return reasons;
-    }
-
-    public void savePhoto() {
-        photoPaths.add(currentPhotoPath);
     }
 
     public void setWriteoff(int value) {

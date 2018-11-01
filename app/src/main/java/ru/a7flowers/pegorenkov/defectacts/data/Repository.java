@@ -34,6 +34,7 @@ public class Repository {
     private Mode mMode = Mode.DEFECTS;
 
     private DefectData mDefectData;
+    private DiffData mDiffData;
 
     private Repository(NetworkDataSource networkDataSource, LocalDataSource localDataSource){
         mNetworkDataSource = networkDataSource;
@@ -307,11 +308,18 @@ public class Repository {
         return mDefectData;
     }
 
+    public DiffData getSavedDiffData() {
+        return mDiffData;
+    }
+
+    public void saveDiffData(DiffData mDiffData) {
+        this.mDiffData = mDiffData;
+    }
+
     public static class DefectData{
         private LiveData<List<Good>> mGoods;
         private Defect mDefect;
         private List<String> photoPaths = new ArrayList<>();
-        private String currentPhotoPath;
 
         public DefectData() {
         }
@@ -339,15 +347,47 @@ public class Repository {
         public void setPhotoPaths(List<String> photoPaths) {
             this.photoPaths = photoPaths;
         }
+    }
 
-        public String getCurrentPhotoPath() {
-            return currentPhotoPath;
+    public static class DiffData{
+        private LiveData<List<Good>> mGoods;
+        private Diff mDiff;
+        private Good mDiffGood;
+        private List<String> photoPaths = new ArrayList<>();
+
+        public LiveData<List<Good>> getmGoods() {
+            return mGoods;
         }
 
-        public void setCurrentPhotoPath(String currentPhotoPath) {
-            this.currentPhotoPath = currentPhotoPath;
+        public void setmGoods(LiveData<List<Good>> mGoods) {
+            this.mGoods = mGoods;
+        }
+
+        public List<String> getPhotoPaths() {
+            return photoPaths;
+        }
+
+        public void setPhotoPaths(List<String> photoPaths) {
+            this.photoPaths = photoPaths;
+        }
+
+        public Diff getmDiff() {
+            return mDiff;
+        }
+
+        public void setmDiff(Diff mDiff) {
+            this.mDiff = mDiff;
+        }
+
+        public Good getmDiffGood() {
+            return mDiffGood;
+        }
+
+        public void setmDiffGood(Good mDiffGood) {
+            this.mDiffGood = mDiffGood;
         }
     }
+
 
     //TODO create adapter entity to value
 }

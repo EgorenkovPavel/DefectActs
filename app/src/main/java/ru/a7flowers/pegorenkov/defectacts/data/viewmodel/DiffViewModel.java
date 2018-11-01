@@ -19,18 +19,14 @@ public class DiffViewModel extends AndroidViewModel {
     private Repository mRepository;
 
     // General
-    private String[] mDeliveryIds;
     private LiveData<List<Good>> mGoods;
+    private boolean isNewViewModel;
 
     //DIFF
     private MutableLiveData<Diff> mDiff = new MutableLiveData<>();
     private MutableLiveData<Good> mDiffGood = new MutableLiveData<>();
     private MutableLiveData<Integer> mPhotoCount = new MutableLiveData<>();
     private List<String> photoPaths = new ArrayList<>();
-
-    public MutableLiveData<Diff> getDiff() {
-        return mDiff;
-    }
 
     public DiffViewModel(@NonNull Application application, Repository repository) {
         super(application);
@@ -39,15 +35,53 @@ public class DiffViewModel extends AndroidViewModel {
         init();
     }
 
+    private void saveState(){
+        if(isNewViewModel) return;
+
+        Repository.DiffData data = new Repository.DiffData();
+
+        data.setmGoods(mGoods);
+        data.setmDiffGood(mDiffGood.getValue());
+        data.setmDiff(mDiff.getValue());
+        data.setPhotoPaths(photoPaths);
+
+        mRepository.saveDiffData(data);
+    }
+
+    public void restoreState(){
+        if(!isNewViewModel) return;
+
+        Repository.DiffData data = mRepository.getSavedDiffData();
+
+        if (data == null) return;
+
+        mGoods = data.getmGoods();
+        mDiffGood.setValue(data.getmDiffGood());
+        mDiff.setValue(data.getmDiff());
+        photoPaths = data.getPhotoPaths();
+        mPhotoCount.setValue(photoPaths.size());
+
+        isNewViewModel = false;
+    }
+
+    @Override
+    protected void onCleared() {
+        saveState();
+        super.onCleared();
+    }
+
     private void init(){
         mDiff.setValue(new Diff());
         mDiffGood.setValue(null);
         photoPaths = new ArrayList<>();
         mPhotoCount.setValue(0);
+
+        isNewViewModel = true;
     }
 
     public void start(String[] deliveryIds){
         loadDelivery(deliveryIds);
+        isNewViewModel = false;
     }
 
     public void start(String[] deliveryIds, String diffId){
@@ -87,15 +121,28 @@ public class DiffViewModel extends AndroidViewModel {
 
             }
         });
+
+        isNewViewModel = false;
     }
 
     private void loadDelivery(String[] deliveryIds){
-        mDeliveryIds = deliveryIds;
         mGoods = mRepository.loadGoods(deliveryIds);
     }
 
     public void setGood(Good good) {
         mDiffGood.setValue(good);
+
+        Diff diff = mDiff.getValue();
+        if (diff == null) return;
+
+        diff.setSeries(good.getSeries());
+        diff.setDeliveryId(good.getDeliveryId());
+        diff.setTitle(good.getGood());
+        diff.setSuplier(good.getSuplier());
+        diff.setCountry(good.getCountry());
+        diff.setDeliveryNumber(good.getDeliveryNumber());
+
+        mDiff.setValue(diff);
     }
 
     public void setAmount(int value) {
@@ -240,4 +287,9 @@ public class DiffViewModel extends AndroidViewModel {
         else
             return diff.getWeigth();
     }
+
+    public MutableLiveData<Diff> getDiff() {
+        return mDiff;
+    }
+
 }

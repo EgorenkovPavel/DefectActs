@@ -63,16 +63,20 @@ public class DiffActivity extends ItemActivity {
         model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DiffViewModel.class);
 
         findViews();
-        
-        Intent i = getIntent();
-        if (i.hasExtra(DELIVERY)){
-            String[] deliveryIds = i.getExtras().getStringArray(DELIVERY);
-            if(i.hasExtra(DIFF)){
-                String diffId = i.getStringExtra(DIFF);
-                model.start(deliveryIds, diffId);
-            }else{
-                model.start(deliveryIds);
+
+        if (savedInstanceState == null) {
+            Intent i = getIntent();
+            if (i.hasExtra(DELIVERY)) {
+                String[] deliveryIds = i.getExtras().getStringArray(DELIVERY);
+                if (i.hasExtra(DIFF)) {
+                    String diffId = i.getStringExtra(DIFF);
+                    model.start(deliveryIds, diffId);
+                } else {
+                    model.start(deliveryIds);
+                }
             }
+        }else{
+            model.restoreState();
         }
 
         model.getDiffGood().observe(this, new Observer<Good>() {
