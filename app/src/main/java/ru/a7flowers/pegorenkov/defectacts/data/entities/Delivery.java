@@ -34,12 +34,19 @@ public class Delivery implements Serializable{
     @SerializedName("differenceActExist")
     private boolean differenceActExist;
 
-    public Delivery(@NonNull String id, String number, Date date, boolean defectActExist, boolean differenceActExist) {
+    @ColumnInfo(name = "photoCount")
+    @SerializedName("photoCount")
+    private int photoCount;
+
+    public Delivery(@NonNull String id, String number, Date date, boolean defectActExist,
+                    boolean differenceActExist,
+                    int photoCount) {
         this.id = id;
         this.number = number;
         this.date = date;
         this.defectActExist = defectActExist;
         this.differenceActExist = differenceActExist;
+        this.photoCount = photoCount;
     }
 
     @NonNull
@@ -61,5 +68,9 @@ public class Delivery implements Serializable{
 
     public boolean isDifferenceActExist() {
         return differenceActExist;
+    }
+
+    public int getPhotoCount() {
+        return photoCount;
     }
 }

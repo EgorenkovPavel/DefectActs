@@ -48,6 +48,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
         viewHolder.ivDefectActExist.setVisibility(delivery.isDefectActExist() ? View.VISIBLE : View.INVISIBLE);
         viewHolder.ivDiffActExist.setVisibility(delivery.isDifferenceActExist() ? View.VISIBLE : View.INVISIBLE);
         viewHolder.cbSelected.setChecked(mViewModel.isDeliverySelected(delivery));
+        viewHolder.tvPhotoCount.setText(String.valueOf(delivery.getPhotoCount()));
     }
 
     @Override
