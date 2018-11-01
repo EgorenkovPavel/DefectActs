@@ -22,6 +22,8 @@ public class Diff {
 
     private String deliveryId;
 
+    private String deliveryNumber;
+
     private float diameter;
 
     private int length;
@@ -34,6 +36,7 @@ public class Diff {
 
     public Diff(String id, String series, String title, String suplier, String country,
                 String comment, int quantity, int photoQuantity, String deliveryId,
+                String deliveryNumber,
                 float diameter, int length, int weigth, int budgeonAmount, float bulk) {
         this.id = id;
         this.series = series;
@@ -44,6 +47,7 @@ public class Diff {
         this.quantity = quantity;
         this.photoQuantity = photoQuantity;
         this.deliveryId = deliveryId;
+        this.deliveryNumber = deliveryNumber;
         this.diameter = diameter;
         this.length = length;
         this.weigth = weigth;
@@ -161,5 +165,13 @@ public class Diff {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getDeliveryNumber() {
+        return deliveryNumber;
+    }
+
+    public void setDeliveryNumber(String deliveryNumber) {
+        this.deliveryNumber = deliveryNumber;
     }
 }

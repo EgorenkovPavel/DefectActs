@@ -27,6 +27,7 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.EditTextDropdown.TextChangeListener;
 import ru.a7flowers.pegorenkov.defectacts.adapters.GoodsSearchAdapter;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DiffViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
@@ -89,44 +90,36 @@ public class DiffActivity extends ItemActivity {
             }
         });
 
-        model.getDiffAmount().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer value) {
-                String text = String.valueOf(value);
-                if(!text.equals(etAmount.getText().toString())) {
-                    etAmount.setText(text);
-                    etAmount.setSelection(etAmount.getText().length());
-                }
-            }
-        });
-
-        model.getDiffComment().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String comment) {
-                String text = String.valueOf(comment);
-                if(!text.equals(etComment.getText().toString())) {
-                    etComment.setText(comment);
-                    etComment.setSelection(etComment.getText().length());
-                }
-            }
-        });
-
         model.getPhotoCount().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer count) {
                 tvPhotoCount.setText(String.valueOf(count));
             }
         });
+
+        model.getDiff().observe(this, new Observer<Diff>() {
+            @Override
+            public void onChanged(@Nullable Diff diff) {
+                if (diff == null)
+                    init(new Diff());
+                else
+                    init(diff);
+            }
+        });
+    }
+
+    private void init(Diff diff){
+        fillEditText(etAmount, String.valueOf(diff.getQuantity()));
+        fillEditText(etComment, diff.getComment());
+        tvSeries.setText(diff.getSeries());
+        tvTitle.setText(diff.getTitle());
+        tvSuplier.setText(diff.getSuplier());
+        tvCountry.setText(diff.getCountry());
+        tvDelivery.setText(diff.getDeliveryNumber());
     }
 
     private void init(Good good){
         if (good != null) {
-            tvSeries.setText(good.getSeries());
-            tvTitle.setText(good.getGood());
-            tvSuplier.setText(good.getSuplier());
-            tvCountry.setText(good.getCountry());
-            tvDelivery.setText(good.getDeliveryNumber());
-
             List<ValueData> data = new ArrayList<>();
 
             addValueData(data, good.getLength(), R.string.length,
@@ -173,13 +166,18 @@ public class DiffActivity extends ItemActivity {
             initValues(data);
 
         }else{
-            tvSeries.setText("");
-            tvTitle.setText("");
-            tvSuplier.setText("");
-            tvCountry.setText("");
-            tvDelivery.setText("");
-
             initValues(null);
+        }
+    }
+
+    private void fillEditText(EditText view, String text){
+        if (text == null) {
+            view.setText("");
+            return;
+        }
+        if(!text.equals(view.getText().toString())) {
+            view.setText(text);
+            view.setSelection(view.getText().length());
         }
     }
 

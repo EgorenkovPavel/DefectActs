@@ -19,11 +19,14 @@ public interface DifferenceDao {
     @Query("SELECT differencies.*, " +
             "goods.good as title, " +
             "goods.suplier as suplier, " +
-            "goods.country as country " +
+            "goods.country as country, " +
+            "deliveries.number as deliveryNumber " +
             "FROM differencies as differencies " +
             "INNER JOIN goods as goods " +
             "ON differencies.series = goods.series " +
             "AND differencies.deliveryId = goods.deliveryId " +
+            "INNER JOIN deliveries as deliveries " +
+            "ON differencies.deliveryId = deliveries.id " +
             "WHERE differencies.deliveryId IN (:deliveryIds)" +
             "ORDER BY goods.good")
     LiveData<List<Diff>> loadDifferencies(String[] deliveryIds);
@@ -32,11 +35,14 @@ public interface DifferenceDao {
     @Query("SELECT differencies.*, " +
             "goods.good as title, " +
             "goods.suplier as suplier, " +
-            "goods.country as country " +
+            "goods.country as country, " +
+            "deliveries.number as deliveryNumber " +
             "FROM differencies as differencies " +
             "INNER JOIN goods as goods " +
             "ON differencies.series = goods.series " +
             "AND differencies.deliveryId = goods.deliveryId " +
+            "INNER JOIN deliveries as deliveries " +
+            "ON differencies.deliveryId = deliveries.id " +
             "WHERE differencies.id = :defectId")
     Diff loadDifference(String defectId);
 
@@ -44,11 +50,14 @@ public interface DifferenceDao {
     @Query("SELECT differencies.*, " +
             "goods.good as title, " +
             "goods.suplier as suplier, " +
-            "goods.country as country " +
+            "goods.country as country, " +
+            "deliveries.number as deliveryNumber " +
             "FROM differencies as differencies " +
             "INNER JOIN goods as goods " +
             "ON differencies.series = goods.series " +
-            "AND differencies.deliveryId = goods.deliveryId ")
+            "AND differencies.deliveryId = goods.deliveryId " +
+            "INNER JOIN deliveries as deliveries " +
+            "ON differencies.deliveryId = deliveries.id ")
     LiveData<List<Diff>> loadDifferencies();
 
     @Query("SELECT * FROM differencies WHERE id = :diffId")
