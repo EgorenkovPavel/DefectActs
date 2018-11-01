@@ -17,7 +17,7 @@ import ru.a7flowers.pegorenkov.defectacts.R;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveriesViewModel;
 
-public class DeliveryDiffAdapter extends RecyclerView.Adapter<DeliveryDiffAdapter.DeliveryHolder>{
+public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.DeliveryHolder>{
 
     private DeliveriesViewModel mViewModel;
     private List<Delivery> items;
@@ -30,7 +30,7 @@ public class DeliveryDiffAdapter extends RecyclerView.Adapter<DeliveryDiffAdapte
     @Override
     public DeliveryHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_delivery_diff, viewGroup, false);
+                .inflate(R.layout.item_delivery, viewGroup, false);
 
         return new DeliveryHolder(v);
     }
@@ -44,7 +44,8 @@ public class DeliveryDiffAdapter extends RecyclerView.Adapter<DeliveryDiffAdapte
 
         viewHolder.tvNumber.setText(delivery.getNumber());
         viewHolder.tvDate.setText(format.format(delivery.getDate()));
-        viewHolder.ivActExist.setVisibility(delivery.isDifferenceActExist() ? View.VISIBLE : View.INVISIBLE);
+        viewHolder.ivDefectActExist.setVisibility(delivery.isDefectActExist() ? View.VISIBLE : View.INVISIBLE);
+        viewHolder.ivDiffActExist.setVisibility(delivery.isDifferenceActExist() ? View.VISIBLE : View.INVISIBLE);
         viewHolder.cbSelected.setChecked(mViewModel.isDeliverySelected(delivery));
     }
 
@@ -62,7 +63,10 @@ public class DeliveryDiffAdapter extends RecyclerView.Adapter<DeliveryDiffAdapte
 
         TextView tvNumber;
         TextView tvDate;
-        ImageView ivActExist;
+        ImageView ivDefectActExist;
+        ImageView ivDiffActExist;
+        ImageView ivPhoto;
+        TextView tvPhotoCount;
         CheckBox cbSelected;
 
         public DeliveryHolder(@NonNull View itemView) {
@@ -70,7 +74,10 @@ public class DeliveryDiffAdapter extends RecyclerView.Adapter<DeliveryDiffAdapte
 
             tvNumber = itemView.findViewById(R.id.tvNumber);
             tvDate = itemView.findViewById(R.id.tvDate);
-            ivActExist = itemView.findViewById(R.id.ivDefectActExist);
+            ivDefectActExist = itemView.findViewById(R.id.ivDefectActExist);
+            ivDiffActExist = itemView.findViewById(R.id.ivDiffActExist);
+            ivPhoto = itemView.findViewById(R.id.ivPhoto);
+            tvPhotoCount = itemView.findViewById(R.id.tvPhotoCount);
             cbSelected = itemView.findViewById(R.id.cbSelected);
 
             cbSelected.setOnClickListener(this);

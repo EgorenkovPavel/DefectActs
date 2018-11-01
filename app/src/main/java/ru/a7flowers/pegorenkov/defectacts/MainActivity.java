@@ -19,8 +19,7 @@ import android.view.View;
 
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.adapters.DeliveryDefectAdapter;
-import ru.a7flowers.pegorenkov.defectacts.adapters.DeliveryDiffAdapter;
+import ru.a7flowers.pegorenkov.defectacts.adapters.DeliveryAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.Mode;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveriesViewModel;
@@ -94,17 +93,14 @@ public class MainActivity extends AppCompatActivity{
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         rvDeliveries.addItemDecoration(itemDecor);
 
-        final DeliveryDefectAdapter defectAdapter = new DeliveryDefectAdapter();
-        defectAdapter.setViewModel(model);
-
-        final DeliveryDiffAdapter diffAdapter = new DeliveryDiffAdapter();
-        diffAdapter.setViewModel(model);
+        final DeliveryAdapter adapter = new DeliveryAdapter();
+        adapter.setViewModel(model);
+        rvDeliveries.setAdapter(adapter);
 
         model.getDeliveries().observe(this, new Observer<List<Delivery>>() {
             @Override
             public void onChanged(@Nullable List<Delivery> deliveries) {
-                defectAdapter.setItems(deliveries);
-                diffAdapter.setItems(deliveries);
+                adapter.setItems(deliveries);
             }
         });
 
@@ -112,11 +108,9 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onChanged(@Nullable Mode mode) {
                 if (mode == Mode.DEFECTS) {
-                    rvDeliveries.setAdapter(defectAdapter);
                     TabLayout.Tab tab = tabs.getTabAt(0);
                     tab.select();
                 }else if (mode == Mode.DIFFERENCIES) {
-                    rvDeliveries.setAdapter(diffAdapter);
                     TabLayout.Tab tab = tabs.getTabAt(1);
                     tab.select();
                 }
