@@ -24,7 +24,7 @@ public class DiffViewModel extends AndroidViewModel {
 
     //DIFF
     private MutableLiveData<Diff> mDiff = new MutableLiveData<>();
-    private MutableLiveData<Good> mDiffGood = new MutableLiveData<>();
+    //private MutableLiveData<Good> mDiffGood = new MutableLiveData<>();
     private MutableLiveData<Integer> mPhotoCount = new MutableLiveData<>();
     private List<String> photoPaths = new ArrayList<>();
 
@@ -41,7 +41,6 @@ public class DiffViewModel extends AndroidViewModel {
         Repository.DiffData data = new Repository.DiffData();
 
         data.setmGoods(mGoods);
-        data.setmDiffGood(mDiffGood.getValue());
         data.setmDiff(mDiff.getValue());
         data.setPhotoPaths(photoPaths);
 
@@ -56,7 +55,6 @@ public class DiffViewModel extends AndroidViewModel {
         if (data == null) return;
 
         mGoods = data.getmGoods();
-        mDiffGood.setValue(data.getmDiffGood());
         mDiff.setValue(data.getmDiff());
         photoPaths = data.getPhotoPaths();
         mPhotoCount.setValue(photoPaths.size());
@@ -72,7 +70,6 @@ public class DiffViewModel extends AndroidViewModel {
 
     private void init(){
         mDiff.setValue(new Diff());
-        mDiffGood.setValue(null);
         photoPaths = new ArrayList<>();
         mPhotoCount.setValue(0);
 
@@ -90,30 +87,7 @@ public class DiffViewModel extends AndroidViewModel {
         mRepository.getDiff(diffId, new DataSource.LoadDiffCallback() {
             @Override
             public void onDiffLoaded(final Diff diff) {
-
-                //TODO Problem: loading good and diff independently. When to set length value to view?
-                //using rxjava or call model when draw includes
-
                 mDiff.postValue(diff);
-
-                mRepository.getGood(diff.getDeliveryId(), diff.getSeries(), new DataSource.LoadGoodCallback() {
-                    @Override
-                    public void onGoodLoaded(Good good) {
-                        mDiffGood.postValue(good);
-                    }
-
-                    @Override
-                    public void onGoodLoadFailed() {
-                        Good good = new Good();
-                        good.setSeries(diff.getSeries());
-                        good.setGood(diff.getTitle());
-                        good.setSuplier(diff.getSuplier());
-                        good.setCountry(diff.getCountry());
-                        good.setDeliveryId(diff.getDeliveryId());
-                        good.setDeliveryNumber(diff.getDeliveryId());
-                        mDiffGood.postValue(good);
-                    }
-                });
             }
 
             @Override
@@ -130,8 +104,6 @@ public class DiffViewModel extends AndroidViewModel {
     }
 
     public void setGood(Good good) {
-        mDiffGood.setValue(good);
-
         Diff diff = mDiff.getValue();
         if (diff == null) return;
 
@@ -141,6 +113,12 @@ public class DiffViewModel extends AndroidViewModel {
         diff.setSuplier(good.getSuplier());
         diff.setCountry(good.getCountry());
         diff.setDeliveryNumber(good.getDeliveryNumber());
+
+        diff.setListBudgeonAmount(good.getBudgeonAmount());
+        diff.setListBulk(good.getBulk());
+        diff.setListDiameter(good.getDiameter());
+        diff.setListLength(good.getLength());
+        diff.setListWeigth(good.getWeigth());
 
         mDiff.setValue(diff);
     }
@@ -181,10 +159,6 @@ public class DiffViewModel extends AndroidViewModel {
         mRepository.saveDiff(diff, new ArrayList<>(photoPaths));
 
         init();
-    }
-
-    public MutableLiveData<Good> getDiffGood() {
-        return mDiffGood;
     }
 
     public LiveData<List<Good>> getGoods() {
@@ -246,46 +220,6 @@ public class DiffViewModel extends AndroidViewModel {
         if(diff == null) return;
         diff.setBulk(bulk);
         mDiff.setValue(diff);
-    }
-
-    public int getDiffLength() {
-        Diff diff = mDiff.getValue();
-        if(diff == null)
-            return 0;
-        else
-            return diff.getLength();
-    }
-
-    public float getDiffDiameter() {
-        Diff diff = mDiff.getValue();
-        if(diff == null)
-            return 0;
-        else
-            return diff.getDiameter();
-    }
-
-    public float getDiffBulk() {
-        Diff diff = mDiff.getValue();
-        if(diff == null)
-            return 0;
-        else
-            return diff.getBulk();
-    }
-
-    public int getDiffBudgeonAmount() {
-        Diff diff = mDiff.getValue();
-        if(diff == null)
-            return 0;
-        else
-            return diff.getBudgeonAmount();
-    }
-
-    public int getDiffWeigth() {
-        Diff diff = mDiff.getValue();
-        if(diff == null)
-            return 0;
-        else
-            return diff.getWeigth();
     }
 
     public MutableLiveData<Diff> getDiff() {

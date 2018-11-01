@@ -79,13 +79,6 @@ public class DiffActivity extends ItemActivity {
             model.restoreState();
         }
 
-        model.getDiffGood().observe(this, new Observer<Good>() {
-            @Override
-            public void onChanged(@Nullable Good good) {
-                init(good);
-            }
-        });
-
         model.getGoods().observe(this, new Observer<List<Good>>() {
             @Override
             public void onChanged(@Nullable List<Good> goods) {
@@ -115,62 +108,60 @@ public class DiffActivity extends ItemActivity {
     private void init(Diff diff){
         fillEditText(etAmount, String.valueOf(diff.getQuantity()));
         fillEditText(etComment, diff.getComment());
-        tvSeries.setText(diff.getSeries());
-        tvTitle.setText(diff.getTitle());
-        tvSuplier.setText(diff.getSuplier());
-        tvCountry.setText(diff.getCountry());
-        tvDelivery.setText(diff.getDeliveryNumber());
-    }
 
-    private void init(Good good){
-        if (good != null) {
+        if((String.valueOf(tvSeries.getText())).equals(diff.getSeries())){
+
+        }else {
+            tvSeries.setText(diff.getSeries());
+            tvTitle.setText(diff.getTitle());
+            tvSuplier.setText(diff.getSuplier());
+            tvCountry.setText(diff.getCountry());
+            tvDelivery.setText(diff.getDeliveryNumber());
+
             List<ValueData> data = new ArrayList<>();
 
-            addValueData(data, good.getLength(), R.string.length,
-                    model.getDiffLength(),
+            addValueData(data, diff.getListLength(), R.string.length,
+                    diff.getLength(),
                     new TextChangeListener() {
-                @Override
-                public void onTextChanged(String value) {
-                    model.setDiffLength(Integer.parseInt(value));
-                }
-            });
-            addValueData(data, good.getDiameter(), R.string.diameter,
-                    model.getDiffDiameter(),
+                        @Override
+                        public void onTextChanged(String value) {
+                            model.setDiffLength(Integer.parseInt(value));
+                        }
+                    });
+            addValueData(data, diff.getListDiameter(), R.string.diameter,
+                    diff.getDiameter(),
                     new TextChangeListener() {
-                @Override
-                public void onTextChanged(String value) {
-                    model.setDiffDiameter(Float.parseFloat(value));
-                }
-            });
-            addValueData(data, good.getBulk(), R.string.bulk,
-                    model.getDiffBulk(),
+                        @Override
+                        public void onTextChanged(String value) {
+                            model.setDiffDiameter(Float.parseFloat(value));
+                        }
+                    });
+            addValueData(data, diff.getListBulk(), R.string.bulk,
+                    diff.getBulk(),
                     new TextChangeListener() {
-                @Override
-                public void onTextChanged(String value) {
-                    model.setDiffBulk(Integer.parseInt(value));
-                }
-            });
-            addValueData(data, good.getBudgeonAmount(), R.string.budgeonAmount,
-                    model.getDiffBudgeonAmount(),
+                        @Override
+                        public void onTextChanged(String value) {
+                            model.setDiffBulk(Integer.parseInt(value));
+                        }
+                    });
+            addValueData(data, diff.getListBudgeonAmount(), R.string.budgeonAmount,
+                    diff.getBudgeonAmount(),
                     new TextChangeListener() {
-                @Override
-                public void onTextChanged(String value) {
-                    model.setDiffBudgeonAmount(Integer.parseInt(value));
-                }
-            });
-            addValueData(data, good.getWeigth(), R.string.weigth,
-                    model.getDiffWeigth(),
+                        @Override
+                        public void onTextChanged(String value) {
+                            model.setDiffBudgeonAmount(Integer.parseInt(value));
+                        }
+                    });
+            addValueData(data, diff.getListWeigth(), R.string.weigth,
+                    diff.getWeigth(),
                     new TextChangeListener() {
-                @Override
-                public void onTextChanged(String value) {
-                    model.setDiffWeigth(Integer.parseInt(value));
-                }
-            });
+                        @Override
+                        public void onTextChanged(String value) {
+                            model.setDiffWeigth(Integer.parseInt(value));
+                        }
+                    });
 
             initValues(data);
-
-        }else{
-            initValues(null);
         }
     }
 

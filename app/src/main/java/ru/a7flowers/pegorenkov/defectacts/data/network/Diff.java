@@ -1,8 +1,19 @@
 package ru.a7flowers.pegorenkov.defectacts.data.network;
 
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Relation;
+
+import java.util.List;
+
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBudgeonAmountEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBulkEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueDiameterEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueLengthEntity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueWeigthEntity;
 
 public class Diff {
+
+    //TODO add embedded field good
 
     private String id;
 
@@ -34,30 +45,16 @@ public class Diff {
 
     private float bulk;
 
-    public Diff(String id, String series, String title, String suplier, String country,
-                String comment, int quantity, int photoQuantity, String deliveryId,
-                String deliveryNumber,
-                float diameter, int length, int weigth, int budgeonAmount, float bulk) {
-        this.id = id;
-        this.series = series;
-        this.title = title;
-        this.suplier = suplier;
-        this.country = country;
-        this.comment = comment;
-        this.quantity = quantity;
-        this.photoQuantity = photoQuantity;
-        this.deliveryId = deliveryId;
-        this.deliveryNumber = deliveryNumber;
-        this.diameter = diameter;
-        this.length = length;
-        this.weigth = weigth;
-        this.budgeonAmount = budgeonAmount;
-        this.bulk = bulk;
-    }
-
-    @Ignore
-    public Diff() {
-    }
+    @Relation(parentColumn = "series", entityColumn = "series", entity = ValueDiameterEntity.class, projection = {"value"})
+    private List<Float> listDiameter;
+    @Relation(parentColumn = "series", entityColumn = "series", entity = ValueLengthEntity.class, projection = {"value"})
+    private List<Integer> listLength;
+    @Relation(parentColumn = "series", entityColumn = "series", entity = ValueWeigthEntity.class, projection = {"value"})
+    private List<Integer> listWeigth;
+    @Relation(parentColumn = "series", entityColumn = "series", entity = ValueBudgeonAmountEntity.class, projection = {"value"})
+    private List<Integer> listBudgeonAmount;
+    @Relation(parentColumn = "series", entityColumn = "series", entity = ValueBulkEntity.class, projection = {"value"})
+    private List<Float> listBulk;
 
     public String getId() {
         return id;
@@ -119,10 +116,6 @@ public class Diff {
         this.id = id;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
     public void setSeries(String series) {
         this.series = series;
     }
@@ -137,18 +130,6 @@ public class Diff {
 
     public void setDiameter(float diameter) {
         this.diameter = diameter;
-    }
-
-    public void setLength(Integer length) {
-        this.length = length;
-    }
-
-    public void setWeigth(Integer weigth) {
-        this.weigth = weigth;
-    }
-
-    public void setBudgeonAmount(Integer budgeonAmount) {
-        this.budgeonAmount = budgeonAmount;
     }
 
     public void setBulk(float bulk) {
@@ -174,4 +155,66 @@ public class Diff {
     public void setDeliveryNumber(String deliveryNumber) {
         this.deliveryNumber = deliveryNumber;
     }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPhotoQuantity(int photoQuantity) {
+        this.photoQuantity = photoQuantity;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public void setWeigth(int weigth) {
+        this.weigth = weigth;
+    }
+
+    public void setBudgeonAmount(int budgeonAmount) {
+        this.budgeonAmount = budgeonAmount;
+    }
+
+    public List<Float> getListDiameter() {
+        return listDiameter;
+    }
+
+    public void setListDiameter(List<Float> listDiameter) {
+        this.listDiameter = listDiameter;
+    }
+
+    public List<Integer> getListLength() {
+        return listLength;
+    }
+
+    public void setListLength(List<Integer> listLength) {
+        this.listLength = listLength;
+    }
+
+    public List<Integer> getListWeigth() {
+        return listWeigth;
+    }
+
+    public void setListWeigth(List<Integer> listWeigth) {
+        this.listWeigth = listWeigth;
+    }
+
+    public List<Integer> getListBudgeonAmount() {
+        return listBudgeonAmount;
+    }
+
+    public void setListBudgeonAmount(List<Integer> listBudgeonAmount) {
+        this.listBudgeonAmount = listBudgeonAmount;
+    }
+
+    public List<Float> getListBulk() {
+        return listBulk;
+    }
+
+    public void setListBulk(List<Float> listBulk) {
+        this.listBulk = listBulk;
+    }
+
+
 }
