@@ -33,6 +33,8 @@ public class Repository {
     private LiveData<List<Reason>> mReasons;
     private Mode mMode = Mode.DEFECTS;
 
+    private DefectData mDefectData;
+
     private Repository(NetworkDataSource networkDataSource, LocalDataSource localDataSource){
         mNetworkDataSource = networkDataSource;
         mLocalDataSource = localDataSource;
@@ -294,6 +296,57 @@ public class Repository {
     private void refreshDataAfterSavingDiff(Diff diff){
         mLocalDataSource.setDiffActExists(diff.getDeliveryId());
         mLocalDataSource.saveDiff(diff);
+    }
+
+    //SAVE STATE
+    public void saveDefectData(DefectData defectData){
+        mDefectData = defectData;
+    }
+
+    public DefectData getSavedDefectData() {
+        return mDefectData;
+    }
+
+    public static class DefectData{
+        private LiveData<List<Good>> mGoods;
+        private Defect mDefect;
+        private List<String> photoPaths = new ArrayList<>();
+        private String currentPhotoPath;
+
+        public DefectData() {
+        }
+
+        public LiveData<List<Good>> getmGoods() {
+            return mGoods;
+        }
+
+        public void setmGoods(LiveData<List<Good>> mGoods) {
+            this.mGoods = mGoods;
+        }
+
+        public Defect getmDefect() {
+            return mDefect;
+        }
+
+        public void setmDefect(Defect mDefect) {
+            this.mDefect = mDefect;
+        }
+
+        public List<String> getPhotoPaths() {
+            return photoPaths;
+        }
+
+        public void setPhotoPaths(List<String> photoPaths) {
+            this.photoPaths = photoPaths;
+        }
+
+        public String getCurrentPhotoPath() {
+            return currentPhotoPath;
+        }
+
+        public void setCurrentPhotoPath(String currentPhotoPath) {
+            this.currentPhotoPath = currentPhotoPath;
+        }
     }
 
     //TODO create adapter entity to value

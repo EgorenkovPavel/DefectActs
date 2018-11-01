@@ -21,7 +21,6 @@ public class DefectViewModel extends AndroidViewModel{
 
     private Repository mRepository;
     // General
-    private String[] mDeliveryIds;
     private LiveData<List<Good>> mGoods;
     private boolean isNewViewModel;
 
@@ -32,11 +31,6 @@ public class DefectViewModel extends AndroidViewModel{
     private List<String> photoPaths = new ArrayList<>();
     private String currentPhotoPath;
 
-    public MutableLiveData<Defect> getDefect() {
-        return mDefect;
-    }
-    //TODO add saving state
-
     public DefectViewModel(@NonNull Application application, Repository repository) {
         super(application);
         mRepository = repository;
@@ -46,10 +40,31 @@ public class DefectViewModel extends AndroidViewModel{
 
     private void saveState(){
        if(isNewViewModel) return;
+
+       Repository.DefectData data = new Repository.DefectData();
+
+       data.setmGoods(mGoods);
+       data.setmDefect(mDefect.getValue());
+       data.setPhotoPaths(photoPaths);
+       data.setCurrentPhotoPath(currentPhotoPath);
+
+       mRepository.saveDefectData(data);
     }
 
     public void restoreState(){
         if(!isNewViewModel) return;
+
+        Repository.DefectData data = mRepository.getSavedDefectData();
+
+        if (data == null) return;
+
+        mGoods = data.getmGoods();
+        mDefect.setValue(data.getmDefect());
+        photoPaths = data.getPhotoPaths();
+        mPhotoCount.setValue(photoPaths.size());
+        currentPhotoPath = data.getCurrentPhotoPath();
+
+        isNewViewModel = false;
     }
 
     @Override
@@ -93,7 +108,6 @@ public class DefectViewModel extends AndroidViewModel{
     }
 
     private void loadDelivery(String[] deliveryIds){
-        mDeliveryIds = deliveryIds;
         mGoods = mRepository.loadGoods(deliveryIds);
     }
 
@@ -156,6 +170,10 @@ public class DefectViewModel extends AndroidViewModel{
 
         defect.setReasons(reasons);
         mDefect.setValue(defect);
+    }
+
+    public MutableLiveData<Defect> getDefect() {
+        return mDefect;
     }
 
     public void saveDefect(){
