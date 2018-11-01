@@ -32,6 +32,7 @@
 
     <Button
         android:id="@+id/btnCancel"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@android:string/cancel"
@@ -42,6 +43,7 @@
 
     <Button
         android:id="@+id/btnOk"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@android:string/ok"
