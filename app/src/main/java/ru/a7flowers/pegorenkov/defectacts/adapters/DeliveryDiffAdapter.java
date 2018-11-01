@@ -70,7 +70,7 @@ public class DeliveryDiffAdapter extends RecyclerView.Adapter<DeliveryDiffAdapte
 
             tvNumber = itemView.findViewById(R.id.tvNumber);
             tvDate = itemView.findViewById(R.id.tvDate);
-            ivActExist = itemView.findViewById(R.id.ivActExist);
+            ivActExist = itemView.findViewById(R.id.ivDefectActExist);
             cbSelected = itemView.findViewById(R.id.cbSelected);
 
             cbSelected.setOnClickListener(this);

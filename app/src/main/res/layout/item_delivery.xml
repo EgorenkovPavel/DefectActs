@@ -29,16 +29,25 @@
 
     <ImageView
         android:id="@+id/ivDefectActExist"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
         android:contentDescription="@string/actExist"
         android:tint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bug" />
+
+    <ImageView
+        android:id="@+id/ivDiffActExist"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/actExist"
+        android:tint="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivDefectActExist"
         app:srcCompat="@drawable/swap" />
 
     <CheckBox
@@ -51,4 +60,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+    <TextView
+        android:id="@+id/tvPhotoCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/ivPhoto"
+        app:layout_constraintEnd_toStartOf="@+id/ivPhoto"
+        app:layout_constraintTop_toTopOf="@+id/ivPhoto"
+        tools:text="12" />
 </android.support.constraint.ConstraintLayout>

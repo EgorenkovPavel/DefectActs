@@ -28,7 +28,7 @@
         tools:text="25.12.2015" />
 
     <ImageView
-        android:id="@+id/ivActExist"
+        android:id="@+id/ivDefectActExist"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginBottom="8dp"
