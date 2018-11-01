@@ -179,7 +179,7 @@ public class DefectViewModel extends AndroidViewModel{
     public void incWriteoff() {
         Defect defect = mDefect.getValue();
         if(defect == null) return;
-        defect.setQuantity(defect.getQuantity() + 1);
+        defect.setWriteoff(defect.getWriteoff() + 1);
         mDefect.setValue(defect);
     }
 
@@ -187,7 +187,7 @@ public class DefectViewModel extends AndroidViewModel{
 
         Defect defect = mDefect.getValue();
         if(defect == null) return;
-        defect.setQuantity(Math.max(defect.getQuantity() - 1, 0));
+        defect.setWriteoff(Math.max(defect.getWriteoff() - 1, 0));
         mDefect.setValue(defect);
     }
 
