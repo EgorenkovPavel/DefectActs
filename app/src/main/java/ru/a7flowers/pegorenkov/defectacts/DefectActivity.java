@@ -70,15 +70,19 @@ public class DefectActivity extends ItemActivity {
 
         findViews();
 
-        Intent i = getIntent();
-        if (i.hasExtra(DELIVERY)){
-            String[] deliveryIds = i.getExtras().getStringArray(DELIVERY);
-            if(i.hasExtra(DEFECT)){
-                String defectId = i.getStringExtra(DEFECT);
-                model.start(deliveryIds, defectId);
-            }else{
-                model.start(deliveryIds);
+        if (savedInstanceState == null) {
+            Intent i = getIntent();
+            if (i.hasExtra(DELIVERY)) {
+                String[] deliveryIds = i.getExtras().getStringArray(DELIVERY);
+                if (i.hasExtra(DEFECT)) {
+                    String defectId = i.getStringExtra(DEFECT);
+                    model.start(deliveryIds, defectId);
+                } else {
+                    model.start(deliveryIds);
+                }
             }
+        }else{
+            model.restoreState();
         }
 
         model.getGoods().observe(this, new Observer<List<Good>>() {

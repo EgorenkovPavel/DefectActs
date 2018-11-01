@@ -23,6 +23,7 @@ public class DefectViewModel extends AndroidViewModel{
     // General
     private String[] mDeliveryIds;
     private LiveData<List<Good>> mGoods;
+    private boolean isNewViewModel;
 
     // For defect
     private MutableLiveData<Defect> mDefect = new MutableLiveData<>();
@@ -43,15 +44,32 @@ public class DefectViewModel extends AndroidViewModel{
         init();
     }
 
+    private void saveState(){
+       if(isNewViewModel) return;
+    }
+
+    public void restoreState(){
+        if(!isNewViewModel) return;
+    }
+
+    @Override
+    protected void onCleared() {
+        saveState();
+        super.onCleared();
+    }
+
     private void init(){
         mDefect.setValue(new Defect());
 
         mPhotoCount.postValue(0);
         photoPaths = new ArrayList<>();
+
+        isNewViewModel = true;
     }
 
     public void start(String[] deliveryIds){
         loadDelivery(deliveryIds);
+        isNewViewModel = false;
     }
 
     public void start(String[] deliveryIds, final String defectId){
@@ -70,6 +88,8 @@ public class DefectViewModel extends AndroidViewModel{
 
             }
         });
+
+        isNewViewModel = false;
     }
 
     private void loadDelivery(String[] deliveryIds){
