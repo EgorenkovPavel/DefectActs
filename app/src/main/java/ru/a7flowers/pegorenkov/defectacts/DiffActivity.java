@@ -59,6 +59,7 @@ public class DiffActivity extends ItemActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setShowBackpressedDialog(true);
 
         model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DiffViewModel.class);
 

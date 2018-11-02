@@ -44,9 +44,11 @@ public class ItemActivity extends AppCompatActivity{
 
     private static final String PHOTO_PATH_KEY = "photo_path_key";
     private static final String PHOTO_PARAMS_KEY = "photo_params_key";
+    private static final String SHOW_BACKPRESSED_DIALOG = "show_backpressed_dialog";
 
     private String mCurrentPhotoPath;
     private Bundle mPhotoParams;
+    private boolean mShowBackpressedDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class ItemActivity extends AppCompatActivity{
                 mCurrentPhotoPath = savedInstanceState.getString(PHOTO_PATH_KEY);
             if (savedInstanceState.containsKey(PHOTO_PARAMS_KEY))
                 mPhotoParams = savedInstanceState.getBundle(PHOTO_PARAMS_KEY);
+            if (savedInstanceState.containsKey(SHOW_BACKPRESSED_DIALOG))
+                mShowBackpressedDialog = savedInstanceState.getBoolean(SHOW_BACKPRESSED_DIALOG);
         }
     }
 
@@ -64,12 +68,16 @@ public class ItemActivity extends AppCompatActivity{
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(PHOTO_PATH_KEY, mCurrentPhotoPath);
         outState.putBundle(PHOTO_PARAMS_KEY, mPhotoParams);
+        outState.putBoolean(SHOW_BACKPRESSED_DIALOG, mShowBackpressedDialog);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onBackPressed() {
-        getBackPressedDialog().show();
+        if (mShowBackpressedDialog)
+            getBackPressedDialog().show();
+        else
+            super.onBackPressed();
     }
 
     private Dialog getBackPressedDialog(){
@@ -83,6 +91,10 @@ public class ItemActivity extends AppCompatActivity{
                     }
                 });
         return builder.create();
+    }
+
+    public void setShowBackpressedDialog(boolean showBackpressedDialog) {
+        this.mShowBackpressedDialog = showBackpressedDialog;
     }
 
     public void startPhoto(Bundle photoParams){

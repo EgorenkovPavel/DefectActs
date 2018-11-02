@@ -176,4 +176,5 @@ public class MainActivity extends ItemActivity implements DeliveryAdapter.TakePh
         String deliveryId = photoParams.getString(DELIVERY_ID_KEY);
         model.saveDeliveryPhoto(deliveryId, photoPath);
     }
+
 }
