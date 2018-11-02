@@ -121,6 +121,45 @@ public class NetworkDataSource {
         });
     }
 
+    public void saveDeliveryPhoto(final String deliveryId, final String photoPath, final UploadPhotosCallback callback) {
+
+        mAppExecutors.networkIO().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                byte[] buf = null;
+
+                try {
+                    InputStream in = new FileInputStream(new File(photoPath));
+                    buf = new byte[in.available()];
+                    while (in.read(buf) != -1) ;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    callback.onPhotosUploadingFailed();
+                    return;
+                }
+
+                if (buf == null) {
+                    callback.onPhotosUploadingFailed();
+                    return;
+                }
+
+                RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
+                Call<Boolean> responce = mDeliveryApi.setDeliveryPhoto(deliveryId, requestBody);
+                try {
+                    responce.execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    callback.onPhotosUploadingFailed();
+                    return;
+                }
+
+                callback.onPhotosUploaded();
+            }
+        });
+
+    }
+
     //REASONS
     public void loadReasons(final DataSource.LoadReasonsCallback callback){
 

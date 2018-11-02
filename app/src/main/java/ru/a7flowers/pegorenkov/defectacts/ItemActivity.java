@@ -41,22 +41,29 @@ public class ItemActivity extends AppCompatActivity{
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int RC_HANDLE_CAMERA_PERM = 2;
     private static final int RC_BARCODE_CAPTURE = 9001;
+
     private static final String PHOTO_PATH_KEY = "photo_path_key";
+    private static final String PHOTO_PARAMS_KEY = "photo_params_key";
 
     private String mCurrentPhotoPath;
+    private Bundle mPhotoParams;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(savedInstanceState != null && savedInstanceState.containsKey(PHOTO_PATH_KEY)){
-            mCurrentPhotoPath = savedInstanceState.getString(PHOTO_PATH_KEY);
+        if(savedInstanceState != null){
+            if (savedInstanceState.containsKey(PHOTO_PATH_KEY))
+                mCurrentPhotoPath = savedInstanceState.getString(PHOTO_PATH_KEY);
+            if (savedInstanceState.containsKey(PHOTO_PARAMS_KEY))
+                mPhotoParams = savedInstanceState.getBundle(PHOTO_PARAMS_KEY);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(PHOTO_PATH_KEY, mCurrentPhotoPath);
+        outState.putBundle(PHOTO_PARAMS_KEY, mPhotoParams);
         super.onSaveInstanceState(outState);
     }
 
@@ -78,7 +85,8 @@ public class ItemActivity extends AppCompatActivity{
         return builder.create();
     }
 
-    public void startPhoto(){
+    public void startPhoto(Bundle photoParams){
+        this.mPhotoParams = photoParams;
         checkPermissions(RC_HANDLE_CAMERA_PERM,
                 new String[]{Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE});
@@ -212,7 +220,7 @@ public class ItemActivity extends AppCompatActivity{
                 }
             }
         }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            onPhotoTaken(mCurrentPhotoPath);
+            onPhotoTaken(mCurrentPhotoPath, mPhotoParams);
         }
         else {
             super.onActivityResult(requestCode, resultCode, intent);
@@ -252,7 +260,7 @@ public class ItemActivity extends AppCompatActivity{
 
     }
 
-    public void onPhotoTaken(String photoPath) {
+    public void onPhotoTaken(String photoPath, Bundle photoParams) {
 
     }
 

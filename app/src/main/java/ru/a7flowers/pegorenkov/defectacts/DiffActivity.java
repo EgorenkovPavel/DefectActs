@@ -327,7 +327,7 @@ public class DiffActivity extends ItemActivity {
         ibPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startPhoto();
+                startPhoto(null);
                 }
         });
 
@@ -358,10 +358,11 @@ public class DiffActivity extends ItemActivity {
     }
 
     @Override
-    public void onPhotoTaken(String photoPath) {
+    public void onPhotoTaken(String photoPath, Bundle photoParams) {
         model.setPhotoPath(photoPath);
     }
 
+    //TODO add dialog to itemActivity
     private Dialog getDialogNoPhoto(){
         AlertDialog.Builder builder = new AlertDialog.Builder(DiffActivity.this);
         builder.setMessage(R.string.dialog_no_photo)
@@ -375,7 +376,7 @@ public class DiffActivity extends ItemActivity {
         .setNeutralButton(R.string.photo, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                startPhoto();
+                startPhoto(null);
             }
         });
         return builder.create();

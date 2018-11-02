@@ -100,6 +100,31 @@ public class Repository {
         });
     }
 
+    public void saveDeliveryPhoto(final String deliveryId, String photoPath) {
+        //TODO optimize
+        mNetworkDataSource.saveDeliveryPhoto(deliveryId, photoPath, new DataSource.UploadPhotosCallback() {
+            @Override
+            public void onPhotosUploaded() {
+                mNetworkDataSource.loadDelivery(deliveryId, new DataSource.LoadDeliveryCallback() {
+                    @Override
+                    public void onDeliveryLoaded(Delivery delivery) {
+                        mLocalDataSource.saveDelivery(delivery);
+                    }
+
+                    @Override
+                    public void onDeliveryLoadFailed() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onPhotosUploadingFailed() {
+
+            }
+        });
+    }
+
     // GOODS
     public LiveData<List<Good>> loadGoods(String[] deliveryIds) {
         return mLocalDataSource.loadGoods(deliveryIds);

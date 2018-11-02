@@ -46,6 +46,9 @@ public interface DeliveryApi {
     @POST("deliveries/{deliveryId}/differencies")
     Call<String> setDiff(@Path("deliveryId") String deliveryId, @Body Diff diff);
 
+    @POST("deliveries/{deliveryId}/photo")
+    Call<Boolean> setDeliveryPhoto(@Path("deliveryId") String deliveryId, @Body RequestBody photo);
+
     @POST("deliveries/{deliveryId}/defects/{defectId}/photo")
     Call<Boolean> setDefectPhoto(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId, @Body RequestBody photo);
 

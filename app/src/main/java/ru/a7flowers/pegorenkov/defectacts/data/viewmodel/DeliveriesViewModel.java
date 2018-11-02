@@ -83,4 +83,8 @@ public class DeliveriesViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> getIsReloading() {
         return isReloading;
     }
+
+    public void saveDeliveryPhoto(String deliveryId, String photoPath) {
+        mRepository.saveDeliveryPhoto(deliveryId, photoPath);
+    }
 }

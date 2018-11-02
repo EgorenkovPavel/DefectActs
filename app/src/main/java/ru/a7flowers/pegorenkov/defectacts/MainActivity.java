@@ -25,7 +25,9 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveriesViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends ItemActivity implements DeliveryAdapter.TakePhotoListener {
+
+    private static final String DELIVERY_ID_KEY = "delivery_id";
 
     private DeliveriesViewModel model;
 
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity{
 
         final DeliveryAdapter adapter = new DeliveryAdapter();
         adapter.setViewModel(model);
+        adapter.setTakePhotoListener(this);
         rvDeliveries.setAdapter(adapter);
 
         model.getDeliveries().observe(this, new Observer<List<Delivery>>() {
@@ -161,4 +164,16 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void takePhoto(Delivery delivery) {
+        Bundle params = new Bundle();
+        params.putString(DELIVERY_ID_KEY, delivery.getId());
+        startPhoto(params);
+    }
+
+    @Override
+    public void onPhotoTaken(String photoPath, Bundle photoParams) {
+        String deliveryId = photoParams.getString(DELIVERY_ID_KEY);
+        model.saveDeliveryPhoto(deliveryId, photoPath);
+    }
 }

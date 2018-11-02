@@ -22,9 +22,18 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
 
     private DeliveriesViewModel mViewModel;
     private List<Delivery> items;
+    private TakePhotoListener listener;
 
     public void setViewModel(DeliveriesViewModel viewModel) {
         mViewModel = viewModel;
+    }
+
+    public interface TakePhotoListener{
+        void takePhoto(Delivery delivery);
+    }
+
+    public void setTakePhotoListener(TakePhotoListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -88,8 +97,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
             ivPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO
-                    Toast.makeText(view.getContext(), "Take photo", Toast.LENGTH_SHORT).show();
+                    Delivery delivery = items.get(getAdapterPosition());
+                    if (listener != null) listener.takePhoto(delivery);
                 }
             });
         }

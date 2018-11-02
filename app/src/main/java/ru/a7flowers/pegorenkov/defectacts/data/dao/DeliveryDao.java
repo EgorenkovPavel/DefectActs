@@ -16,7 +16,7 @@ public interface DeliveryDao {
     @Query("SELECT * FROM deliveries ORDER BY date")
     LiveData<List<Delivery>> loadAllDeliveries();
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertDelivery(Delivery delivery);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

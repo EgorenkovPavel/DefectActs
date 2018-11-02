@@ -302,7 +302,7 @@ public class DefectActivity extends ItemActivity {
         ibPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startPhoto();
+                startPhoto(null);
              }
         });
 
@@ -353,7 +353,7 @@ public class DefectActivity extends ItemActivity {
     }
 
     @Override
-    public void onPhotoTaken(String photoPath) {
+    public void onPhotoTaken(String photoPath, Bundle photoParams) {
         model.setPhotoPath(photoPath);
     }
 
@@ -370,7 +370,7 @@ public class DefectActivity extends ItemActivity {
                 .setNeutralButton(R.string.photo, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        startPhoto();
+                        startPhoto(null);
                     }
                 });
         return builder.create();
