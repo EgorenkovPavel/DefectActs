@@ -107,7 +107,7 @@ public class DiffActivity extends ItemActivity {
     }
 
     private void init(Diff diff){
-        fillEditText(etAmount, String.valueOf(diff.getQuantity()));
+        fillEditText(etAmount, String.valueOf(diff.getQuantity() == 0 ? "" : diff.getQuantity()));
         fillEditText(etComment, diff.getComment());
 
         if((String.valueOf(tvSeries.getText())).equals(diff.getSeries())){

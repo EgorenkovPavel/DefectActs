@@ -113,8 +113,8 @@ public class DefectActivity extends ItemActivity {
     }
 
     private void fillByDefect(Defect defect){
-        fillEditText(etAmount, String.valueOf(defect.getQuantity()));
-        fillEditText(etWriteoff, String.valueOf(defect.getWriteoff()));
+        fillEditText(etAmount, String.valueOf(defect.getQuantity() == 0 ? "" : defect.getQuantity()));
+        fillEditText(etWriteoff, String.valueOf(defect.getWriteoff() == 0 ? "" : defect.getWriteoff()));
         fillEditText(etComment, defect.getComment());
         tvSeries.setText(defect.getSeries());
         tvTitle.setText(defect.getTitle());

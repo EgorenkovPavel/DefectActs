@@ -112,7 +112,14 @@ public class EditTextDropdown<T extends Number> extends ConstraintLayout{
     }
 
     public void setValue(T value){
-        this.value = value == null ? "" : value.toString();
+        if (value == null){
+            this.value = "";
+        }else if(value.equals(0) || value.equals(0.0)){
+            this.value = "";
+        }else{
+            this.value = value.toString();
+        }
+
         acText.setText(this.value);
     }
 
