@@ -33,8 +33,11 @@ public class Repository {
     private LiveData<List<User>> mUsers;
     private LiveData<List<Delivery>> mDeliveries;
     private LiveData<List<Reason>> mReasons;
-    private Mode mMode = Mode.DEFECTS;
 
+    private Mode mMode = Mode.DEFECTS;
+    private User mCurrentUser;
+
+    //SAVED STATES
     private DefectData mDefectData;
     private DiffData mDiffData;
 
@@ -88,6 +91,20 @@ public class Repository {
         return mUsers;
     }
 
+    public void setCurrentUser(User user) {
+        this.mCurrentUser = user;
+
+        if(mCurrentUser.isDefectAccess() && !mCurrentUser.isDiffAccess()){
+            mMode = Mode.DEFECTS;
+        }else if(!mCurrentUser.isDefectAccess() && mCurrentUser.isDiffAccess()){
+            mMode = Mode.DIFFERENCIES;
+        }
+    }
+
+    public User getCurrentUser() {
+        return mCurrentUser;
+    }
+
     private void loadUsersFromNetwork(){
         mNetworkDataSource.loadUsers(new DataSource.LoadUsersCallback() {
             @Override
@@ -127,7 +144,7 @@ public class Repository {
 
     public void saveDeliveryPhoto(final String deliveryId, String photoPath) {
         //TODO optimize
-        mNetworkDataSource.saveDeliveryPhoto(deliveryId, photoPath, new DataSource.UploadPhotosCallback() {
+        mNetworkDataSource.saveDeliveryPhoto(mCurrentUser, deliveryId, photoPath, new DataSource.UploadPhotosCallback() {
             @Override
             public void onPhotosUploaded() {
                 mNetworkDataSource.loadDelivery(deliveryId, new DataSource.LoadDeliveryCallback() {
@@ -239,10 +256,10 @@ public class Repository {
 
     public void saveDefect(Defect defect, final List<String> photoPaths){
 
-        mNetworkDataSource.saveDefect(defect, new DataSource.UploadDefectCallback() {
+        mNetworkDataSource.saveDefect(mCurrentUser, defect, new DataSource.UploadDefectCallback() {
             @Override
             public void onDefectUploaded(final Defect defect) {
-                mNetworkDataSource.saveDefectPhotos(defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
+                mNetworkDataSource.saveDefectPhotos(mCurrentUser, defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
                     @Override
                     public void onPhotosUploaded() {
                         refreshDataAfterSavingDefect(defect);
@@ -321,10 +338,10 @@ public class Repository {
     }
 
     public void saveDiff(Diff diff, final ArrayList<String> photoPaths) {
-        mNetworkDataSource.saveDiff(diff, new DataSource.UploadDiffCallback() {
+        mNetworkDataSource.saveDiff(mCurrentUser, diff, new DataSource.UploadDiffCallback() {
             @Override
             public void onDiffUploaded(final Diff diff) {
-                mNetworkDataSource.saveDiffPhotos(diff.getDeliveryId(), diff.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
+                mNetworkDataSource.saveDiffPhotos(mCurrentUser, diff.getDeliveryId(), diff.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
                     @Override
                     public void onPhotosUploaded() {
                         refreshDataAfterSavingDiff(diff);
@@ -365,6 +382,7 @@ public class Repository {
     public void saveDiffData(DiffData mDiffData) {
         this.mDiffData = mDiffData;
     }
+
 
     public static class DefectData{
         private LiveData<List<Good>> mGoods;

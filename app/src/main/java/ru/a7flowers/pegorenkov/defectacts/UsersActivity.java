@@ -2,6 +2,7 @@ package ru.a7flowers.pegorenkov.defectacts;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -50,11 +51,13 @@ public class UsersActivity extends AppCompatActivity implements UsersAdapter.OnU
                 adapter.setItems(users);
             }
         });
-
     }
 
     @Override
     public void onUserClick(User user) {
+        model.setCurrentUser(user);
 
+        Intent i = new Intent(this, DeliveriesActivity.class);
+        startActivity(i);
     }
 }

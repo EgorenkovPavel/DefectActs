@@ -14,6 +14,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Mode;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
 
 public class DeliveriesViewModel extends AndroidViewModel {
 
@@ -86,5 +87,10 @@ public class DeliveriesViewModel extends AndroidViewModel {
 
     public void saveDeliveryPhoto(String deliveryId, String photoPath) {
         mRepository.saveDeliveryPhoto(deliveryId, photoPath);
+    }
+
+    public boolean isModeSelectionAvailable() {
+        User user = mRepository.getCurrentUser();
+        return user.isDefectAccess() && user.isDiffAccess();
     }
 }

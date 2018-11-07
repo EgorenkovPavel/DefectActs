@@ -6,6 +6,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
@@ -45,18 +46,18 @@ public interface DeliveryApi {
 //    Call<List<DefectReasonEntity>> getDefectReasons(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId);
 
     @POST("deliveries/{deliveryId}/defects")
-    Call<String> setDefect(@Path("deliveryId") String deliveryId, @Body Defect defect);
+    Call<String> setDefect(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Body Defect defect);
 
     @POST("deliveries/{deliveryId}/differencies")
-    Call<String> setDiff(@Path("deliveryId") String deliveryId, @Body Diff diff);
+    Call<String> setDiff(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Body Diff diff);
 
     @POST("deliveries/{deliveryId}/photo")
-    Call<Boolean> setDeliveryPhoto(@Path("deliveryId") String deliveryId, @Body RequestBody photo);
+    Call<Boolean> setDeliveryPhoto(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Body RequestBody photo);
 
     @POST("deliveries/{deliveryId}/defects/{defectId}/photo")
-    Call<Boolean> setDefectPhoto(@Path("deliveryId") String deliveryId, @Path("defectId") String defectId, @Body RequestBody photo);
+    Call<Boolean> setDefectPhoto(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Path("defectId") String defectId, @Body RequestBody photo);
 
     @POST("deliveries/{deliveryId}/differencies/{diffId}/photo")
-    Call<Boolean> setDiffPhoto(@Path("deliveryId") String deliveryId, @Path("diffId") String diffId, @Body RequestBody photo);
+    Call<Boolean> setDiffPhoto(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Path("diffId") String diffId, @Body RequestBody photo);
 
 }

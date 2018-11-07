@@ -39,6 +39,7 @@ public class DeliveriesActivity extends ItemActivity implements DeliveryAdapter.
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(DeliveriesViewModel.class);
 
@@ -64,26 +65,30 @@ public class DeliveriesActivity extends ItemActivity implements DeliveryAdapter.
                 android.R.color.holo_red_light);
 
         final TabLayout tabs = findViewById(R.id.tabs);
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 0){
-                    model.setMode(Mode.DEFECTS);
-                }else if(tab.getPosition() == 1){
-                    model.setMode(Mode.DIFFERENCIES);
+        if(model.isModeSelectionAvailable()) {
+            tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    if (tab.getPosition() == 0) {
+                        model.setMode(Mode.DEFECTS);
+                    } else if (tab.getPosition() == 1) {
+                        model.setMode(Mode.DIFFERENCIES);
+                    }
                 }
-            }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
 
-            }
+                }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
 
-            }
-        });
+                }
+            });
+        }else{
+            tabs.setVisibility(View.GONE);
+        }
 
         final RecyclerView rvDeliveries = findViewById(R.id.rvDeliveries);
         rvDeliveries.setHasFixedSize(true);

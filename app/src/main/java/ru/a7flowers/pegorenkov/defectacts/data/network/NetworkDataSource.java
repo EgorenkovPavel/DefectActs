@@ -148,7 +148,7 @@ public class NetworkDataSource {
         });
     }
 
-    public void saveDeliveryPhoto(final String deliveryId, final String photoPath, final UploadPhotosCallback callback) {
+    public void saveDeliveryPhoto(final User user, final String deliveryId, final String photoPath, final UploadPhotosCallback callback) {
 
         mAppExecutors.networkIO().execute(new Runnable() {
             @Override
@@ -172,7 +172,7 @@ public class NetworkDataSource {
                 }
 
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
-                Call<Boolean> responce = mDeliveryApi.setDeliveryPhoto(deliveryId, requestBody);
+                Call<Boolean> responce = mDeliveryApi.setDeliveryPhoto(user.getId(), deliveryId, requestBody);
                 try {
                     responce.execute();
                 } catch (IOException e) {
@@ -276,11 +276,11 @@ public class NetworkDataSource {
         });
     }
 
-    public void saveDefect(final Defect defect, final UploadDefectCallback callback) {
+    public void saveDefect(final User user, final Defect defect, final UploadDefectCallback callback) {
 
         Log.d(TAG, "Start upload defect");
 
-        Call<String> responce = mDeliveryApi.setDefect(defect.getDeliveryId(), defect);
+        Call<String> responce = mDeliveryApi.setDefect(user.getId(), defect.getDeliveryId(), defect);
         responce.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
@@ -297,7 +297,7 @@ public class NetworkDataSource {
         });
     }
 
-    public void saveDefectPhotos(final String deliveryId, final String defectId, final List<String> photoPaths, final UploadPhotosCallback callback) {
+    public void saveDefectPhotos(final User user, final String deliveryId, final String defectId, final List<String> photoPaths, final UploadPhotosCallback callback) {
 
         mAppExecutors.networkIO().execute(new Runnable() {
             @Override
@@ -322,7 +322,7 @@ public class NetworkDataSource {
                     if (buf == null) continue;
 
                     RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
-                    Call<Boolean> responce = mDeliveryApi.setDefectPhoto(deliveryId, defectId, requestBody);
+                    Call<Boolean> responce = mDeliveryApi.setDefectPhoto(user.getId(), deliveryId, defectId, requestBody);
                     try {
                         responce.execute();
                     } catch (IOException e) {
@@ -360,11 +360,11 @@ public class NetworkDataSource {
         });
     }
 
-    public void saveDiff(final Diff diff, final DataSource.UploadDiffCallback callback) {
+    public void saveDiff(final User user, final Diff diff, final DataSource.UploadDiffCallback callback) {
 
         Log.d(TAG, "Start upload diff");
 
-        Call<String> responce = mDeliveryApi.setDiff(diff.getDeliveryId(), diff);
+        Call<String> responce = mDeliveryApi.setDiff(user.getId(), diff.getDeliveryId(), diff);
         responce.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
@@ -401,7 +401,7 @@ public class NetworkDataSource {
         });
     }
 
-    public void saveDiffPhotos(final String deliveryId, final String diffId, final List<String> photoPaths, final UploadPhotosCallback callback) {
+    public void saveDiffPhotos(final User user, final String deliveryId, final String diffId, final List<String> photoPaths, final UploadPhotosCallback callback) {
 
         mAppExecutors.networkIO().execute(new Runnable() {
             @Override
@@ -426,7 +426,7 @@ public class NetworkDataSource {
                     if (buf == null) continue;
 
                     RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
-                    Call<Boolean> responce = mDeliveryApi.setDiffPhoto(deliveryId, diffId, requestBody);
+                    Call<Boolean> responce = mDeliveryApi.setDiffPhoto(user.getId(), deliveryId, diffId, requestBody);
                     try {
                         responce.execute();
                     } catch (IOException e) {

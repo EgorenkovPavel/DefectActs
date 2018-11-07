@@ -24,4 +24,7 @@ public class UsersViewModel extends AndroidViewModel {
         return mRepository.getUsers();
     }
 
+    public void setCurrentUser(User user) {
+        mRepository.setCurrentUser(user);
+    }
 }
