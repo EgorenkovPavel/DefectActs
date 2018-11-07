@@ -42,7 +42,9 @@ public class ViewModelFactory extends ViewModelProvider.AndroidViewModelFactory 
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
 
-        if (modelClass == DeliveriesViewModel.class)
+        if (modelClass == UsersViewModel.class)
+            return (T) new UsersViewModel(mApplication, mRepository);
+        else if (modelClass == DeliveriesViewModel.class)
             return (T) new DeliveriesViewModel(mApplication, mRepository);
         else if (modelClass == DeliveryDefectViewModel.class)
             return (T) new DeliveryDefectViewModel(mApplication, mRepository);

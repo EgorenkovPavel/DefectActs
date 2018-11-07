@@ -31,6 +31,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.UploadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.UploadPhotosCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
 
 public class NetworkDataSource {
 
@@ -72,6 +73,32 @@ public class NetworkDataSource {
             }
         }
         return INSTANCE;
+    }
+
+    //USERS
+    public void loadUsers(final DataSource.LoadUsersCallback loadUsersCallback) {
+        Log.d(TAG, "Start download users");
+        Call<List<User>> users = mDeliveryApi.getUsers();
+        users.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, retrofit2.Response<List<User>> response) {
+
+                List<User> list = response.body();
+                if (list == null){
+                    Log.d(TAG, "End download users - failed");
+                    loadUsersCallback.onUsersLoadFailed();
+                }else{
+                    Log.d(TAG, "End download users - success");
+                    loadUsersCallback.onUsersLoaded(list);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                Log.d(TAG, "End download users - failed");
+                loadUsersCallback.onUsersLoadFailed();
+            }
+        });
     }
 
     //DELIVERIES

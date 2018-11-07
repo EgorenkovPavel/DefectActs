@@ -4,11 +4,17 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
 public interface DataSource {
+
+    interface LoadUsersCallback{
+        void onUsersLoaded(List<User> users);
+        void onUsersLoadFailed();
+    }
 
     interface LoadDeliveriesCallback{
         void onDeliveriesLoaded(List<Delivery> deliveries);

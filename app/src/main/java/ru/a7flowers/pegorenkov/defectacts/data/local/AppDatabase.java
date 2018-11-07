@@ -12,19 +12,23 @@ import ru.a7flowers.pegorenkov.defectacts.data.dao.DeliveryDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.DifferenceDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.GoodDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.ReasonDao;
+import ru.a7flowers.pegorenkov.defectacts.data.dao.UserDao;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReasonEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DifferenceEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBudgeonAmountEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBulkEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueDiameterEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueLengthEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueWeigthEntity;
 
-@Database(entities = {Delivery.class,
+@Database(entities = {
+        User.class,
+        Delivery.class,
         GoodEntity.class,
         DefectEntity.class,
         DifferenceEntity.class,
@@ -55,6 +59,8 @@ public abstract class AppDatabase extends RoomDatabase{
         }
         return sInstance;
     }
+
+    public abstract UserDao userDao();
 
     public abstract DeliveryDao deliveryDao();
 

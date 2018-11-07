@@ -11,6 +11,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ReloadDataCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBudgeonAmountEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBulkEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueDiameterEntity;
@@ -29,6 +30,7 @@ public class Repository {
     private NetworkDataSource mNetworkDataSource;
     private LocalDataSource mLocalDataSource;
 
+    private LiveData<List<User>> mUsers;
     private LiveData<List<Delivery>> mDeliveries;
     private LiveData<List<Reason>> mReasons;
     private Mode mMode = Mode.DEFECTS;
@@ -58,6 +60,7 @@ public class Repository {
         mLocalDataSource.deleteAll(new DataSource.ClearDatabaseCallback() {
             @Override
             public void onDatabaseCleared() {
+                loadUsersFromNetwork();
                 loadDeliveriesFromNetwork(callback);
                 loadReasonsFromNetwork();
             }
@@ -75,6 +78,28 @@ public class Repository {
 
     public void setMode(Mode mode) {
         this.mMode = mode;
+    }
+
+    //USERS
+    public LiveData<List<User>> getUsers(){
+        if(mUsers == null){
+            mUsers = mLocalDataSource.getUsers();
+        }
+        return mUsers;
+    }
+
+    private void loadUsersFromNetwork(){
+        mNetworkDataSource.loadUsers(new DataSource.LoadUsersCallback() {
+            @Override
+            public void onUsersLoaded(List<User> users) {
+                mLocalDataSource.saveUsers(users);
+            }
+
+            @Override
+            public void onUsersLoadFailed() {
+
+            }
+        });
     }
 
     // DELIVERY

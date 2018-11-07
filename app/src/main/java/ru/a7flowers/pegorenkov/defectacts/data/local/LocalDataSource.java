@@ -18,6 +18,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DifferenceEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBudgeonAmountEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBulkEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueDiameterEntity;
@@ -56,6 +57,7 @@ public class LocalDataSource {
         mAppExecutors.discIO().execute(new Runnable() {
             @Override
             public void run() {
+                mDb.userDao().deleteAllUsers();
                 mDb.deliveryDao().deleteAllDeliveries();
                 mDb.reasonDao().deleteAll();
                 mDb.goodDao().deleteAllBudgeonsAmounts();
@@ -64,6 +66,22 @@ public class LocalDataSource {
                 mDb.goodDao().deleteAllLengths();
                 mDb.goodDao().deleteAllWeigths();
                 callback.onDatabaseCleared();
+            }
+        });
+    }
+
+    //USERS
+    public LiveData<List<User>> getUsers() {
+        Log.d(TAG, "Get all users");
+        return mDb.userDao().loadAllUsers();
+    }
+
+    public void saveUsers(final List<User> users) {
+        Log.d(TAG, "Insert users");
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.userDao().insertUsers(users);
             }
         });
     }
@@ -291,4 +309,5 @@ public class LocalDataSource {
             }
         });
     }
+
 }

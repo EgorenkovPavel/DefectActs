@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +24,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DeliveriesViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 
-public class MainActivity extends ItemActivity implements DeliveryAdapter.TakePhotoListener {
+public class DeliveriesActivity extends ItemActivity implements DeliveryAdapter.TakePhotoListener {
 
     private static final String DELIVERY_ID_KEY = "delivery_id";
 
@@ -36,7 +35,7 @@ public class MainActivity extends ItemActivity implements DeliveryAdapter.TakePh
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_deliveries);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -138,7 +137,7 @@ public class MainActivity extends ItemActivity implements DeliveryAdapter.TakePh
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_settings:{
-                Intent i = new Intent(MainActivity.this, PrefActivity.class);
+                Intent i = new Intent(DeliveriesActivity.this, PrefActivity.class);
                 startActivity(i);
                 return true;
             }

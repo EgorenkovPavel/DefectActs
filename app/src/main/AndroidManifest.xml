@@ -13,33 +13,43 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
-            android:name=".MainActivity"
-            android:label="@string/deliveries"
+            android:name=".UsersActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".DeliveryDefectActivity"
-            android:label="@string/defects"
-            android:parentActivityName=".MainActivity"
+            android:name=".DeliveriesActivity"
+            android:label="@string/deliveries"
+            android:parentActivityName=".UsersActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".UsersActivity" />
+        </activity>
+
+        <activity
+            android:name=".DeliveryDefectActivity"
+            android:label="@string/defects"
+            android:parentActivityName=".DeliveriesActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DeliveriesActivity" />
         </activity>
         <activity
             android:name=".DeliveryDiffActivity"
             android:label="@string/differencies"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".DeliveriesActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".DeliveriesActivity" />
         </activity>
         <activity
             android:name=".DefectActivity"
@@ -78,11 +88,11 @@
         </activity>
         <activity
             android:name=".PrefActivity"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".DeliveriesActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".DeliveriesActivity" />
         </activity>
         <provider
             android:name="android.support.v4.content.FileProvider"

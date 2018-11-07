@@ -37,5 +37,6 @@
     <string name="dropdown">dropdown</string>
     <string name="dialog_no_photo">No photo. Continue?</string>
     <string name="dialog_back_pressed">Data not saved. Continue?</string>
+    <string name="users">Users</string>
 
 </resources>

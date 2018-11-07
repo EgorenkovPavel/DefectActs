@@ -10,8 +10,12 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
 
 public interface DeliveryApi {
+
+    @GET("users")
+    Call<List<User>> getUsers();
 
     @GET("reasons")
     Call<List<Reason>> getReasons();
