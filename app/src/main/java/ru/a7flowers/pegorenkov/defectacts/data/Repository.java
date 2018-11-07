@@ -440,4 +440,8 @@ public class Repository {
 
 
     //TODO create adapter entity to value
+
+    //TODO add current user
+    //TODO add user to all queries
+    //TODO set mode depends on user
 }
