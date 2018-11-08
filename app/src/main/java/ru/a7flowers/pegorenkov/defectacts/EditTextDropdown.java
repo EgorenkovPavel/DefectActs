@@ -114,7 +114,7 @@ public class EditTextDropdown<T extends Number> extends ConstraintLayout{
     public void setValue(T value){
         if (value == null){
             this.value = "";
-        }else if(value.equals(0) || value.equals(0.0)){
+        }else if(value.equals(0) || value.equals(0f)){
             this.value = "";
         }else{
             this.value = value.toString();
