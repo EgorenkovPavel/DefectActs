@@ -69,6 +69,9 @@ public class Defect {
     }
 
     public List<DefectReasonEntity> getReasons() {
+        for (DefectReasonEntity reason:mReasons) {
+            reason.setDefectId(id);
+        }
         return mReasons;
     }
 

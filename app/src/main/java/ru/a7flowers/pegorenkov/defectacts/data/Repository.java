@@ -143,7 +143,6 @@ public class Repository {
     }
 
     public void saveDeliveryPhoto(final String deliveryId, String photoPath) {
-        //TODO optimize
         mNetworkDataSource.saveDeliveryPhoto(mCurrentUser, deliveryId, photoPath, new DataSource.UploadPhotosCallback() {
             @Override
             public void onPhotosUploaded(int photoCount) {

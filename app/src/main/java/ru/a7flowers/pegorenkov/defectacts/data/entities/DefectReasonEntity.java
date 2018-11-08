@@ -43,4 +43,8 @@ public class DefectReasonEntity {
     public String getTitle() {
         return title;
     }
+
+    public void setDefectId(String defectId) {
+        this.defectId = defectId;
+    }
 }
