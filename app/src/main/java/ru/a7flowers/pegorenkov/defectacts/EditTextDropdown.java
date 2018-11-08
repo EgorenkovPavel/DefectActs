@@ -1,11 +1,13 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -85,13 +87,15 @@ public class EditTextDropdown<T extends Number> extends ConstraintLayout{
         btnDropdown.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (acText.isPopupShowing()) {
-                    acText.dismissDropDown();
-                }else{
-                    acText.showDropDown();
-                }
+                hideKeyboard();
+                acText.showDropDown();
             }
         });
+    }
+
+    private void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(acText.getWindowToken(), 0);
     }
 
     private String getValueFromText(){
