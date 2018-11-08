@@ -2,6 +2,7 @@ package ru.a7flowers.pegorenkov.defectacts;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -23,7 +25,7 @@ public class EditTextDropdown<T extends Number> extends ConstraintLayout{
     private ImageButton btnDropdown;
     private TextChangeListener listener;
     private String value = "";
-    private ArrayAdapter<T> adapter;
+    private DropDownAdapter adapter;
 
     public EditTextDropdown(Context context) {
         super(context);
@@ -73,7 +75,7 @@ public class EditTextDropdown<T extends Number> extends ConstraintLayout{
             }
         });
 
-        adapter = new ArrayAdapter<T>(getContext(), android.R.layout.simple_dropdown_item_1line);
+        adapter = new DropDownAdapter(getContext());
         acText.setAdapter(adapter);
         acText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -134,5 +136,28 @@ public class EditTextDropdown<T extends Number> extends ConstraintLayout{
 
     public interface TextChangeListener{
         void onTextChanged(String value);
+    }
+
+    class DropDownAdapter extends ArrayAdapter<T>{
+
+        public DropDownAdapter(@NonNull Context context) {
+            super(context, android.R.layout.simple_dropdown_item_1line);
+        }
+
+        @NonNull
+        @Override
+        public Filter getFilter() {
+            return new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence charSequence) {
+                    return null;
+                }
+
+                @Override
+                protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+
+                }
+            };
+        }
     }
 }
