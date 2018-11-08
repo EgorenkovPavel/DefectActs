@@ -68,4 +68,8 @@ public interface DefectDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertDefects(List<DefectEntity> defects);
+
+    @Query("UPDATE defects SET photoQuantity = :photoCount WHERE deliveryId = :deliveryId AND id = :defectId")
+    void setPhotoCount(String deliveryId, String defectId, int photoCount);
+
 }

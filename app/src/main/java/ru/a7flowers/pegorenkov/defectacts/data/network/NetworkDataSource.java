@@ -154,17 +154,9 @@ public class NetworkDataSource {
             @Override
             public void run() {
 
-                byte[] buf = null;
+                byte[] buf = readFile(photoPath);
 
-                try {
-                    InputStream in = new FileInputStream(new File(photoPath));
-                    buf = new byte[in.available()];
-                    while (in.read(buf) != -1) ;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    callback.onPhotosUploadingFailed();
-                    return;
-                }
+                int photoAmount = 0;
 
                 if (buf == null) {
                     callback.onPhotosUploadingFailed();
@@ -172,16 +164,16 @@ public class NetworkDataSource {
                 }
 
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
-                Call<Boolean> responce = mDeliveryApi.setDeliveryPhoto(user.getId(), deliveryId, requestBody);
+                Call<Integer> call = mDeliveryApi.setDeliveryPhoto(user.getId(), deliveryId, requestBody);
                 try {
-                    responce.execute();
+                    photoAmount = call.execute().body();
                 } catch (IOException e) {
                     e.printStackTrace();
                     callback.onPhotosUploadingFailed();
                     return;
                 }
 
-                callback.onPhotosUploaded();
+                callback.onPhotosUploaded(photoAmount);
             }
         });
 
@@ -305,33 +297,29 @@ public class NetworkDataSource {
 
                 boolean success = true;
 
+                int photoAmount = 0;
+
                 for (String path : photoPaths) {
 
-                    byte[] buf = null;
+                    byte[] buf = readFile(path);
 
-                    try {
-                        InputStream in = new FileInputStream(new File(path));
-                        buf = new byte[in.available()];
-                        while (in.read(buf) != -1) ;
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (buf == null) {
                         success = false;
-                        break;
+                        continue;
                     }
 
-                    if (buf == null) continue;
-
                     RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
-                    Call<Boolean> responce = mDeliveryApi.setDefectPhoto(user.getId(), deliveryId, defectId, requestBody);
+                    Call<Integer> call = mDeliveryApi.setDefectPhoto(user.getId(), deliveryId, defectId, requestBody);
                     try {
-                        responce.execute();
+                        photoAmount = call.execute().body();
                     } catch (IOException e) {
                         success = false;
                         e.printStackTrace();
                     }
                 }
+
                 if (success)
-                    callback.onPhotosUploaded();
+                    callback.onPhotosUploaded(photoAmount);
                 else
                     callback.onPhotosUploadingFailed();
             }
@@ -408,39 +396,50 @@ public class NetworkDataSource {
             public void run() {
 
                 boolean success = true;
+                int photoAmount = 0;
 
                 for (String path : photoPaths) {
 
-                    byte[] buf = null;
+                    byte[] buf = readFile(path);
 
-                    try {
-                        InputStream in = new FileInputStream(new File(path));
-                        buf = new byte[in.available()];
-                        while (in.read(buf) != -1) ;
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (buf == null) {
                         success = false;
-                        break;
+                        continue;
                     }
 
-                    if (buf == null) continue;
-
                     RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
-                    Call<Boolean> responce = mDeliveryApi.setDiffPhoto(user.getId(), deliveryId, diffId, requestBody);
+                    Call<Integer> call = mDeliveryApi.setDiffPhoto(user.getId(), deliveryId, diffId, requestBody);
                     try {
-                        responce.execute();
+                        photoAmount = call.execute().body();
                     } catch (IOException e) {
                         success = false;
                         e.printStackTrace();
                     }
                 }
                 if (success)
-                    callback.onPhotosUploaded();
+                    callback.onPhotosUploaded(photoAmount);
                 else
                     callback.onPhotosUploadingFailed();
             }
         });
+    }
 
+    //SERVICE
+    private byte[] readFile(String path){
+        byte[] buf = null;
+
+        try {
+            File file = new File(path);
+            InputStream in = new FileInputStream(file);
+            buf = new byte[in.available()];
+            while (in.read(buf) != -1) ;
+            in.close();
+            file.delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return buf;
     }
 
     //TODO add own classes to network entities

@@ -146,18 +146,8 @@ public class Repository {
         //TODO optimize
         mNetworkDataSource.saveDeliveryPhoto(mCurrentUser, deliveryId, photoPath, new DataSource.UploadPhotosCallback() {
             @Override
-            public void onPhotosUploaded() {
-                mNetworkDataSource.loadDelivery(deliveryId, new DataSource.LoadDeliveryCallback() {
-                    @Override
-                    public void onDeliveryLoaded(Delivery delivery) {
-                        mLocalDataSource.saveDelivery(delivery);
-                    }
-
-                    @Override
-                    public void onDeliveryLoadFailed() {
-
-                    }
-                });
+            public void onPhotosUploaded(int photoCount) {
+                mLocalDataSource.setDeliveryPhotoCount(deliveryId, photoCount);
             }
 
             @Override
@@ -259,15 +249,18 @@ public class Repository {
         mNetworkDataSource.saveDefect(mCurrentUser, defect, new DataSource.UploadDefectCallback() {
             @Override
             public void onDefectUploaded(final Defect defect) {
+                mLocalDataSource.setDefectActExists(defect.getDeliveryId());
+                mLocalDataSource.saveDefectServer(defect);
+
                 mNetworkDataSource.saveDefectPhotos(mCurrentUser, defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
                     @Override
-                    public void onPhotosUploaded() {
-                        refreshDataAfterSavingDefect(defect);
+                    public void onPhotosUploaded(int photoCount) {
+                        mLocalDataSource.setDefectPhotoCount(defect.getDeliveryId(), defect.getId(), photoCount);
                     }
 
                     @Override
                     public void onPhotosUploadingFailed() {
-                        refreshDataAfterSavingDefect(defect);
+
                     }
                 });
             }
@@ -305,11 +298,6 @@ public class Repository {
         mLocalDataSource.getDefectReasons(defectId, callback);
     }
 
-    private void refreshDataAfterSavingDefect(Defect defect){
-        mLocalDataSource.setDefectActExists(defect.getDeliveryId());
-        mLocalDataSource.saveDefectServer(defect);
-    }
-
     //DIFF
     public void getDiff(String diffId, DataSource.LoadDiffCallback callback){
         mLocalDataSource.getDiff(diffId, callback);
@@ -338,18 +326,20 @@ public class Repository {
     }
 
     public void saveDiff(Diff diff, final ArrayList<String> photoPaths) {
-        mNetworkDataSource.saveDiff(mCurrentUser, diff, new DataSource.UploadDiffCallback() {
+         mNetworkDataSource.saveDiff(mCurrentUser, diff, new DataSource.UploadDiffCallback() {
             @Override
             public void onDiffUploaded(final Diff diff) {
+                mLocalDataSource.setDiffActExists(diff.getDeliveryId());
+                mLocalDataSource.saveDiff(diff);
                 mNetworkDataSource.saveDiffPhotos(mCurrentUser, diff.getDeliveryId(), diff.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
                     @Override
-                    public void onPhotosUploaded() {
-                        refreshDataAfterSavingDiff(diff);
+                    public void onPhotosUploaded(int photoCount) {
+                        mLocalDataSource.setDiffPhotoCount(diff.getDeliveryId(), diff.getId(), photoCount);
                     }
 
                     @Override
                     public void onPhotosUploadingFailed() {
-                        refreshDataAfterSavingDiff(diff);
+
                     }
                 });
             }
@@ -361,10 +351,6 @@ public class Repository {
         });
     }
 
-    private void refreshDataAfterSavingDiff(Diff diff){
-        mLocalDataSource.setDiffActExists(diff.getDeliveryId());
-        mLocalDataSource.saveDiff(diff);
-    }
 
     //SAVE STATE
     public void saveDefectData(DefectData defectData){

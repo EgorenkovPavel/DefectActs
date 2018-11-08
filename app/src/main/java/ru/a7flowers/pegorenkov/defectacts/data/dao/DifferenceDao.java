@@ -68,4 +68,7 @@ public interface DifferenceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertDifferencies(List<DifferenceEntity> diffs);
+
+    @Query("UPDATE differencies SET photoQuantity = :photoCount WHERE deliveryId = :deliveryId AND id = :defectId")
+    void setPhotoCount(String deliveryId, String defectId, int photoCount);
 }

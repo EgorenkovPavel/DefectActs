@@ -146,6 +146,15 @@ public class LocalDataSource {
         });
     }
 
+    public void setDeliveryPhotoCount(final String deliveryId, final int photoCount) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.deliveryDao().setPhotoCount(deliveryId, photoCount);
+            }
+        });
+    }
+
     //GOODS
     public LiveData<List<Good>> loadGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery goods");
@@ -215,6 +224,15 @@ public class LocalDataSource {
         });
     }
 
+    public void setDefectPhotoCount(final String deliveryId, final String id, final int photoCount) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.defectDao().setPhotoCount(deliveryId, id, photoCount);
+            }
+        });
+    }
+
     //DIFF
     public LiveData<List<Diff>> getDiffGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery diffs");
@@ -260,6 +278,15 @@ public class LocalDataSource {
             public void run() {
                 DifferenceEntity differenceEntity = new DifferenceEntity(diff);
                 mDb.differenceDao().insertDifference(differenceEntity);
+            }
+        });
+    }
+
+    public void setDiffPhotoCount(final String deliveryId, final String id, final int photoCount) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.differenceDao().setPhotoCount(deliveryId, id, photoCount);
             }
         });
     }

@@ -72,7 +72,7 @@ public interface DataSource {
     }
 
     interface UploadPhotosCallback{
-        void onPhotosUploaded();
+        void onPhotosUploaded(int photoAmount);
         void onPhotosUploadingFailed();
     }
 
