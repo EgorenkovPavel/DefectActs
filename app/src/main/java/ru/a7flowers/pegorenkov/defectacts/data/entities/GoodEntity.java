@@ -46,8 +46,30 @@ public class GoodEntity {
     @SerializedName("deliveryNumber")
     private String deliveryNumber;
 
+    @ColumnInfo(name = "diameter")
+    @SerializedName("diameter")
+    private float diameter;
+
+    @ColumnInfo(name = "length")
+    @SerializedName("length")
+    private int length;
+
+    @ColumnInfo(name = "weigth")
+    @SerializedName("weigth")
+    private int weigth;
+
+    @ColumnInfo(name = "budgeonAmount")
+    @SerializedName("budgeonAmount")
+    private int budgeonAmount;
+
+    @ColumnInfo(name = "bulk")
+    @SerializedName("bulk")
+    private float bulk;
+
+
     public GoodEntity(String series, String good, String suplier, String country, int deliveryQuantity,
-                      String deliveryId, String deliveryNumber) {
+                      String deliveryId, String deliveryNumber, float diameter, int length, int weigth,
+                      int budgeonAmount, float bulk) {
         this.series = series;
         this.good = good;
         this.suplier = suplier;
@@ -55,6 +77,12 @@ public class GoodEntity {
         this.deliveryQuantity = deliveryQuantity;
         this.deliveryId = deliveryId;
         this.deliveryNumber = deliveryNumber;
+
+        this.diameter = diameter;
+        this.length = length;
+        this.weigth = weigth;
+        this.budgeonAmount = budgeonAmount;
+        this.bulk = bulk;
     }
 
     @Ignore
@@ -114,5 +142,25 @@ public class GoodEntity {
 
     public void setDeliveryNumber(String deliveryNumber) {
         this.deliveryNumber = deliveryNumber;
+    }
+
+    public float getDiameter() {
+        return diameter;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public int getWeigth() {
+        return weigth;
+    }
+
+    public int getBudgeonAmount() {
+        return budgeonAmount;
+    }
+
+    public float getBulk() {
+        return bulk;
     }
 }

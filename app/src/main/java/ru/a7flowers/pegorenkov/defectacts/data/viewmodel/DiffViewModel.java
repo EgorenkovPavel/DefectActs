@@ -114,11 +114,17 @@ public class DiffViewModel extends AndroidViewModel {
         diff.setCountry(good.getCountry());
         diff.setDeliveryNumber(good.getDeliveryNumber());
 
-        diff.setListBudgeonAmount(good.getBudgeonAmount());
-        diff.setListBulk(good.getBulk());
-        diff.setListDiameter(good.getDiameter());
-        diff.setListLength(good.getLength());
-        diff.setListWeigth(good.getWeigth());
+        diff.setBudgeonAmount(good.getBudgeonAmount());
+        diff.setBulk(good.getBulk());
+        diff.setDiameter(good.getDiameter());
+        diff.setLength(good.getLength());
+        diff.setWeigth(good.getWeigth());
+
+        diff.setListBudgeonAmount(good.getListBudgeonAmount());
+        diff.setListBulk(good.getListBulk());
+        diff.setListDiameter(good.getListDiameter());
+        diff.setListLength(good.getListLength());
+        diff.setListWeigth(good.getListWeigth());
 
         mDiff.setValue(diff);
     }

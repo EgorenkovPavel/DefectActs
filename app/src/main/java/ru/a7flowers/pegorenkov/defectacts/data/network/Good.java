@@ -26,16 +26,26 @@ public class Good {
 
     private String deliveryNumber;
 
+    private float diameter;
+
+    private int length;
+
+    private int weigth;
+
+    private int budgeonAmount;
+
+    private float bulk;
+
     @Relation(parentColumn = "series", entityColumn = "series", entity = ValueDiameterEntity.class, projection = {"value"})
-    private List<Float> diameter;
+    private List<Float> listDiameter;
     @Relation(parentColumn = "series", entityColumn = "series", entity = ValueLengthEntity.class, projection = {"value"})
-    private List<Integer> length;
+    private List<Integer> listLength;
     @Relation(parentColumn = "series", entityColumn = "series", entity = ValueWeigthEntity.class, projection = {"value"})
-    private List<Integer> weigth;
+    private List<Integer> listWeigth;
     @Relation(parentColumn = "series", entityColumn = "series", entity = ValueBudgeonAmountEntity.class, projection = {"value"})
-    private List<Integer> budgeonAmount;
+    private List<Integer> listBudgeonAmount;
     @Relation(parentColumn = "series", entityColumn = "series", entity = ValueBulkEntity.class, projection = {"value"})
-    private List<Float> bulk;
+    private List<Float> listBulk;
 
     public String getSeries() {
         return series;
@@ -93,43 +103,83 @@ public class Good {
         this.deliveryNumber = deliveryNumber;
     }
 
-    public List<Float> getDiameter() {
+    public List<Float> getListDiameter() {
+        return listDiameter;
+    }
+
+    public void setListDiameter(List<Float> diameter) {
+        this.listDiameter = diameter;
+    }
+
+    public List<Integer> getListLength() {
+        return listLength;
+    }
+
+    public void setListLength(List<Integer> length) {
+        this.listLength = length;
+    }
+
+    public List<Integer> getListWeigth() {
+        return listWeigth;
+    }
+
+    public void setListWeigth(List<Integer> weigth) {
+        this.listWeigth = weigth;
+    }
+
+    public List<Integer> getListBudgeonAmount() {
+        return listBudgeonAmount;
+    }
+
+    public void setListBudgeonAmount(List<Integer> budgeonAmount) {
+        this.listBudgeonAmount = budgeonAmount;
+    }
+
+    public List<Float> getListBulk() {
+        return listBulk;
+    }
+
+    public void setListBulk(List<Float> bulk) {
+        this.listBulk = bulk;
+    }
+
+    public float getDiameter() {
         return diameter;
     }
 
-    public void setDiameter(List<Float> diameter) {
+    public void setDiameter(float diameter) {
         this.diameter = diameter;
     }
 
-    public List<Integer> getLength() {
+    public int getLength() {
         return length;
     }
 
-    public void setLength(List<Integer> length) {
+    public void setLength(int length) {
         this.length = length;
     }
 
-    public List<Integer> getWeigth() {
+    public int getWeigth() {
         return weigth;
     }
 
-    public void setWeigth(List<Integer> weigth) {
+    public void setWeigth(int weigth) {
         this.weigth = weigth;
     }
 
-    public List<Integer> getBudgeonAmount() {
+    public int getBudgeonAmount() {
         return budgeonAmount;
     }
 
-    public void setBudgeonAmount(List<Integer> budgeonAmount) {
+    public void setBudgeonAmount(int budgeonAmount) {
         this.budgeonAmount = budgeonAmount;
     }
 
-    public List<Float> getBulk() {
+    public float getBulk() {
         return bulk;
     }
 
-    public void setBulk(List<Float> bulk) {
+    public void setBulk(float bulk) {
         this.bulk = bulk;
     }
 }

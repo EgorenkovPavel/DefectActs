@@ -176,26 +176,28 @@ public class Repository {
                     for (Good good:goods) {
                         goodEntityList.add(new GoodEntity(good.getSeries(), good.getGood(),
                                 good.getSuplier(), good.getCountry(), good.getDeliveryQuantity(),
-                                good.getDeliveryId(), good.getDeliveryNumber()));
+                                good.getDeliveryId(), good.getDeliveryNumber(), good.getDiameter(),
+                                good.getLength(), good.getWeigth(), good.getBudgeonAmount(), good.getBulk()));
 
-                        for (Float value:good.getDiameter()) {
+                        for (Float value:good.getListDiameter()) {
                             diameters.add(new ValueDiameterEntity(good.getSeries(), value));
                         }
-                        for (Integer value:good.getLength()) {
+                        for (Integer value:good.getListLength()) {
                             lengths.add(new ValueLengthEntity(good.getSeries(), value));
                         }
-                        for (Integer value:good.getWeigth()) {
+                        for (Integer value:good.getListWeigth()) {
                             weigths.add(new ValueWeigthEntity(good.getSeries(), value));
                         }
-                        for (Integer value:good.getBudgeonAmount()) {
+                        for (Integer value:good.getListBudgeonAmount()) {
                             budgeonAmounts.add(new ValueBudgeonAmountEntity(good.getSeries(), value));
                         }
-                        for (Float value:good.getBulk()) {
+                        for (Float value:good.getListBulk()) {
                             bulks.add(new ValueBulkEntity(good.getSeries(), value));
                         }
                     }
 
                     mLocalDataSource.saveGoods(goodEntityList);
+
                     mLocalDataSource.saveDiameters(diameters);
                     mLocalDataSource.saveLengths(lengths);
                     mLocalDataSource.saveWeigths(weigths);
