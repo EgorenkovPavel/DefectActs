@@ -239,4 +239,9 @@ public class DefectViewModel extends AndroidViewModel{
 
         return selectedGoods;
     }
+
+    public boolean showBackpressedDialog() {
+        Defect defect = mDefect.getValue();
+        return defect != null && defect.getSeries() != null;
+    }
 }

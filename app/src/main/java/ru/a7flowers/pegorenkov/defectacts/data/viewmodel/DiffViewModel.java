@@ -232,4 +232,8 @@ public class DiffViewModel extends AndroidViewModel {
         return mDiff;
     }
 
+    public boolean showBackpressedDialog() {
+        Diff diff = mDiff.getValue();
+        return diff != null && diff.getSeries() != null;
+    }
 }
