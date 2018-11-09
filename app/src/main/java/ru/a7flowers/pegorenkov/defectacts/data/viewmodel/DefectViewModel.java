@@ -24,6 +24,9 @@ public class DefectViewModel extends AndroidViewModel{
     private LiveData<List<Good>> mGoods;
     private boolean isNewViewModel;
 
+    private SingleLiveEvent<List<Defect>> mGoodDefects = new SingleLiveEvent<>();
+    private Good selectedGood;
+
     // For defect
     private MutableLiveData<Defect> mDefect = new MutableLiveData<>();
 
@@ -129,7 +132,29 @@ public class DefectViewModel extends AndroidViewModel{
         mDefect.setValue(defect);
     }
 
-    public void setGood(Good good){
+    public void setGood(final Good good){
+        String exeptedDefectId = mDefect.getValue().getId();
+        if(exeptedDefectId == null) exeptedDefectId = "";
+
+        mRepository.getDefectsByGood(good, exeptedDefectId, new DataSource.LoadDefectsCallback() {
+            @Override
+            public void onDefectsLoaded(List<Defect> defects) {
+                if (defects.isEmpty()){
+                    fillDefectByGood(good);
+                 }else{
+                    mGoodDefects.postValue(defects);
+                    selectedGood = good;
+                }
+            }
+
+            @Override
+            public void onDefectsLoadFailed() {
+
+            }
+        });
+    }
+
+    private void fillDefectByGood(Good good){
         Defect defect = mDefect.getValue();
 
         defect.setSeries(good.getSeries());
@@ -140,7 +165,7 @@ public class DefectViewModel extends AndroidViewModel{
         defect.setDeliveryNumber(good.getDeliveryNumber());
         defect.setDeliveryQuantity(good.getDeliveryQuantity());
 
-        mDefect.setValue(defect);
+        mDefect.postValue(defect);
     }
 
     public void setAmount(int value){
@@ -244,5 +269,21 @@ public class DefectViewModel extends AndroidViewModel{
     public boolean showBackpressedDialog() {
         Defect defect = mDefect.getValue();
         return defect != null && defect.getSeries() != null;
+    }
+
+    public MutableLiveData<List<Defect>> getGoodDefects() {
+        return mGoodDefects;
+    }
+
+    public void setDefect(Defect defect) {
+        mDefect.setValue(defect);
+        selectedGood = null;
+        mGoodDefects.setValue(null);
+    }
+
+    public void createNewDefectByGood() {
+        fillDefectByGood(selectedGood);
+        selectedGood = null;
+        mGoodDefects.setValue(null);
     }
 }

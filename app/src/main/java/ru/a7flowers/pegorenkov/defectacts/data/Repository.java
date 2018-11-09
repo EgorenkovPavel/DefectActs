@@ -295,6 +295,10 @@ public class Repository {
         }
     }
 
+    public void getDefectsByGood(Good good, String exeptedDefectId, DataSource.LoadDefectsCallback callback){
+        mLocalDataSource.getDefectsByGood(good, exeptedDefectId, callback);
+    }
+
     public void getDefectReasons(String defectId, final LoadReasonsCallback callback) {
         mLocalDataSource.getDefectReasons(defectId, callback);
     }

@@ -233,6 +233,17 @@ public class LocalDataSource {
         });
     }
 
+    public void getDefectsByGood(final Good good, final String exeptedDefectId, final DataSource.LoadDefectsCallback callback) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Defect> defects = mDb.defectDao().loadDefectsByGood(good.getDeliveryId(), good.getSeries(), exeptedDefectId);
+                callback.onDefectsLoaded(defects);
+            }
+        });
+
+    }
+
     //DIFF
     public LiveData<List<Diff>> getDiffGoods(String[] deliveryIds) {
         Log.d(TAG, "Get delivery diffs");
@@ -336,5 +347,4 @@ public class LocalDataSource {
             }
         });
     }
-
 }

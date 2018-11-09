@@ -45,6 +45,25 @@ public interface DefectDao {
             "AND defects.deliveryId = goods.deliveryId " +
             "INNER JOIN deliveries as deliveries " +
             "ON defects.deliveryId = deliveries.id " +
+            "WHERE defects.deliveryId = :deliveryId " +
+            "AND defects.series = :series " +
+            "AND defects.id != :exeptedDefectId " +
+            "ORDER BY goods.good")
+    List<Defect> loadDefectsByGood(String deliveryId, String series, String exeptedDefectId);
+
+    @Transaction
+    @Query("SELECT defects.*, " +
+            "goods.good as title, " +
+            "goods.suplier as suplier, " +
+            "goods.country as country, " +
+            "goods.deliveryQuantity as deliveryQuantity, " +
+            "deliveries.number as deliveryNumber " +
+            "FROM defects as defects " +
+            "INNER JOIN goods as goods " +
+            "ON defects.series = goods.series " +
+            "AND defects.deliveryId = goods.deliveryId " +
+            "INNER JOIN deliveries as deliveries " +
+            "ON defects.deliveryId = deliveries.id " +
             "WHERE defects.id = :defectId")
     Defect loadDefect(String defectId);
 

@@ -3,9 +3,11 @@ package ru.a7flowers.pegorenkov.defectacts;
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -13,17 +15,19 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.GoodsSearchAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReasonEntity;
@@ -108,6 +112,13 @@ public class DefectActivity extends ItemActivity {
                     fillByDefect(new Defect());
                 else
                     fillByDefect(defect);
+            }
+        });
+        model.getGoodDefects().observe(this, new Observer<List<Defect>>() {
+            @Override
+            public void onChanged(@Nullable List<Defect> defects) {
+                if(defects == null || defects.isEmpty()) return;
+                showChooseDefectDialog(defects);
             }
         });
     }
@@ -388,6 +399,66 @@ public class DefectActivity extends ItemActivity {
         model.saveDefect();
         acSearch.setText("");
         acSearch.requestFocus();
+    }
+
+    private void showChooseDefectDialog(final List<Defect> defects){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose defect")
+                .setAdapter(new DefectsDialogAdapter(this, defects),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                model.setDefect(defects.get(i));
+                            }
+                        })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        acSearch.setText("");
+                        acSearch.requestFocus();
+                    }
+                })
+                .setNeutralButton("Create new", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        model.createNewDefectByGood();
+                    }
+                });
+        builder.show();
+    }
+
+    class DefectsDialogAdapter extends ArrayAdapter<Defect>{
+
+        public DefectsDialogAdapter(@NonNull Context context, @NonNull List<Defect> objects) {
+            super(context, R.layout.item_defect, objects);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_defect, parent, false);
+
+            Defect defect = getItem(position);
+
+            TextView tvSeries = v.findViewById(R.id.tvSeries);
+            TextView tvGood = v.findViewById(R.id.tvGood);
+            TextView tvSuplier = v.findViewById(R.id.tvSuplier);
+            TextView tvCountry = v.findViewById(R.id.tvCountry);
+            TextView tvQuantity = v.findViewById(R.id.tvQuantity);
+            TextView tvPhotoQuantity = v.findViewById(R.id.tvPhotoQuantity);
+
+            tvSeries.setText(defect.getSeries());
+            tvGood.setText(defect.getTitle());
+            tvSuplier.setText(defect.getSuplier());
+            tvCountry.setText(defect.getCountry());
+            tvQuantity.setText(String.valueOf(defect.getQuantity()));
+            tvPhotoQuantity.setText(String.valueOf(defect.getPhotoQuantity()));
+
+            return v;
+        }
+
+
     }
 
 }
