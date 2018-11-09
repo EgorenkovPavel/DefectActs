@@ -138,6 +138,7 @@ public class DefectViewModel extends AndroidViewModel{
         defect.setSuplier(good.getSuplier());
         defect.setCountry(good.getCountry());
         defect.setDeliveryNumber(good.getDeliveryNumber());
+        defect.setDeliveryQuantity(good.getDeliveryQuantity());
 
         mDefect.setValue(defect);
     }

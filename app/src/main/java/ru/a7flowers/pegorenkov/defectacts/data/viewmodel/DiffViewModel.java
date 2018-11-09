@@ -113,6 +113,7 @@ public class DiffViewModel extends AndroidViewModel {
         diff.setSuplier(good.getSuplier());
         diff.setCountry(good.getCountry());
         diff.setDeliveryNumber(good.getDeliveryNumber());
+        diff.setDeliveryQuantity(good.getDeliveryQuantity());
 
         diff.setBudgeonAmount(good.getBudgeonAmount());
         diff.setBulk(good.getBulk());

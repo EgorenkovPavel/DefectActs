@@ -20,6 +20,7 @@ public interface DifferenceDao {
             "goods.good as title, " +
             "goods.suplier as suplier, " +
             "goods.country as country, " +
+            "goods.deliveryQuantity as deliveryQuantity, " +
             "deliveries.number as deliveryNumber " +
             "FROM differencies as differencies " +
             "INNER JOIN goods as goods " +
@@ -36,6 +37,7 @@ public interface DifferenceDao {
             "goods.good as title, " +
             "goods.suplier as suplier, " +
             "goods.country as country, " +
+            "goods.deliveryQuantity as deliveryQuantity, " +
             "deliveries.number as deliveryNumber " +
             "FROM differencies as differencies " +
             "INNER JOIN goods as goods " +
@@ -51,6 +53,7 @@ public interface DifferenceDao {
             "goods.good as title, " +
             "goods.suplier as suplier, " +
             "goods.country as country, " +
+            "goods.deliveryQuantity as deliveryQuantity, " +
             "deliveries.number as deliveryNumber " +
             "FROM differencies as differencies " +
             "INNER JOIN goods as goods " +

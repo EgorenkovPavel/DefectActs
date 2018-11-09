@@ -35,6 +35,8 @@ public class Diff {
 
     private String deliveryNumber;
 
+    private int deliveryQuantity;
+
     private float diameter;
 
     private int length;
@@ -216,5 +218,11 @@ public class Diff {
         this.listBulk = listBulk;
     }
 
+    public int getDeliveryQuantity() {
+        return deliveryQuantity;
+    }
 
+    public void setDeliveryQuantity(int deliveryQuantity) {
+        this.deliveryQuantity = deliveryQuantity;
+    }
 }

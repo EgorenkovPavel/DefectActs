@@ -20,6 +20,7 @@ public interface DefectDao {
             "goods.good as title, " +
             "goods.suplier as suplier, " +
             "goods.country as country, " +
+            "goods.deliveryQuantity as deliveryQuantity, " +
             "deliveries.number as deliveryNumber " +
             "FROM defects as defects " +
             "INNER JOIN goods as goods " +
@@ -36,6 +37,7 @@ public interface DefectDao {
             "goods.good as title, " +
             "goods.suplier as suplier, " +
             "goods.country as country, " +
+            "goods.deliveryQuantity as deliveryQuantity, " +
             "deliveries.number as deliveryNumber " +
             "FROM defects as defects " +
             "INNER JOIN goods as goods " +
@@ -51,6 +53,7 @@ public interface DefectDao {
             "goods.good as title, " +
             "goods.suplier as suplier, " +
             "goods.country as country, " +
+            "goods.deliveryQuantity as deliveryQuantity, " +
             "deliveries.number as deliveryNumber " +
             "FROM defects as defects " +
             "INNER JOIN goods as goods " +

@@ -41,6 +41,8 @@ public class Defect {
     @SerializedName("deliveryNumber")
     private String deliveryNumber;
 
+    private int deliveryQuantity;
+
     @SerializedName("title")
     private String title;
 
@@ -179,5 +181,13 @@ public class Defect {
 
     public void setDeliveryNumber(String deliveryNumber) {
         this.deliveryNumber = deliveryNumber;
+    }
+
+    public int getDeliveryQuantity() {
+        return deliveryQuantity;
+    }
+
+    public void setDeliveryQuantity(int deliveryQuantity) {
+        this.deliveryQuantity = deliveryQuantity;
     }
 }

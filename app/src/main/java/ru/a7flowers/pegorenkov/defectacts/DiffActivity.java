@@ -45,6 +45,7 @@ public class DiffActivity extends ItemActivity {
     private TextView tvSuplier;
     private TextView tvCountry;
     private TextView tvDelivery;
+    private TextView tvDeliveryAmount;
     private EditText etComment;
     private EditText etAmount;
     private TextView tvPhotoCount;
@@ -117,6 +118,7 @@ public class DiffActivity extends ItemActivity {
             tvSuplier.setText(diff.getSuplier());
             tvCountry.setText(diff.getCountry());
             tvDelivery.setText(diff.getDeliveryNumber());
+            tvDeliveryAmount.setText(String.valueOf(diff.getDeliveryQuantity()));
 
             List<ValueData> data = new ArrayList<>();
 
@@ -223,6 +225,7 @@ public class DiffActivity extends ItemActivity {
         tvSuplier = findViewById(R.id.tvSuplier);
         tvCountry = findViewById(R.id.tvCountry);
         tvDelivery = findViewById(R.id.tvDelivery);
+        tvDeliveryAmount = findViewById(R.id.tvDeliveryAmount);
         etComment = findViewById(R.id.etComment);
         tvPhotoCount = findViewById(R.id.tvPhotoCount);
 

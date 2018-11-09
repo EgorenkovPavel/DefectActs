@@ -54,6 +54,7 @@ public class DefectActivity extends ItemActivity {
     private TextView tvSuplier;
     private TextView tvCountry;
     private TextView tvDelivery;
+    private TextView tvDeliveryAmount;
     private AutoCompleteTextView acSearch;
     private TextView tvPhotoCount;
 
@@ -120,6 +121,7 @@ public class DefectActivity extends ItemActivity {
         tvSuplier.setText(defect.getSuplier());
         tvCountry.setText(defect.getCountry());
         tvDelivery.setText(defect.getDeliveryNumber());
+        tvDeliveryAmount.setText(String.valueOf(defect.getDeliveryQuantity()));
 
         StringBuilder text = new StringBuilder();
         for (DefectReasonEntity reason : defect.getReasons()) {
@@ -154,6 +156,7 @@ public class DefectActivity extends ItemActivity {
         tvSuplier = findViewById(R.id.tvSuplier);
         tvCountry = findViewById(R.id.tvCountry);
         tvDelivery = findViewById(R.id.tvDelivery);
+        tvDeliveryAmount = findViewById(R.id.tvDeliveryAmount);
         tvReasons = findViewById(R.id.tvReasons);
         etComment = findViewById(R.id.etComment);
         tvPhotoCount = findViewById(R.id.tvPhotoCount);
