@@ -154,6 +154,8 @@ public class DefectActivity extends ItemActivity {
 
     private void findViews() {
 
+        //TODO add searchview
+
         View includeAmount = findViewById(R.id.includeAmount);
         View includeWriteoff = findViewById(R.id.includeWriteoff);
         TextView titleAmount = includeAmount.findViewById(R.id.lblTitle);
