@@ -79,6 +79,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
         ImageView ivPhoto;
         TextView tvPhotoCount;
         CheckBox cbSelected;
+        View vTap;
 
         public DeliveryHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,11 +91,12 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
             ivPhoto = itemView.findViewById(R.id.ivPhoto);
             tvPhotoCount = itemView.findViewById(R.id.tvPhotoCount);
             cbSelected = itemView.findViewById(R.id.cbSelected);
+            vTap = itemView.findViewById(R.id.vTap);
 
             cbSelected.setOnClickListener(this);
             itemView.setOnClickListener(this);
 
-            ivPhoto.setOnClickListener(new View.OnClickListener() {
+            vTap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Delivery delivery = items.get(getAdapterPosition());
