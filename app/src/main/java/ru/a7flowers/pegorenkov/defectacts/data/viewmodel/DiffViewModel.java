@@ -166,6 +166,7 @@ public class DiffViewModel extends AndroidViewModel {
         mRepository.saveDiff(diff, new ArrayList<>(photoPaths));
 
         init();
+        isNewViewModel = false;
     }
 
     public LiveData<List<Good>> getGoods() {

@@ -207,6 +207,7 @@ public class DefectViewModel extends AndroidViewModel{
                 new ArrayList<>(photoPaths));
 
         init();
+        isNewViewModel = false;
     }
 
     public String[] getDefectReasonsList(){
