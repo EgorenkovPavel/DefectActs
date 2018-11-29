@@ -132,7 +132,7 @@ public class DefectActivity extends ItemActivity {
         tvSuplier.setText(defect.getSuplier());
         tvCountry.setText(defect.getCountry());
         tvDelivery.setText(defect.getDeliveryNumber());
-        tvDeliveryAmount.setText(String.valueOf(defect.getDeliveryQuantity()));
+        tvDeliveryAmount.setText(defect.getDeliveryQuantity() == 0 ? "" : String.valueOf(defect.getDeliveryQuantity()));
 
         StringBuilder text = new StringBuilder();
         for (DefectReasonEntity reason : defect.getReasons()) {
@@ -406,7 +406,7 @@ public class DefectActivity extends ItemActivity {
     private void showChooseDefectDialog(final List<Defect> defects){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose defect")
+        builder.setTitle(R.string.choose_position_dialog_title)
                 .setAdapter(new DefectsDialogAdapter(this, defects),
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -421,10 +421,17 @@ public class DefectActivity extends ItemActivity {
                         acSearch.requestFocus();
                     }
                 })
-                .setNeutralButton("Create new", new DialogInterface.OnClickListener() {
+                .setNeutralButton(getString(R.string.btn_create_new), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         model.createNewDefectByGood();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        acSearch.setText("");
+                        acSearch.requestFocus();
                     }
                 });
         builder.show();
@@ -459,8 +466,6 @@ public class DefectActivity extends ItemActivity {
 
             return v;
         }
-
-
     }
 
 }

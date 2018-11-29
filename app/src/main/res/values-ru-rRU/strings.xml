@@ -38,4 +38,7 @@
     <string name="dropdown">Выпадающий список</string>
     <string name="dialog_no_photo">Нет фото. Продолжить?</string>
     <string name="dialog_back_pressed">Данные будут потеряны. Продолжить?</string>
+    <string name="users">Пользователи</string>
+    <string name="choose_position_dialog_title">Выберите позицию</string>
+    <string name="btn_create_new">Новый</string>
 </resources>

@@ -141,7 +141,7 @@ public class DefectViewModel extends AndroidViewModel{
             public void onDefectsLoaded(List<Defect> defects) {
                 if (defects.isEmpty()){
                     fillDefectByGood(good);
-                 }else{
+                }else{
                     mGoodDefects.postValue(defects);
                     selectedGood = good;
                 }

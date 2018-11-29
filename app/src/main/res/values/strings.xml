@@ -38,5 +38,7 @@
     <string name="dialog_no_photo">No photo. Continue?</string>
     <string name="dialog_back_pressed">Data not saved. Continue?</string>
     <string name="users">Users</string>
+    <string name="choose_position_dialog_title">Choose position</string>
+    <string name="btn_create_new">Create new</string>
 
 </resources>
