@@ -1,4 +1,4 @@
-package ru.a7flowers.pegorenkov.defectacts;
+package ru.a7flowers.pegorenkov.defectacts.views;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +19,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
+
+import ru.a7flowers.pegorenkov.defectacts.R;
 
 public class EditTextDropdown<T extends Number> extends ConstraintLayout{
 

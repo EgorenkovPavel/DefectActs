@@ -105,7 +105,7 @@
     <!--app:layout_constraintStart_toStartOf="parent"-->
     <!--app:layout_constraintTop_toBottomOf="@+id/includeSearch" />-->
 
-    <ru.a7flowers.pegorenkov.defectacts.EditTextDropdown
+    <ru.a7flowers.pegorenkov.defectacts.views.EditTextDropdown
         android:id="@+id/includeNum1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
         app:layout_constraintTop_toBottomOf="@+id/includeSearch"
         tools:layout_height="60dp" />
 
-    <ru.a7flowers.pegorenkov.defectacts.EditTextDropdown
+    <ru.a7flowers.pegorenkov.defectacts.views.EditTextDropdown
         android:id="@+id/includeNum3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
         app:layout_constraintTop_toBottomOf="@+id/includeNum1"
         tools:layout_height="60dp" />
 
-    <ru.a7flowers.pegorenkov.defectacts.EditTextDropdown
+    <ru.a7flowers.pegorenkov.defectacts.views.EditTextDropdown
         android:id="@+id/includeNum4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
         app:layout_constraintTop_toTopOf="@+id/includeNum3"
         tools:layout_height="60dp" />
 
-    <ru.a7flowers.pegorenkov.defectacts.EditTextDropdown
+    <ru.a7flowers.pegorenkov.defectacts.views.EditTextDropdown
         android:id="@+id/includeNum5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -152,7 +152,7 @@
         app:layout_constraintTop_toTopOf="@+id/includeAmount"
         tools:layout_height="60dp" />
 
-    <ru.a7flowers.pegorenkov.defectacts.EditTextDropdown
+    <ru.a7flowers.pegorenkov.defectacts.views.EditTextDropdown
         android:id="@+id/includeNum2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

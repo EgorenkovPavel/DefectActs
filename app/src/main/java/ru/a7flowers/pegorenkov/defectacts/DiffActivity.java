@@ -13,7 +13,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -25,7 +24,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.a7flowers.pegorenkov.defectacts.EditTextDropdown.TextChangeListener;
+import ru.a7flowers.pegorenkov.defectacts.views.EditTextDropdown;
+import ru.a7flowers.pegorenkov.defectacts.views.EditTextDropdown.TextChangeListener;
 import ru.a7flowers.pegorenkov.defectacts.adapters.GoodsSearchAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;

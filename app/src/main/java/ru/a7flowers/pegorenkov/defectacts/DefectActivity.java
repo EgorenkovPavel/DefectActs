@@ -127,6 +127,7 @@ public class DefectActivity extends ItemActivity {
         fillEditText(etAmount, String.valueOf(defect.getQuantity() == 0 ? "" : defect.getQuantity()));
         fillEditText(etWriteoff, String.valueOf(defect.getWriteoff() == 0 ? "" : defect.getWriteoff()));
         fillEditText(etComment, defect.getComment());
+
         tvSeries.setText(defect.getSeries());
         tvTitle.setText(defect.getTitle());
         tvSuplier.setText(defect.getSuplier());
@@ -153,8 +154,6 @@ public class DefectActivity extends ItemActivity {
     }
 
     private void findViews() {
-
-        //TODO add searchview
 
         View includeAmount = findViewById(R.id.includeAmount);
         View includeWriteoff = findViewById(R.id.includeWriteoff);
