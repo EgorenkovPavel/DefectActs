@@ -5,7 +5,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -118,6 +120,11 @@ public class EditTextDropdown<T extends Number> extends ConstraintLayout{
     }
 
     public void setValue(T value){
+        if (value instanceof Integer)
+            acText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        else
+            acText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
         if (value == null){
             this.value = "";
         }else if(value.equals(0) || value.equals(0f)){
