@@ -24,6 +24,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.a7flowers.pegorenkov.defectacts.views.AmountView;
 import ru.a7flowers.pegorenkov.defectacts.views.EditTextDropdown;
 import ru.a7flowers.pegorenkov.defectacts.views.EditTextDropdown.TextChangeListener;
 import ru.a7flowers.pegorenkov.defectacts.adapters.GoodsSearchAdapter;
@@ -47,7 +48,7 @@ public class DiffActivity extends ItemActivity {
     private TextView tvDelivery;
     private TextView tvDeliveryAmount;
     private EditText etComment;
-    private EditText etAmount;
+    private AmountView etAmount;
     private TextView tvPhotoCount;
     private EditTextDropdown[] values = new EditTextDropdown[5];
 
@@ -107,7 +108,8 @@ public class DiffActivity extends ItemActivity {
     }
 
     private void init(Diff diff){
-        fillEditText(etAmount, String.valueOf(diff.getQuantity() == 0 ? "" : diff.getQuantity()));
+        etAmount.setValue(diff.getQuantity());
+
         fillEditText(etComment, diff.getComment());
 
         if((String.valueOf(tvSeries.getText())).equals(diff.getSeries())){
@@ -215,10 +217,6 @@ public class DiffActivity extends ItemActivity {
         values[3] = findViewById(R.id.includeNum4);
         values[4] = findViewById(R.id.includeNum5);
 
-        View includeAmount = findViewById(R.id.includeAmount);
-        TextView titleAmount = includeAmount.findViewById(R.id.lblTitle);
-        titleAmount.setText(R.string.amount);
-
         acSearch = findViewById(R.id.acSearch);
         tvSeries = findViewById(R.id.tvSeries);
         tvTitle = findViewById(R.id.tvTitle);
@@ -229,10 +227,15 @@ public class DiffActivity extends ItemActivity {
         etComment = findViewById(R.id.etComment);
         tvPhotoCount = findViewById(R.id.tvPhotoCount);
 
-        etAmount = includeAmount.findViewById(R.id.etAmount);
+        etAmount = findViewById(R.id.includeAmount);
+        etAmount.setTitle(getString(R.string.amount));
+        etAmount.setListener(new AmountView.ValueChangeListener() {
+            @Override
+            public void onValueChange(int value) {
+                model.setAmount(value);
+            }
+        });
 
-        ImageButton btnAmountInc = includeAmount.findViewById(R.id.btnInc);
-        ImageButton btnAmountDec = includeAmount.findViewById(R.id.btnDec);
         ImageButton ibPhoto = findViewById(R.id.ibPhoto);
         ImageButton ibNext = findViewById(R.id.ibNext);
         ImageButton ibBarcode = findViewById(R.id.ibBarcode);
@@ -257,25 +260,6 @@ public class DiffActivity extends ItemActivity {
             }
         });
 
-        etAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String text = String.valueOf(etAmount.getText());
-                int value = text.isEmpty() ? 0 : Integer.valueOf(text);
-                model.setAmount(value);
-            }
-        });
-
         etComment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -290,20 +274,6 @@ public class DiffActivity extends ItemActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 model.setComment(String.valueOf(etComment.getText()));
-            }
-        });
-
-        btnAmountInc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                model.incAmount();
-            }
-        });
-
-        btnAmountDec.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                model.decAmount();
             }
         });
 

@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
 
-    <include
+    <ru.a7flowers.pegorenkov.defectacts.views.AmountView
         android:id="@+id/includeAmount"
         layout="@layout/edit_text_inc_dec"
         android:layout_width="0dp"
@@ -47,7 +47,8 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/includeNum3" />
+        app:layout_constraintTop_toBottomOf="@+id/includeNum3"
+        tools:layout_height="60dp"/>
 
     <TextView
         android:id="@+id/lblComment"
