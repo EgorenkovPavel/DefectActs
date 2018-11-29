@@ -36,6 +36,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.DefectViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
+import ru.a7flowers.pegorenkov.defectacts.views.AmountView;
 
 public class DefectActivity extends ItemActivity {
 
@@ -49,8 +50,9 @@ public class DefectActivity extends ItemActivity {
 
     private GoodsSearchAdapter adapter;
 
-    private EditText etAmount;
-    private EditText etWriteoff;
+    private AmountView etAmount;
+    private AmountView etWriteoff;
+
     private TextView tvReasons;
     private EditText etComment;
     private TextView tvSeries;
@@ -124,8 +126,9 @@ public class DefectActivity extends ItemActivity {
     }
 
     private void fillByDefect(Defect defect){
-        fillEditText(etAmount, String.valueOf(defect.getQuantity() == 0 ? "" : defect.getQuantity()));
-        fillEditText(etWriteoff, String.valueOf(defect.getWriteoff() == 0 ? "" : defect.getWriteoff()));
+        etAmount.setValue(defect.getQuantity());
+        etWriteoff.setValue(defect.getWriteoff());
+
         fillEditText(etComment, defect.getComment());
 
         tvSeries.setText(defect.getSeries());
@@ -155,12 +158,23 @@ public class DefectActivity extends ItemActivity {
 
     private void findViews() {
 
-        View includeAmount = findViewById(R.id.includeAmount);
-        View includeWriteoff = findViewById(R.id.includeWriteoff);
-        TextView titleAmount = includeAmount.findViewById(R.id.lblTitle);
-        titleAmount.setText(R.string.amount);
-        TextView titleWriteoff = includeWriteoff.findViewById(R.id.lblTitle);
-        titleWriteoff.setText(R.string.writeoff);
+        etAmount = findViewById(R.id.includeAmount);
+        etAmount.setTitle(getString(R.string.amount));
+        etAmount.setListener(new AmountView.ValueChangeListener() {
+            @Override
+            public void onValueChange(int value) {
+                model.setAmount(value);
+            }
+        });
+
+        etWriteoff = findViewById(R.id.includeWriteoff);
+        etWriteoff.setTitle(getString(R.string.writeoff));
+        etWriteoff.setListener(new AmountView.ValueChangeListener() {
+            @Override
+            public void onValueChange(int value) {
+                model.setWriteoff(value);
+            }
+        });
 
         acSearch = findViewById(R.id.acSearch);
         tvSeries = findViewById(R.id.tvSeries);
@@ -173,13 +187,6 @@ public class DefectActivity extends ItemActivity {
         etComment = findViewById(R.id.etComment);
         tvPhotoCount = findViewById(R.id.tvPhotoCount);
 
-        etAmount = includeAmount.findViewById(R.id.etAmount);
-        etWriteoff = includeWriteoff.findViewById(R.id.etAmount);
-
-        ImageButton btnAmountInc = includeAmount.findViewById(R.id.btnInc);
-        ImageButton btnAmountDec = includeAmount.findViewById(R.id.btnDec);
-        ImageButton btnWriteoffInc = includeWriteoff.findViewById(R.id.btnInc);
-        ImageButton btnWriteoffDec = includeWriteoff.findViewById(R.id.btnDec);
         ImageButton ibPhoto = findViewById(R.id.ibPhoto);
         ImageButton ibNext = findViewById(R.id.ibNext);
         ImageButton ibBarcode = findViewById(R.id.ibBarcode);
@@ -213,44 +220,6 @@ public class DefectActivity extends ItemActivity {
             }
         });
 
-        etAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String text = String.valueOf(etAmount.getText());
-                int value = text.isEmpty() ? 0 : Integer.valueOf(text);
-                model.setAmount(value);
-            }
-        });
-
-        etWriteoff.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String text = String.valueOf(etWriteoff.getText());
-                int value = text.isEmpty() ? 0 : Integer.valueOf(text);
-                model.setWriteoff(value);
-            }
-        });
-
         etComment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -265,34 +234,6 @@ public class DefectActivity extends ItemActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 model.setComment(String.valueOf(etComment.getText()));
-            }
-        });
-
-        btnAmountInc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                model.incAmount();
-            }
-        });
-
-        btnAmountDec.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                model.decAmount();
-            }
-        });
-
-        btnWriteoffInc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                model.incWriteoff();
-            }
-        });
-
-        btnWriteoffDec.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                model.decWriteoff();
             }
         });
 

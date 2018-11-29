@@ -82,8 +82,12 @@ public class AmountView extends ConstraintLayout {
             @Override
             public void afterTextChanged(Editable editable) {
                 String text = String.valueOf(etAmount.getText());
-                value = text.isEmpty() ? 0 : Integer.valueOf(text);
-                if(listener != null) listener.onValueChange(value);
+                int newValue = text.isEmpty() ? 0 : Integer.valueOf(text);
+
+                if(listener != null && newValue != value) {
+                    value = newValue;
+                    listener.onValueChange(value);
+                };
             }
         });
     }

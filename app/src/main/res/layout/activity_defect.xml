@@ -66,9 +66,8 @@
         app:layout_constraintTop_toBottomOf="@+id/lblReasons"
         tools:text="Reasons" />
 
-    <include
+    <ru.a7flowers.pegorenkov.defectacts.views.AmountView
         android:id="@+id/includeAmount"
-        layout="@layout/edit_text_inc_dec"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -78,11 +77,11 @@
         app:layout_constraintEnd_toStartOf="@+id/includeWriteoff"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvReasons" />
+        app:layout_constraintTop_toBottomOf="@+id/tvReasons"
+        tools:layout_height="60dp" />
 
-    <include
+    <ru.a7flowers.pegorenkov.defectacts.views.AmountView
         android:id="@+id/includeWriteoff"
-        layout="@layout/edit_text_inc_dec"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -91,7 +90,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/includeAmount"
-        app:layout_constraintTop_toTopOf="@+id/includeAmount" />
+        app:layout_constraintTop_toTopOf="@+id/includeAmount"
+        tools:layout_height="60dp" />
 
     <TextView
         android:id="@+id/lblComment"
