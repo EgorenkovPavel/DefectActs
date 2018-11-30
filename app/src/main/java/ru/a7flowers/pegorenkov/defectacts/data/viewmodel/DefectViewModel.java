@@ -115,23 +115,6 @@ public class DefectViewModel extends AndroidViewModel{
         return mGoods;
     }
 
-    public void incAmount(){
-        Defect defect = mDefect.getValue();
-        if(defect == null) return;
-
-        defect.setQuantity(defect.getQuantity()+1);
-        mDefect.setValue(defect);
-
-    }
-
-    public void decAmount(){
-        Defect defect = mDefect.getValue();
-        if(defect == null) return;
-
-        defect.setQuantity(Math.max(defect.getQuantity()-1, 0));
-        mDefect.setValue(defect);
-    }
-
     public void setGood(final Good good){
         String exeptedDefectId = mDefect.getValue().getId();
         if(exeptedDefectId == null) exeptedDefectId = "";
@@ -227,21 +210,6 @@ public class DefectViewModel extends AndroidViewModel{
         Defect defect = mDefect.getValue();
         if(defect == null) return;
         defect.setWriteoff(value);
-        mDefect.setValue(defect);
-    }
-
-    public void incWriteoff() {
-        Defect defect = mDefect.getValue();
-        if(defect == null) return;
-        defect.setWriteoff(defect.getWriteoff() + 1);
-        mDefect.setValue(defect);
-    }
-
-    public void decWriteoff() {
-
-        Defect defect = mDefect.getValue();
-        if(defect == null) return;
-        defect.setWriteoff(Math.max(defect.getWriteoff() - 1, 0));
         mDefect.setValue(defect);
     }
 

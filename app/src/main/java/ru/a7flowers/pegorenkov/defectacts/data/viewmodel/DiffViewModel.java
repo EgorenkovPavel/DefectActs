@@ -144,20 +144,6 @@ public class DiffViewModel extends AndroidViewModel {
         mDiff.setValue(diff);
     }
 
-    public void incAmount(){
-        Diff diff = mDiff.getValue();
-        if(diff == null) return;
-        diff.setQuantity(diff.getQuantity() + 1);
-        mDiff.setValue(diff);
-    }
-
-    public void decAmount(){
-        Diff diff = mDiff.getValue();
-        if(diff == null) return;
-        diff.setQuantity(Math.max(diff.getQuantity() - 1, 0));
-        mDiff.setValue(diff);
-    }
-
     public void saveDiff() {
 
         Diff diff = mDiff.getValue();
