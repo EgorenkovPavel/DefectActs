@@ -45,6 +45,25 @@ public interface DifferenceDao {
             "AND differencies.deliveryId = goods.deliveryId " +
             "INNER JOIN deliveries as deliveries " +
             "ON differencies.deliveryId = deliveries.id " +
+            "WHERE differencies.deliveryId = :deliveryId " +
+            "AND differencies.series = :series " +
+            "AND differencies.id != :exeptedDiffId " +
+            "ORDER BY goods.series")
+    List<Diff> loadDiffsByGood(String deliveryId, String series, String exeptedDiffId);
+
+    @Transaction
+    @Query("SELECT differencies.*, " +
+            "goods.good as title, " +
+            "goods.suplier as suplier, " +
+            "goods.country as country, " +
+            "goods.deliveryQuantity as deliveryQuantity, " +
+            "deliveries.number as deliveryNumber " +
+            "FROM differencies as differencies " +
+            "INNER JOIN goods as goods " +
+            "ON differencies.series = goods.series " +
+            "AND differencies.deliveryId = goods.deliveryId " +
+            "INNER JOIN deliveries as deliveries " +
+            "ON differencies.deliveryId = deliveries.id " +
             "WHERE differencies.id = :defectId")
     Diff loadDifference(String defectId);
 

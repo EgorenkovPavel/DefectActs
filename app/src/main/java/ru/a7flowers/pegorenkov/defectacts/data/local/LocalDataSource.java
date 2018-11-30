@@ -241,7 +241,6 @@ public class LocalDataSource {
                 callback.onDefectsLoaded(defects);
             }
         });
-
     }
 
     //DIFF
@@ -298,6 +297,16 @@ public class LocalDataSource {
             @Override
             public void run() {
                 mDb.differenceDao().setPhotoCount(deliveryId, id, photoCount);
+            }
+        });
+    }
+
+    public void getDiffsByGood(final Good good, final String exeptedDiffId, final DataSource.LoadDiffsCallback callback) {
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Diff> diffs = mDb.differenceDao().loadDiffsByGood(good.getDeliveryId(), good.getSeries(), exeptedDiffId);
+                callback.onDiffsLoaded(diffs);
             }
         });
     }

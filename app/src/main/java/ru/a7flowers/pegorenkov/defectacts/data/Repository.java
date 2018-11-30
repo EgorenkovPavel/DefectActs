@@ -330,6 +330,10 @@ public class Repository {
         }
     }
 
+    public void getDiffsByGood(Good good, String exeptedDiffId, DataSource.LoadDiffsCallback callback){
+        mLocalDataSource.getDiffsByGood(good, exeptedDiffId, callback);
+    }
+
     public void saveDiff(Diff diff, final ArrayList<String> photoPaths) {
          mNetworkDataSource.saveDiff(mCurrentUser, diff, new DataSource.UploadDiffCallback() {
             @Override

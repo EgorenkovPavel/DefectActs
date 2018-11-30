@@ -11,6 +11,7 @@ import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
+import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
@@ -21,6 +22,9 @@ public class DiffViewModel extends AndroidViewModel {
     // General
     private LiveData<List<Good>> mGoods;
     private boolean isNewViewModel;
+
+    private SingleLiveEvent<List<Diff>> mGoodDiffs = new SingleLiveEvent<>();
+    private Good selectedGood;
 
     //DIFF
     private MutableLiveData<Diff> mDiff = new MutableLiveData<>();
@@ -103,7 +107,29 @@ public class DiffViewModel extends AndroidViewModel {
         mGoods = mRepository.loadGoods(deliveryIds);
     }
 
-    public void setGood(Good good) {
+    public void setGood(final Good good) {
+        String exeptedDiffId = mDiff.getValue().getId();
+        if(exeptedDiffId == null) exeptedDiffId = "";
+
+        mRepository.getDiffsByGood(good, exeptedDiffId, new DataSource.LoadDiffsCallback() {
+            @Override
+            public void onDiffsLoaded(List<Diff> diffs) {
+                if (diffs.isEmpty()){
+                    fillDiffByGood(good);
+                }else{
+                    mGoodDiffs.postValue(diffs);
+                    selectedGood = good;
+                }
+            }
+
+            @Override
+            public void onDiffsLoadFailed() {
+
+            }
+        });
+    }
+
+    private void fillDiffByGood(Good good){
         Diff diff = mDiff.getValue();
         if (diff == null) return;
 
@@ -128,6 +154,10 @@ public class DiffViewModel extends AndroidViewModel {
         diff.setListWeigth(good.getListWeigth());
 
         mDiff.setValue(diff);
+    }
+
+    public SingleLiveEvent<List<Diff>> getGoodDiffs() {
+        return mGoodDiffs;
     }
 
     public void setAmount(int value) {
@@ -223,5 +253,17 @@ public class DiffViewModel extends AndroidViewModel {
     public boolean showBackpressedDialog() {
         Diff diff = mDiff.getValue();
         return diff != null && diff.getSeries() != null;
+    }
+
+    public void setDiff(Diff diff) {
+        mDiff.setValue(diff);
+        selectedGood = null;
+        mGoodDiffs.setValue(null);
+    }
+
+    public void createNewDiffByGood() {
+        fillDiffByGood(selectedGood);
+        selectedGood = null;
+        mGoodDiffs.setValue(null);
     }
 }

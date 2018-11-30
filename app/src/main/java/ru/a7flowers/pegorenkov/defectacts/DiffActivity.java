@@ -3,9 +3,11 @@ package ru.a7flowers.pegorenkov.defectacts;
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -13,8 +15,11 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -108,6 +113,14 @@ public class DiffActivity extends ItemActivity {
                     init(new Diff());
                 else
                     init(diff);
+            }
+        });
+
+        model.getGoodDiffs().observe(this, new Observer<List<Diff>>() {
+            @Override
+            public void onChanged(@Nullable List<Diff> diffs) {
+                if(diffs == null || diffs.isEmpty()) return;
+                showChooseDiffDialog(diffs);
             }
         });
     }
@@ -402,5 +415,71 @@ public class DiffActivity extends ItemActivity {
             return value;
         }
     }
+
+    private void showChooseDiffDialog(final List<Diff> diffs){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.choose_position_dialog_title)
+                .setAdapter(new DiffsDialogAdapter(this, diffs),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                model.setDiff(diffs.get(i));
+                            }
+                        })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        acSearch.setText("");
+                        acSearch.requestFocus();
+                    }
+                })
+                .setNeutralButton(getString(R.string.btn_create_new), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        model.createNewDiffByGood();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        acSearch.setText("");
+                        acSearch.requestFocus();
+                    }
+                });
+        builder.show();
+    }
+
+    class DiffsDialogAdapter extends ArrayAdapter<Diff> {
+
+        public DiffsDialogAdapter(@NonNull Context context, @NonNull List<Diff> objects) {
+            super(context, R.layout.item_diff, objects);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_diff, parent, false);
+
+            Diff diff = getItem(position);
+
+            TextView tvSeries = v.findViewById(R.id.tvSeries);
+            TextView tvGood = v.findViewById(R.id.tvGood);
+            TextView tvSuplier = v.findViewById(R.id.tvSuplier);
+            TextView tvCountry = v.findViewById(R.id.tvCountry);
+            TextView tvQuantity = v.findViewById(R.id.tvQuantity);
+            TextView tvPhotoQuantity = v.findViewById(R.id.tvPhotoQuantity);
+
+            tvSeries.setText(diff.getSeries());
+            tvGood.setText(diff.getTitle());
+            tvSuplier.setText(diff.getSuplier());
+            tvCountry.setText(diff.getCountry());
+            tvQuantity.setText(String.valueOf(diff.getQuantity()));
+            tvPhotoQuantity.setText(String.valueOf(diff.getPhotoQuantity()));
+
+            return v;
+        }
+    }
+
 
 }
