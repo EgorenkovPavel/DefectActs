@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -89,7 +88,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
             ivDefectActExist = itemView.findViewById(R.id.ivDefectActExist);
             ivDiffActExist = itemView.findViewById(R.id.ivDiffActExist);
             ivPhoto = itemView.findViewById(R.id.ivPhoto);
-            tvPhotoCount = itemView.findViewById(R.id.tvPhotoCount);
+            tvPhotoCount = itemView.findViewById(R.id.tvNewPhotoCount);
             cbSelected = itemView.findViewById(R.id.cbSelected);
             vTap = itemView.findViewById(R.id.vTap);
 

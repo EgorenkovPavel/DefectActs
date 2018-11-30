@@ -27,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
-import java.util.zip.Inflater;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.GoodsSearchAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReasonEntity;
@@ -63,6 +62,7 @@ public class DefectActivity extends ItemActivity {
     private TextView tvDeliveryAmount;
     private AutoCompleteTextView acSearch;
     private TextView tvPhotoCount;
+    private TextView tvNewPhotoCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +100,14 @@ public class DefectActivity extends ItemActivity {
             }
         });
 
-        model.getPhotoCount().observe(this, new Observer<Integer>() {
+        model.getNewPhotoCount().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer count) {
-                tvPhotoCount.setText(String.valueOf(count));
+                if(count == null || count == 0){
+                    tvNewPhotoCount.setText("");
+                }else {
+                    tvNewPhotoCount.setText("+" + String.valueOf(count));
+                }
             }
         });
 
@@ -137,6 +141,7 @@ public class DefectActivity extends ItemActivity {
         tvCountry.setText(defect.getCountry());
         tvDelivery.setText(defect.getDeliveryNumber());
         tvDeliveryAmount.setText(defect.getDeliveryQuantity() == 0 ? "" : String.valueOf(defect.getDeliveryQuantity()));
+        tvPhotoCount.setText(defect.getPhotoQuantity() == 0 ? "" : String.valueOf(defect.getPhotoQuantity()));
 
         StringBuilder text = new StringBuilder();
         for (DefectReasonEntity reason : defect.getReasons()) {
@@ -186,6 +191,7 @@ public class DefectActivity extends ItemActivity {
         tvReasons = findViewById(R.id.tvReasons);
         etComment = findViewById(R.id.etComment);
         tvPhotoCount = findViewById(R.id.tvPhotoCount);
+        tvNewPhotoCount = findViewById(R.id.tvNewPhotoCount);
 
         ImageButton ibPhoto = findViewById(R.id.ibPhoto);
         ImageButton ibNext = findViewById(R.id.ibNext);
@@ -240,7 +246,7 @@ public class DefectActivity extends ItemActivity {
         ibNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (model.getPhotoCount().getValue() == 0) {
+                if (model.getNewPhotoCount().getValue() == 0) {
                     getDialogNoPhoto().show();
                 } else {
                     saveDefect();

@@ -245,7 +245,7 @@ public class DefectViewModel extends AndroidViewModel{
         mDefect.setValue(defect);
     }
 
-    public MutableLiveData<Integer> getPhotoCount() {
+    public MutableLiveData<Integer> getNewPhotoCount() {
         return mPhotoCount;
     }
 

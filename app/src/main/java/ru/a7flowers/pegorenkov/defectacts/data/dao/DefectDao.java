@@ -29,7 +29,7 @@ public interface DefectDao {
             "INNER JOIN deliveries as deliveries " +
             "ON defects.deliveryId = deliveries.id " +
             "WHERE defects.deliveryId IN (:deliveryIds)" +
-            "ORDER BY goods.good")
+            "ORDER BY goods.series")
     LiveData<List<Defect>> loadDefects(String[] deliveryIds);
 
     @Transaction
@@ -48,7 +48,7 @@ public interface DefectDao {
             "WHERE defects.deliveryId = :deliveryId " +
             "AND defects.series = :series " +
             "AND defects.id != :exeptedDefectId " +
-            "ORDER BY goods.good")
+            "ORDER BY goods.series")
     List<Defect> loadDefectsByGood(String deliveryId, String series, String exeptedDefectId);
 
     @Transaction

@@ -29,7 +29,7 @@ public interface DifferenceDao {
             "INNER JOIN deliveries as deliveries " +
             "ON differencies.deliveryId = deliveries.id " +
             "WHERE differencies.deliveryId IN (:deliveryIds)" +
-            "ORDER BY goods.good")
+            "ORDER BY goods.series")
     LiveData<List<Diff>> loadDifferencies(String[] deliveryIds);
 
     @Transaction

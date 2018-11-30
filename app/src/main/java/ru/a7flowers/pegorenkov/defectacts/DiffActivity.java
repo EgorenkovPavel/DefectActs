@@ -50,6 +50,7 @@ public class DiffActivity extends ItemActivity {
     private EditText etComment;
     private AmountView etAmount;
     private TextView tvPhotoCount;
+    private TextView tvNewPhotoCount;
     private EditTextDropdown[] values = new EditTextDropdown[5];
 
     private GoodsSearchAdapter adapter;
@@ -92,7 +93,11 @@ public class DiffActivity extends ItemActivity {
         model.getPhotoCount().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer count) {
-                tvPhotoCount.setText(String.valueOf(count));
+                if(count == null || count == 0){
+                    tvNewPhotoCount.setText("");
+                }else {
+                    tvNewPhotoCount.setText("+" + String.valueOf(count));
+                }
             }
         });
 
@@ -121,6 +126,7 @@ public class DiffActivity extends ItemActivity {
             tvCountry.setText(diff.getCountry());
             tvDelivery.setText(diff.getDeliveryNumber());
             tvDeliveryAmount.setText(String.valueOf(diff.getDeliveryQuantity()));
+            tvPhotoCount.setText(diff.getPhotoQuantity() == 0 ? "" : String.valueOf(diff.getPhotoQuantity()));
 
             List<ValueData> data = new ArrayList<>();
 
@@ -226,6 +232,7 @@ public class DiffActivity extends ItemActivity {
         tvDeliveryAmount = findViewById(R.id.tvDeliveryAmount);
         etComment = findViewById(R.id.etComment);
         tvPhotoCount = findViewById(R.id.tvPhotoCount);
+        tvNewPhotoCount = findViewById(R.id.tvNewPhotoCount);
 
         etAmount = findViewById(R.id.includeAmount);
         etAmount.setTitle(getString(R.string.amount));
