@@ -153,7 +153,7 @@ public class DiffViewModel extends AndroidViewModel {
         diff.setListLength(good.getListLength());
         diff.setListWeigth(good.getListWeigth());
 
-        mDiff.setValue(diff);
+        mDiff.postValue(diff);
     }
 
     public SingleLiveEvent<List<Diff>> getGoodDiffs() {

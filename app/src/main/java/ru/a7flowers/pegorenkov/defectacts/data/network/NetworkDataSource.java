@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import android.util.Base64;
 import java.util.List;
 
 import okhttp3.Interceptor;
@@ -48,7 +49,7 @@ public class NetworkDataSource {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request newRequest  = chain.request().newBuilder()
-                        .addHeader("Authorization", BuildConfig.ServerPassword)
+                        .addHeader("Authorization", getAuth())
                         .build();
                 return chain.proceed(newRequest);
             }
@@ -62,6 +63,13 @@ public class NetworkDataSource {
                 .build();
 
         mDeliveryApi = mRetrofit.create(DeliveryApi.class);
+    }
+
+    private static String getAuth() {
+        final String pair = BuildConfig.ServerUsername + ":" + BuildConfig.ServerPassword;
+        final byte[] encodedBytes = Base64.encode(pair.getBytes(), Base64.NO_WRAP);
+        final String auth = new String(encodedBytes);
+        return "Basic " + auth;
     }
 
     public static NetworkDataSource getInstance() {
