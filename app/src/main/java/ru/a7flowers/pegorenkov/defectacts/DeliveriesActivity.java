@@ -132,25 +132,6 @@ public class DeliveriesActivity extends ItemActivity implements DeliveryAdapter.
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_settings:{
-                Intent i = new Intent(DeliveriesActivity.this, PrefActivity.class);
-                startActivity(i);
-                return true;
-            }
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     private void openDeliveryActivity(){
 
         String[] deliveriesIds = model.getSelectedDeliveryIds();
