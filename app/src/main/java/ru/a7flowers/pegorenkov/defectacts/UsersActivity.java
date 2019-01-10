@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 public class UsersActivity extends AppCompatActivity implements UsersAdapter.OnUserClickListener {
 
     private UsersViewModel model;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +35,20 @@ public class UsersActivity extends AppCompatActivity implements UsersAdapter.OnU
         setSupportActionBar(toolbar);
 
         model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(UsersViewModel.class);
+
+        swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                model.refreshData();
+            }
+        });
+        swipeContainer.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
 
         final RecyclerView rvUsers = findViewById(R.id.rvUsers);
         rvUsers.setHasFixedSize(true);
@@ -53,6 +69,14 @@ public class UsersActivity extends AppCompatActivity implements UsersAdapter.OnU
                 adapter.setItems(users);
             }
         });
+
+        model.getIsReloading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isLoading) {
+                swipeContainer.setRefreshing(isLoading);
+            }
+        });
+
     }
 
     @Override

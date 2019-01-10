@@ -9,6 +9,7 @@ import java.io.InputStream;
 import android.util.Base64;
 import java.util.List;
 
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -21,6 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.a7flowers.pegorenkov.defectacts.BuildConfig;
+import ru.a7flowers.pegorenkov.defectacts.NetworkSettings;
 import ru.a7flowers.pegorenkov.defectacts.data.AppExecutors;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
@@ -42,6 +44,8 @@ public class NetworkDataSource {
     private AppExecutors mAppExecutors;
     private DeliveryApi mDeliveryApi;
 
+    private static NetworkSettings mSettings;
+
     private NetworkDataSource() {
         mAppExecutors = AppExecutors.getInstance();
 
@@ -49,7 +53,7 @@ public class NetworkDataSource {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request newRequest  = chain.request().newBuilder()
-                        .addHeader("Authorization", getAuth())
+                        .addHeader("Authorization", mSettings.getAuth())
                         .build();
                 return chain.proceed(newRequest);
             }
@@ -57,7 +61,7 @@ public class NetworkDataSource {
 
         Retrofit mRetrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl(BuildConfig.ServerPath)
+                .baseUrl(mSettings.getServerPath())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
@@ -65,18 +69,18 @@ public class NetworkDataSource {
         mDeliveryApi = mRetrofit.create(DeliveryApi.class);
     }
 
-    private static String getAuth() {
-        final String pair = BuildConfig.ServerUsername + ":" + BuildConfig.ServerPassword;
-        final byte[] encodedBytes = Base64.encode(pair.getBytes(), Base64.NO_WRAP);
-        final String auth = new String(encodedBytes);
-        return "Basic " + auth;
-    }
-
-    public static NetworkDataSource getInstance() {
+    public static NetworkDataSource getInstance(NetworkSettings settings) {
         if (INSTANCE == null) {
             synchronized (NetworkDataSource.class) {
                 if (INSTANCE == null) {
+                    mSettings = settings;
                     INSTANCE = new NetworkDataSource();
+                    mSettings.setServerPathChangeListener(new NetworkSettings.ServerPathChangeListener() {
+                        @Override
+                        public void onServerPathChanged() {
+                            INSTANCE = new NetworkDataSource();
+                        }
+                    });
                 }
             }
         }

@@ -3,8 +3,13 @@ package ru.a7flowers.pegorenkov.defectacts.data.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
+import ru.a7flowers.pegorenkov.defectacts.BuildConfig;
+import ru.a7flowers.pegorenkov.defectacts.NetworkSettings;
+import ru.a7flowers.pegorenkov.defectacts.R;
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
 import ru.a7flowers.pegorenkov.defectacts.data.local.AppDatabase;
 import ru.a7flowers.pegorenkov.defectacts.data.local.LocalDataSource;
@@ -17,13 +22,16 @@ public class ViewModelFactory extends ViewModelProvider.AndroidViewModelFactory 
     private final Application mApplication;
     private final Repository mRepository;
 
-    public static ViewModelFactory getInstance(Application application) {
+    public static ViewModelFactory getInstance(final Application application) {
 
         if (INSTANCE == null) {
             synchronized (ViewModelFactory.class) {
                 if (INSTANCE == null) {
+
+                    NetworkSettings settings = new NetworkSettings(application);
+
                     INSTANCE = new ViewModelFactory(application,
-                            Repository.getInstance(NetworkDataSource.getInstance(),
+                            Repository.getInstance(NetworkDataSource.getInstance(settings),
                             LocalDataSource.getInstance(AppDatabase.getInstance(application))));
                 }
             }

@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
-        android:key="@string/pref_preffix"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="Preffix" />
-    <EditTextPreference
-        android:key="@string/pref_suffix"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="Suffix" />
+    <PreferenceCategory android:title="@string/connection">
+
+        <EditTextPreference
+            android:inputType="text"
+            android:key="@string/pref_server"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/server"/>
+        <EditTextPreference
+            android:inputType="text"
+            android:key="@string/pref_user"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/user" />
+        <EditTextPreference
+            android:inputType="text"
+            android:key="@string/pref_password"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/password"
+            android:password="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/barcode_scanner">
+
+        <EditTextPreference
+            android:inputType="text"
+            android:key="@string/pref_prefix"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/prefix" />
+        <EditTextPreference
+            android:inputType="text"
+            android:key="@string/pref_sufix"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/sufix" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

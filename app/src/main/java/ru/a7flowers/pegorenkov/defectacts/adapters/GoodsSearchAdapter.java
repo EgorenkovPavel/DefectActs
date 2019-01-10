@@ -81,8 +81,8 @@ public class GoodsSearchAdapter extends ArrayAdapter<Good> {
         super(context, R.layout.item_good);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        suffix = prefs.getString(context.getString(R.string.pref_suffix), "");
-        preffix = prefs.getString(context.getString(R.string.pref_preffix), "");
+        suffix = prefs.getString(context.getString(R.string.pref_sufix), "");
+        preffix = prefs.getString(context.getString(R.string.pref_prefix), "");
     }
 
     public void setCallback(GoodFoundCallback callback) {

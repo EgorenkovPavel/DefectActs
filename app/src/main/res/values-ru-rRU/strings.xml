@@ -23,8 +23,6 @@
     <string name="country">Страна</string>
     <string name="choose_delivery">Выберите доставку</string>
     <string name="writeoff">Списано</string>
-    <string name="pref_suffix">Суффикс</string>
-    <string name="pref_preffix">Префикс</string>
     <string name="clear">Очистить</string>
     <string name="settings">Настройки</string>
     <string name="difference">Пересорт</string>
@@ -41,4 +39,11 @@
     <string name="users">Пользователи</string>
     <string name="choose_position_dialog_title">Выберите позицию</string>
     <string name="btn_create_new">Новый</string>
+    <string name="connection">Соединение</string>
+    <string name="server">Сервер</string>
+    <string name="user">Пользователь</string>
+    <string name="password">Пароль</string>
+    <string name="barcode_scanner">Сканер штрихкода</string>
+    <string name="prefix">Префикс</string>
+    <string name="sufix">Суффикс</string>
 </resources>
