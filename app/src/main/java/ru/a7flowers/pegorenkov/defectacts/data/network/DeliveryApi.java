@@ -52,12 +52,12 @@ public interface DeliveryApi {
     Call<String> setDiff(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Body Diff diff);
 
     @POST("deliveries/{deliveryId}/photo")
-    Call<Integer> setDeliveryPhoto(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Body RequestBody photo);
+    Call<Integer> setDeliveryPhoto(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Body String photoData);
 
     @POST("deliveries/{deliveryId}/defects/{defectId}/photo")
-    Call<Integer> setDefectPhoto(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Path("defectId") String defectId, @Body RequestBody photo);
+    Call<Integer> setDefectPhoto(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Path("defectId") String defectId, @Body String photoData);
 
     @POST("deliveries/{deliveryId}/differencies/{diffId}/photo")
-    Call<Integer> setDiffPhoto(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Path("diffId") String diffId, @Body RequestBody photo);
+    Call<Integer> setDiffPhoto(@Header("user") String userId, @Path("deliveryId") String deliveryId, @Path("diffId") String diffId, @Body String photoData);
 
 }

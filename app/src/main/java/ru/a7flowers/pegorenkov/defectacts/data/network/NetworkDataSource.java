@@ -1,7 +1,10 @@
 package ru.a7flowers.pegorenkov.defectacts.data.network;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -160,25 +163,22 @@ public class NetworkDataSource {
         });
     }
 
-    public void saveDeliveryPhoto(final User user, final String deliveryId, final String photoPath, final UploadPhotosCallback callback) {
+    public void saveDeliveryPhoto(final User user, final String deliveryId, final String path, final UploadPhotosCallback callback) {
 
         mAppExecutors.networkIO().execute(new Runnable() {
             @Override
             public void run() {
 
-                byte[] buf = readFile(photoPath);
+                String fileData = readfileToString(path);
 
                 int photoAmount = 0;
 
-                if (buf == null) {
-                    callback.onPhotosUploadingFailed();
-                    return;
-                }
-
-                RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
-                Call<Integer> call = mDeliveryApi.setDeliveryPhoto(user.getId(), deliveryId, requestBody);
+                Call<Integer> call = mDeliveryApi.setDeliveryPhoto(user.getId(), deliveryId, fileData);
                 try {
                     photoAmount = call.execute().body();
+
+                    File file = new File(path);
+                    file.delete();
                 } catch (IOException e) {
                     e.printStackTrace();
                     callback.onPhotosUploadingFailed();
@@ -308,22 +308,18 @@ public class NetworkDataSource {
             public void run() {
 
                 boolean success = true;
-
                 int photoAmount = 0;
 
                 for (String path : photoPaths) {
 
-                    byte[] buf = readFile(path);
+                    String fileData = readfileToString(path);
 
-                    if (buf == null) {
-                        success = false;
-                        continue;
-                    }
-
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
-                    Call<Integer> call = mDeliveryApi.setDefectPhoto(user.getId(), deliveryId, defectId, requestBody);
+                    Call<Integer> call = mDeliveryApi.setDefectPhoto(user.getId(), deliveryId, defectId, fileData);
                     try {
                         photoAmount = call.execute().body();
+
+                        File file = new File(path);
+                        file.delete();
                     } catch (IOException e) {
                         success = false;
                         e.printStackTrace();
@@ -407,22 +403,18 @@ public class NetworkDataSource {
             @Override
             public void run() {
 
-                boolean success = true;
                 int photoAmount = 0;
-
+                boolean success = true;
                 for (String path : photoPaths) {
 
-                    byte[] buf = readFile(path);
+                    String fileData = readfileToString(path);
 
-                    if (buf == null) {
-                        success = false;
-                        continue;
-                    }
-
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), buf);
-                    Call<Integer> call = mDeliveryApi.setDiffPhoto(user.getId(), deliveryId, diffId, requestBody);
+                    Call<Integer> call = mDeliveryApi.setDiffPhoto(user.getId(), deliveryId, diffId, fileData);
                     try {
                         photoAmount = call.execute().body();
+
+                        File file = new File(path);
+                        file.delete();
                     } catch (IOException e) {
                         success = false;
                         e.printStackTrace();
@@ -434,6 +426,14 @@ public class NetworkDataSource {
                     callback.onPhotosUploadingFailed();
             }
         });
+    }
+
+    private String readfileToString(String path){
+        Bitmap bm = BitmapFactory.decodeFile(path);
+        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+        byte[] ba = bao.toByteArray();
+        return Base64.encodeToString(ba, Base64.NO_WRAP);
     }
 
     //SERVICE
