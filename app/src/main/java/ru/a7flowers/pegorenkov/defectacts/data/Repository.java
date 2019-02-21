@@ -5,6 +5,9 @@ import android.arch.lifecycle.LiveData;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadReasonsCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ReloadDataCallback;
@@ -22,6 +25,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.network.Defect;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Diff;
 import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 import ru.a7flowers.pegorenkov.defectacts.data.network.NetworkDataSource;
+import ru.a7flowers.pegorenkov.defectacts.data.network.UploadWorker;
 
 public class Repository {
 
@@ -143,17 +147,21 @@ public class Repository {
     }
 
     public void saveDeliveryPhoto(final String deliveryId, String photoPath) {
-        mNetworkDataSource.saveDeliveryPhoto(mCurrentUser, deliveryId, photoPath, new DataSource.UploadPhotosCallback() {
-            @Override
-            public void onPhotosUploaded(int photoCount) {
-                mLocalDataSource.setDeliveryPhotoCount(deliveryId, photoCount);
-            }
 
-            @Override
-            public void onPhotosUploadingFailed() {
-
-            }
-        });
+        List<String> photoPaths = new ArrayList<>();
+        photoPaths.add(photoPath);
+        startWorker(mCurrentUser.getId(), deliveryId, "", "", photoPaths);
+//        mNetworkDataSource.saveDeliveryPhoto(mCurrentUser.getId(), deliveryId, photoPath, new DataSource.UploadPhotosCallback() {
+//            @Override
+//            public void onPhotosUploaded(int photoCount) {
+//                mLocalDataSource.setDeliveryPhotoCount(deliveryId, photoCount);
+//            }
+//
+//            @Override
+//            public void onPhotosUploadingFailed() {
+//
+//            }
+//        });
     }
 
     // GOODS
@@ -253,17 +261,19 @@ public class Repository {
                 mLocalDataSource.setDefectActExists(defect.getDeliveryId());
                 mLocalDataSource.saveDefectServer(defect);
 
-                mNetworkDataSource.saveDefectPhotos(mCurrentUser, defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
-                    @Override
-                    public void onPhotosUploaded(int photoCount) {
-                        mLocalDataSource.setDefectPhotoCount(defect.getDeliveryId(), defect.getId(), photoCount);
-                    }
+                startWorker(mCurrentUser.getId(), defect.getDeliveryId(), defect.getId(), "", photoPaths);
 
-                    @Override
-                    public void onPhotosUploadingFailed() {
-
-                    }
-                });
+//                mNetworkDataSource.saveDefectPhotos(mCurrentUser.getId(), defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
+//                    @Override
+//                    public void onPhotosUploaded(int photoCount) {
+//                        mLocalDataSource.setDefectPhotoCount(defect.getDeliveryId(), defect.getId(), photoCount);
+//                    }
+//
+//                    @Override
+//                    public void onPhotosUploadingFailed() {
+//
+//                    }
+//                });
             }
 
             @Override
@@ -334,23 +344,26 @@ public class Repository {
         mLocalDataSource.getDiffsByGood(good, exeptedDiffId, callback);
     }
 
-    public void saveDiff(Diff diff, final ArrayList<String> photoPaths) {
+    public void saveDiff(Diff diff, final List<String> photoPaths) {
          mNetworkDataSource.saveDiff(mCurrentUser, diff, new DataSource.UploadDiffCallback() {
             @Override
             public void onDiffUploaded(final Diff diff) {
                 mLocalDataSource.setDiffActExists(diff.getDeliveryId());
                 mLocalDataSource.saveDiff(diff);
-                mNetworkDataSource.saveDiffPhotos(mCurrentUser, diff.getDeliveryId(), diff.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
-                    @Override
-                    public void onPhotosUploaded(int photoCount) {
-                        mLocalDataSource.setDiffPhotoCount(diff.getDeliveryId(), diff.getId(), photoCount);
-                    }
 
-                    @Override
-                    public void onPhotosUploadingFailed() {
+                startWorker(mCurrentUser.getId(), diff.getDeliveryId(), "", diff.getId(), photoPaths);
 
-                    }
-                });
+//                mNetworkDataSource.saveDiffPhotos(mCurrentUser.getId(), diff.getDeliveryId(), diff.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
+//                    @Override
+//                    public void onPhotosUploaded(int photoAmount) {
+//                        mLocalDataSource.setDiffPhotoCount(diff.getDeliveryId(), diff.getId(), photoCount);
+//                    }
+//
+//                    @Override
+//                    public void onPhotosUploadingFailed() {
+//
+//                    }
+//                });
             }
 
             @Override
@@ -358,6 +371,22 @@ public class Repository {
 
             }
         });
+    }
+
+    private void startWorker(String userId, String deliveryId, String defectId, String diffId, List<String> photoPaths){
+
+        for (String path:photoPaths) {
+            Data.Builder data = new Data.Builder();
+            data.putString(UploadWorker.USER_ID_KEY, userId);
+            data.putString(UploadWorker.DELIVERY_ID_KEY, deliveryId);
+            data.putString(UploadWorker.DIFF_ID_KEY, diffId);
+            data.putString(UploadWorker.DEFECT_ID_KEY, defectId);
+            data.putString(UploadWorker.PHOTO_PATH_KEY, path);
+
+            OneTimeWorkRequest uploadWork = new OneTimeWorkRequest.Builder(UploadWorker.class).setInputData(data.build())
+                    .build();
+            WorkManager.getInstance().enqueue(uploadWork);
+        }
     }
 
     //SAVE STATE

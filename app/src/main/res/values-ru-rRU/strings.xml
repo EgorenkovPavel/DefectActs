@@ -46,4 +46,6 @@
     <string name="barcode_scanner">Сканер штрихкода</string>
     <string name="prefix">Префикс</string>
     <string name="sufix">Суффикс</string>
+    <string name="error_upload_photo_message">Повторите попытку отправки фото</string>
+    <string name="error_upload_photo_title">Ошибка загрузки фотографий</string>
 </resources>

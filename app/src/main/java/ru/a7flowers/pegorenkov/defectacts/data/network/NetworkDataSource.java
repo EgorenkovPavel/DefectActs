@@ -1,5 +1,6 @@
 package ru.a7flowers.pegorenkov.defectacts.data.network;
 
+import android.accounts.NetworkErrorException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -10,7 +11,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import android.util.Base64;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.CRC32;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -47,10 +51,13 @@ public class NetworkDataSource {
     private AppExecutors mAppExecutors;
     private DeliveryApi mDeliveryApi;
 
+    private CRC32 crc;
+
     private static NetworkSettings mSettings;
 
     private NetworkDataSource() {
         mAppExecutors = AppExecutors.getInstance();
+        crc = new CRC32();
 
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
             @Override
@@ -87,6 +94,10 @@ public class NetworkDataSource {
                 }
             }
         }
+        return INSTANCE;
+    }
+
+    public static NetworkDataSource getInstance(){
         return INSTANCE;
     }
 
@@ -163,27 +174,23 @@ public class NetworkDataSource {
         });
     }
 
-    public void saveDeliveryPhoto(final User user, final String deliveryId, final String path, final UploadPhotosCallback callback) {
+    public void saveDeliveryPhoto(final String userId, final String deliveryId, final String path, final UploadPhotosCallback callback) {
 
         mAppExecutors.networkIO().execute(new Runnable() {
             @Override
             public void run() {
 
-                String fileData = readfileToString(path);
-
                 int photoAmount = 0;
 
-                Call<Integer> call = mDeliveryApi.setDeliveryPhoto(user.getId(), deliveryId, fileData);
                 try {
-                    photoAmount = call.execute().body();
-
-                    File file = new File(path);
-                    file.delete();
-                } catch (IOException e) {
+                    photoAmount = saveDeliveryPhoto(userId, deliveryId, path);
+                } catch (Exception e) {
                     e.printStackTrace();
                     callback.onPhotosUploadingFailed();
                     return;
                 }
+
+                deletePhotoFile(path);
 
                 callback.onPhotosUploaded(photoAmount);
             }
@@ -301,7 +308,7 @@ public class NetworkDataSource {
         });
     }
 
-    public void saveDefectPhotos(final User user, final String deliveryId, final String defectId, final List<String> photoPaths, final UploadPhotosCallback callback) {
+    public void saveDefectPhotos(final String userId, final String deliveryId, final String defectId, final List<String> photoPaths, final UploadPhotosCallback callback) {
 
         mAppExecutors.networkIO().execute(new Runnable() {
             @Override
@@ -312,17 +319,12 @@ public class NetworkDataSource {
 
                 for (String path : photoPaths) {
 
-                    String fileData = readfileToString(path);
-
-                    Call<Integer> call = mDeliveryApi.setDefectPhoto(user.getId(), deliveryId, defectId, fileData);
                     try {
-                        photoAmount = call.execute().body();
-
-                        File file = new File(path);
-                        file.delete();
-                    } catch (IOException e) {
+                        photoAmount = saveDefectPhoto(userId, deliveryId, defectId, path);
+                    } catch (Exception e) {
                         success = false;
                         e.printStackTrace();
+                        continue;
                     }
                 }
 
@@ -397,35 +399,89 @@ public class NetworkDataSource {
         });
     }
 
-    public void saveDiffPhotos(final User user, final String deliveryId, final String diffId, final List<String> photoPaths, final UploadPhotosCallback callback) {
+    public void saveDiffPhotos(final String userId, final String deliveryId, final String diffId, final List<String> photoPaths, final DataSource.UploadPhotosCallback callback) {
 
         mAppExecutors.networkIO().execute(new Runnable() {
             @Override
             public void run() {
 
-                int photoAmount = 0;
                 boolean success = true;
+                int photoAmount = 0;
                 for (String path : photoPaths) {
 
-                    String fileData = readfileToString(path);
-
-                    Call<Integer> call = mDeliveryApi.setDiffPhoto(user.getId(), deliveryId, diffId, fileData);
                     try {
-                        photoAmount = call.execute().body();
-
-                        File file = new File(path);
-                        file.delete();
-                    } catch (IOException e) {
+                        photoAmount = saveDiffPhoto(userId, deliveryId, diffId, path);
+                    } catch (Exception e) {
                         success = false;
                         e.printStackTrace();
+                        continue;
                     }
+
+                    deletePhotoFile(path);
                 }
+
                 if (success)
                     callback.onPhotosUploaded(photoAmount);
                 else
                     callback.onPhotosUploadingFailed();
             }
         });
+    }
+
+    //PHOTOS
+    public int saveDeliveryPhoto(final String userId, final String deliveryId, final String photoPath) throws Exception {
+
+        String fileData = readfileToString(photoPath);
+        long checksum = getChecksun(fileData);
+
+        Call<Integer> call = mDeliveryApi.setDeliveryPhoto(userId, deliveryId, fileData, checksum);
+        retrofit2.Response<Integer> response = call.execute();
+
+        if (!response.isSuccessful()) {
+            throw new NetworkErrorException();
+        }
+
+        return response.body();
+    }
+
+    public int saveDefectPhoto(final String userId, final String deliveryId, final String defectId, final String photoPath) throws Exception {
+
+        String fileData = readfileToString(photoPath);
+        long checksum = getChecksun(fileData);
+
+        Call<Integer> call = mDeliveryApi.setDefectPhoto(userId, deliveryId, defectId, fileData, checksum);
+        retrofit2.Response<Integer> response = call.execute();
+
+        if (!response.isSuccessful()) {
+            throw new NetworkErrorException();
+        }
+
+        return response.body();
+    }
+
+    public int saveDiffPhoto(final String userId, final String deliveryId, final String diffId, final String photoPath) throws Exception {
+
+        String fileData = readfileToString(photoPath);
+        long checksum = getChecksun(fileData);
+
+        Call<Integer> call = mDeliveryApi.setDiffPhoto(userId, deliveryId, diffId, fileData, checksum);
+        retrofit2.Response<Integer> response = call.execute();
+
+        if (!response.isSuccessful()) {
+            throw new NetworkErrorException();
+        }
+
+        return response.body();
+    }
+
+    private long getChecksun(String data){
+        crc.update(data.getBytes());
+        return crc.getValue();
+    }
+
+    private void deletePhotoFile(String path){
+        File file = new File(path);
+        file.delete();
     }
 
     private String readfileToString(String path){
@@ -436,139 +492,4 @@ public class NetworkDataSource {
         return Base64.encodeToString(ba, Base64.NO_WRAP);
     }
 
-    //SERVICE
-    private byte[] readFile(String path){
-        byte[] buf = null;
-
-        try {
-            File file = new File(path);
-            InputStream in = new FileInputStream(file);
-            buf = new byte[in.available()];
-            while (in.read(buf) != -1) ;
-            in.close();
-            file.delete();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return buf;
-    }
-
-    //TODO add own classes to network entities
-
-    //TODO uploading big photos!!!
-//    public String sendFileToServer(String filename, String targetUrl) {
-//        String response = "error";
-//        Log.e("Image filename", filename);
-//        Log.e("url", targetUrl);
-//        HttpURLConnection connection = null;
-//        DataOutputStream outputStream = null;
-//        // DataInputStream inputStream = null;
-//
-//        String pathToOurFile = filename;
-//        String urlServer = targetUrl;
-//        String lineEnd = "\r\n";
-//        String twoHyphens = "--";
-//        String boundary = "*****";
-//        DateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH:mm:ss");
-//
-//        int bytesRead, bytesAvailable, bufferSize;
-//        byte[] buffer;
-//        int maxBufferSize = 1 * 1024;
-//        try {
-//            FileInputStream fileInputStream = new FileInputStream(new File(
-//                    pathToOurFile));
-//
-//            URL url = new URL(urlServer);
-//            connection = (HttpURLConnection) url.openConnection();
-//
-//            // Allow Inputs & Outputs
-//            connection.setDoInput(true);
-//            connection.setDoOutput(true);
-//            connection.setUseCaches(false);
-//            connection.setChunkedStreamingMode(1024);
-//            // Enable POST method
-//            connection.setRequestMethod("POST");
-//
-//            connection.setRequestProperty("Connection", "Keep-Alive");
-//            connection.setRequestProperty("Content-Type",
-//                    "multipart/form-data;boundary=" + boundary);
-//
-//            outputStream = new DataOutputStream(connection.getOutputStream());
-//            outputStream.writeBytes(twoHyphens + boundary + lineEnd);
-//
-//            String connstr = null;
-//            connstr = "Content-Disposition: form-data; name=\"uploadedfile\";filename=\""
-//                    + pathToOurFile + "\"" + lineEnd;
-//            Log.i("Connstr", connstr);
-//
-//            outputStream.writeBytes(connstr);
-//            outputStream.writeBytes(lineEnd);
-//
-//            bytesAvailable = fileInputStream.available();
-//            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-//            buffer = new byte[bufferSize];
-//
-//            // Read file
-//            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-//            Log.e("Image length", bytesAvailable + "");
-//            try {
-//                while (bytesRead > 0) {
-//                    try {
-//                        outputStream.write(buffer, 0, bufferSize);
-//                    } catch (OutOfMemoryError e) {
-//                        e.printStackTrace();
-//                        response = "outofmemoryerror";
-//                        return response;
-//                    }
-//                    bytesAvailable = fileInputStream.available();
-//                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
-//                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                response = "error";
-//                return response;
-//            }
-//            outputStream.writeBytes(lineEnd);
-//            outputStream.writeBytes(twoHyphens + boundary + twoHyphens
-//                    + lineEnd);
-//
-//            // Responses from the server (code and message)
-//            int serverResponseCode = connection.getResponseCode();
-//            String serverResponseMessage = connection.getResponseMessage();
-//            Log.i("Server Response Code ", "" + serverResponseCode);
-//            Log.i("Server Response Message", serverResponseMessage);
-//
-//            if (serverResponseCode == 200) {
-//                response = "true";
-//            }
-//
-//            String CDate = null;
-//            Date serverTime = new Date(connection.getDate());
-//            try {
-//                CDate = df.format(serverTime);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                Log.e("Date Exception", e.getMessage() + " Parse Exception");
-//            }
-//            Log.i("Server Response Time", CDate + "");
-//
-//            filename = CDate
-//                    + filename.substring(filename.lastIndexOf("."),
-//                    filename.length());
-//            Log.i("File Name in Server : ", filename);
-//
-//            fileInputStream.close();
-//            outputStream.flush();
-//            outputStream.close();
-//            outputStream = null;
-//        } catch (Exception ex) {
-//            // Exception handling
-//            response = "error";
-//            Log.e("Send file Exception", ex.getMessage() + "");
-//            ex.printStackTrace();
-//        }
-//        return response;
-//    }
-}
+ }

@@ -50,5 +50,7 @@
     <string name="barcode_scanner">Barcode scanner</string>
     <string name="prefix">Prefix</string>
     <string name="sufix">Sufix</string>
+    <string name="error_upload_photo_message">Retry uploading photos</string>
+    <string name="error_upload_photo_title">Upload photos error</string>
 
 </resources>
