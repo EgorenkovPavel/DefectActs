@@ -18,6 +18,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DifferenceEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.UploadPhotoEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBudgeonAmountEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBulkEntity;
@@ -355,5 +356,27 @@ public class LocalDataSource {
                 mDb.goodDao().insertBulk(bulks);
             }
         });
+    }
+
+    //UPLOAD PHOTOS
+    public void saveUploadPhotos(final List<UploadPhotoEntity> entities){
+        mAppExecutors.discIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.uploadPhotoDao().insert(entities);
+            }
+        });
+    }
+
+    public List<UploadPhotoEntity> getUploadPhotos(int maxTryNumber){
+        return mDb.uploadPhotoDao().getUploadPhotos(maxTryNumber);
+    }
+
+    public void updateUploadPhoto(UploadPhotoEntity entity){
+        mDb.uploadPhotoDao().update(entity);
+    }
+
+    public void deleteUploadPhoto(UploadPhotoEntity entity){
+        mDb.uploadPhotoDao().deleteUploadPhoto(entity);
     }
 }

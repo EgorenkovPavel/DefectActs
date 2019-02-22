@@ -9,24 +9,21 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
 import java.io.File;
+import java.util.List;
 
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import ru.a7flowers.pegorenkov.defectacts.R;
 import ru.a7flowers.pegorenkov.defectacts.UsersActivity;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.UploadPhotoEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.local.AppDatabase;
 import ru.a7flowers.pegorenkov.defectacts.data.local.LocalDataSource;
 
 public class UploadWorker extends Worker {
 
+    private static final int MAX_TRY_NUMBER = 5;
     private static final int ERROR_ID = 4354;
     private static final String CHANNEL_ID = "DEFECT_ACTS_ERROR";
-
-    public static final String USER_ID_KEY = "user_id";
-    public static final String DELIVERY_ID_KEY = "delivery_id";
-    public static final String DEFECT_ID_KEY = "defect_id";
-    public static final String DIFF_ID_KEY = "diff_id";
-    public static final String PHOTO_PATH_KEY = "photo_path";
 
     public UploadWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -38,21 +35,56 @@ public class UploadWorker extends Worker {
 
         Context mContext = getApplicationContext();
 
-        final String userId = getInputData().getString(USER_ID_KEY);
-        final String deliveryId = getInputData().getString(DELIVERY_ID_KEY);
-        final String defectId = getInputData().getString(DEFECT_ID_KEY);
-        final String diffId = getInputData().getString(DIFF_ID_KEY);
-        final String path = getInputData().getString(PHOTO_PATH_KEY);
+        LocalDataSource localDataSource = LocalDataSource.getInstance(AppDatabase.getInstance(mContext));
+        NetworkDataSource networkDataSource = NetworkDataSource.getInstance();
 
-        int photoAmount = 0;
-        try {
-            if (!defectId.isEmpty())
-                photoAmount = NetworkDataSource.getInstance().saveDefectPhoto(userId, deliveryId, diffId, path);
+        boolean tryAgain = false;
+        boolean upLimit = false;
+
+        List<UploadPhotoEntity> entities = localDataSource.getUploadPhotos(MAX_TRY_NUMBER);
+        for (UploadPhotoEntity entity:entities) {
+
+            final String userId = entity.getUserId();
+            final String deliveryId = entity.getDeliveryId();
+            final String defectId = entity.getDefectId();
+            final String diffId = entity.getDiffId();
+            final String path = entity.getPhotoPath();
+
+            int photoAmount = 0;
+            try {
+                if (!defectId.isEmpty())
+                    photoAmount = networkDataSource.saveDefectPhoto(userId, deliveryId, diffId, path);
+                else if(!diffId.isEmpty())
+                    photoAmount = networkDataSource.saveDiffPhoto(userId, deliveryId, diffId, path);
+                else
+                    photoAmount = networkDataSource.saveDeliveryPhoto(userId, deliveryId, path);
+            } catch (Exception e) {
+                entity.incTryNumber();
+
+                if(entity.getTryNumber() == MAX_TRY_NUMBER){
+                    upLimit = true;
+                }else{
+                    tryAgain = true;
+                }
+
+                localDataSource.updateUploadPhoto(entity);
+                continue;
+            }
+
+            deletePhotoFile(path);
+
+            if(!defectId.isEmpty())
+                localDataSource.setDefectPhotoCount(deliveryId, defectId, photoAmount);
             else if(!diffId.isEmpty())
-                photoAmount = NetworkDataSource.getInstance().saveDiffPhoto(userId, deliveryId, diffId, path);
+                localDataSource.setDiffPhotoCount(deliveryId, diffId, photoAmount);
             else
-                photoAmount = NetworkDataSource.getInstance().saveDeliveryPhoto(userId, deliveryId, path);
-        } catch (Exception e) {
+                localDataSource.setDeliveryPhotoCount(deliveryId, photoAmount);
+
+            localDataSource.deleteUploadPhoto(entity);
+
+        }
+
+        if(upLimit){
             PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0, new Intent(mContext,
                     UsersActivity.class), 0);
 
@@ -68,22 +100,12 @@ public class UploadWorker extends Worker {
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
             notificationManager.notify(ERROR_ID, notification);
-
-            return Result.retry();
         }
 
-        deletePhotoFile(path);
-
-        LocalDataSource localDataSource = LocalDataSource.getInstance(AppDatabase.getInstance(mContext));
-
-        if(!defectId.isEmpty())
-            localDataSource.setDefectPhotoCount(deliveryId, defectId, photoAmount);
-        else if(!diffId.isEmpty())
-            localDataSource.setDiffPhotoCount(deliveryId, diffId, photoAmount);
+        if (tryAgain)
+            return Result.retry();
         else
-            localDataSource.setDeliveryPhotoCount(deliveryId, photoAmount);
-
-        return Result.success();
+            return Result.success();
     }
 
     private void deletePhotoFile(String path){

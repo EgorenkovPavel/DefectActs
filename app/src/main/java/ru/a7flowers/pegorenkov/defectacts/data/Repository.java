@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
@@ -14,6 +15,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.DataSource.ReloadDataCallback;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.UploadPhotoEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBudgeonAmountEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBulkEntity;
@@ -148,9 +150,12 @@ public class Repository {
 
     public void saveDeliveryPhoto(final String deliveryId, String photoPath) {
 
-        List<String> photoPaths = new ArrayList<>();
-        photoPaths.add(photoPath);
-        startWorker(mCurrentUser.getId(), deliveryId, "", "", photoPaths);
+        List<UploadPhotoEntity> entities = new ArrayList<>();
+        entities.add(new UploadPhotoEntity(mCurrentUser.getId(), deliveryId, "", "", photoPath));
+
+        mLocalDataSource.saveUploadPhotos(entities);
+
+        startWorker();
 //        mNetworkDataSource.saveDeliveryPhoto(mCurrentUser.getId(), deliveryId, photoPath, new DataSource.UploadPhotosCallback() {
 //            @Override
 //            public void onPhotosUploaded(int photoCount) {
@@ -261,7 +266,13 @@ public class Repository {
                 mLocalDataSource.setDefectActExists(defect.getDeliveryId());
                 mLocalDataSource.saveDefectServer(defect);
 
-                startWorker(mCurrentUser.getId(), defect.getDeliveryId(), defect.getId(), "", photoPaths);
+                List<UploadPhotoEntity> entities = new ArrayList<>();
+                for (String path:photoPaths) {
+                    entities.add(new UploadPhotoEntity(mCurrentUser.getId(), defect.getDeliveryId(), defect.getId(), "", path));
+                }
+                mLocalDataSource.saveUploadPhotos(entities);
+
+                startWorker();
 
 //                mNetworkDataSource.saveDefectPhotos(mCurrentUser.getId(), defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
 //                    @Override
@@ -351,7 +362,12 @@ public class Repository {
                 mLocalDataSource.setDiffActExists(diff.getDeliveryId());
                 mLocalDataSource.saveDiff(diff);
 
-                startWorker(mCurrentUser.getId(), diff.getDeliveryId(), "", diff.getId(), photoPaths);
+                List<UploadPhotoEntity> entities = new ArrayList<>();
+                for (String path:photoPaths) {
+                    entities.add(new UploadPhotoEntity(mCurrentUser.getId(), diff.getDeliveryId(), "", diff.getId(), path));
+                }
+                mLocalDataSource.saveUploadPhotos(entities);
+                startWorker();
 
 //                mNetworkDataSource.saveDiffPhotos(mCurrentUser.getId(), diff.getDeliveryId(), diff.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
 //                    @Override
@@ -373,20 +389,10 @@ public class Repository {
         });
     }
 
-    private void startWorker(String userId, String deliveryId, String defectId, String diffId, List<String> photoPaths){
-
-        for (String path:photoPaths) {
-            Data.Builder data = new Data.Builder();
-            data.putString(UploadWorker.USER_ID_KEY, userId);
-            data.putString(UploadWorker.DELIVERY_ID_KEY, deliveryId);
-            data.putString(UploadWorker.DIFF_ID_KEY, diffId);
-            data.putString(UploadWorker.DEFECT_ID_KEY, defectId);
-            data.putString(UploadWorker.PHOTO_PATH_KEY, path);
-
-            OneTimeWorkRequest uploadWork = new OneTimeWorkRequest.Builder(UploadWorker.class).setInputData(data.build())
-                    .build();
-            WorkManager.getInstance().enqueue(uploadWork);
-        }
+    private void startWorker() {
+        OneTimeWorkRequest uploadWork = new OneTimeWorkRequest.Builder(UploadWorker.class)
+                .build();
+        WorkManager.getInstance().enqueue(uploadWork);
     }
 
     //SAVE STATE

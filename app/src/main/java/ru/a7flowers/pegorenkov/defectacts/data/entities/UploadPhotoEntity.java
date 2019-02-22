@@ -2,6 +2,7 @@ package ru.a7flowers.pegorenkov.defectacts.data.entities;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "uploadPhotos")
@@ -38,6 +39,17 @@ public class UploadPhotoEntity {
         this.tryNumber = tryNumber;
     }
 
+    @Ignore
+    public UploadPhotoEntity(String userId, String deliveryId, String defectId, String diffId, String photoPath) {
+        this.userId = userId;
+        this.deliveryId = deliveryId;
+        this.defectId = defectId;
+        this.diffId = diffId;
+        this.photoPath = photoPath;
+        this.tryNumber = 0;
+    }
+
+
     public String getUserId() {
         return userId;
     }
@@ -64,5 +76,9 @@ public class UploadPhotoEntity {
 
     public int getId() {
         return id;
+    }
+
+    public void incTryNumber(){
+        this.tryNumber++;
     }
 }
