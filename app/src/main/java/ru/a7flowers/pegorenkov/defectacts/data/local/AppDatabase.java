@@ -12,6 +12,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.dao.DeliveryDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.DifferenceDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.GoodDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.ReasonDao;
+import ru.a7flowers.pegorenkov.defectacts.data.dao.UploadPhotoDao;
 import ru.a7flowers.pegorenkov.defectacts.data.dao.UserDao;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DefectReasonEntity;
@@ -19,6 +20,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.Delivery;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.DifferenceEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.GoodEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.Reason;
+import ru.a7flowers.pegorenkov.defectacts.data.entities.UploadPhotoEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBudgeonAmountEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueBulkEntity;
@@ -38,7 +40,8 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.ValueWeigthEntity;
         ValueBulkEntity.class,
         ValueLengthEntity.class,
         ValueBudgeonAmountEntity.class,
-        ValueWeigthEntity.class},
+        ValueWeigthEntity.class,
+        UploadPhotoEntity.class},
 
         version = 1, exportSchema = false)
 @TypeConverters({DataConverter.class})
@@ -73,4 +76,7 @@ public abstract class AppDatabase extends RoomDatabase{
     public abstract DefectReasonDao defectReasonDao();
 
     public abstract DifferenceDao differenceDao();
+
+    public abstract UploadPhotoDao uploadPhotoDao();
+
 }
