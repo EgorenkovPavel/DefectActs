@@ -1,8 +1,6 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,8 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.adapters.UsersAdapter;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
@@ -61,7 +57,7 @@ public class UsersActivity extends AppCompatActivity implements UsersAdapter.OnU
 
         model.getUsers().observe(this, users -> {if(users != null) adapter.setItems(users);});
 
-        model.getIsReloading().observe(this, isLoading -> swipeContainer.setRefreshing(isLoading));
+        model.getIsReloading().observe(this, isLoading -> {if(isLoading != null)swipeContainer.setRefreshing(isLoading);});
 
         model.isActualVersion().observe(this,
                 isActualVersion -> {
@@ -75,9 +71,7 @@ public class UsersActivity extends AppCompatActivity implements UsersAdapter.OnU
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(UsersActivity.this)
                 .setTitle("Version error")
                 .setMessage("Version of app don't matches with server version. Please upgrade the app")
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    UsersActivity.this.finish();
-                });
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> UsersActivity.this.finish());
 
         dialogBuilder.show();
     }
