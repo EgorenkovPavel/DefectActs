@@ -4,6 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -17,17 +19,41 @@ public class UsersViewModel extends AndroidViewModel {
 
     private Repository mRepository;
 
+    private LiveData<List<User>> mUsers = new MutableLiveData<>();
+
     private MutableLiveData<Boolean> isReloading = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isActualVersion = new MutableLiveData<>();
 
     public UsersViewModel(@NonNull Application application, Repository repository) {
         super(application);
         mRepository = repository;
 
-        isReloading.postValue(false);
+        isReloading.setValue(false);
+        isActualVersion.setValue(true);
+
+        mRepository.getServerVersion(new DataSource.GetVersionCallback() {
+            @Override
+            public void onVersionLoaded(String serverVersion) {
+                try {
+                    PackageInfo packageInfo = application.getPackageManager().getPackageInfo(application.getPackageName(), 0);
+                    String localVersion = packageInfo.versionName;
+                    isActualVersion.postValue(localVersion.equals(serverVersion));
+
+                    if (localVersion.equals(serverVersion)) mUsers = mRepository.getUsers();
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onVersionLoadFailed() {
+
+            }
+        });
     }
 
     public LiveData<List<User>> getUsers() {
-        return mRepository.getUsers();
+        return mUsers;
     }
 
     public void setCurrentUser(User user) {
@@ -53,4 +79,7 @@ public class UsersViewModel extends AndroidViewModel {
         return isReloading;
     }
 
+    public MutableLiveData<Boolean> isActualVersion() {
+        return isActualVersion;
+    }
 }

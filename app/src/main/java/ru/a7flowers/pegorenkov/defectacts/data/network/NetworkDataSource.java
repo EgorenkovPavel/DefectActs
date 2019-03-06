@@ -104,7 +104,7 @@ public class NetworkDataSource {
     }
 
     //VERSION
-    public void gerServerVersion(final DataSource.GetVersionCallback callback) {
+    public void getServerVersion(final DataSource.GetVersionCallback callback) {
         Call<String> version = mDeliveryApi.getVersion();
         version.enqueue(new Callback<String>() {
             @Override

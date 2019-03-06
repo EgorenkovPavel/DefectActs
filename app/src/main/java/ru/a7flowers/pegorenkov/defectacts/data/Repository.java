@@ -4,9 +4,7 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import ru.a7flowers.pegorenkov.defectacts.data.DataSource.LoadDefectCallback;
@@ -87,6 +85,11 @@ public class Repository {
 
     public void setMode(Mode mode) {
         this.mMode = mode;
+    }
+
+    //VERSION
+    public void getServerVersion(DataSource.GetVersionCallback callback){
+        mNetworkDataSource.getServerVersion(callback);
     }
 
     //USERS
@@ -410,7 +413,6 @@ public class Repository {
         }
         mLocalDataSource.updateUploadPhotos(entities);
     }
-
 
     //SAVE STATE
     public void saveDefectData(DefectData defectData){

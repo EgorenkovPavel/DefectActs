@@ -2,10 +2,12 @@ package ru.a7flowers.pegorenkov.defectacts;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,18 +39,12 @@ public class UsersActivity extends AppCompatActivity implements UsersAdapter.OnU
         model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(UsersViewModel.class);
 
         swipeContainer = findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                model.refreshData();
-            }
-        });
+        swipeContainer.setOnRefreshListener(() -> model.refreshData());
         swipeContainer.setColorSchemeResources(
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
 
         final RecyclerView rvUsers = findViewById(R.id.rvUsers);
         rvUsers.setHasFixedSize(true);
@@ -63,20 +59,27 @@ public class UsersActivity extends AppCompatActivity implements UsersAdapter.OnU
         adapter.setOnUserClickListener(this);
         rvUsers.setAdapter(adapter);
 
-        model.getUsers().observe(this, new Observer<List<User>>() {
-            @Override
-            public void onChanged(@Nullable List<User> users) {
-                adapter.setItems(users);
+        model.getUsers().observe(this, users -> {if(users != null) adapter.setItems(users);});
+
+        model.getIsReloading().observe(this, isLoading -> swipeContainer.setRefreshing(isLoading));
+
+        model.isActualVersion().observe(this,
+                isActualVersion -> {
+            if(isActualVersion != null && !isActualVersion){
+                showVersionDialog();
             }
         });
+    }
 
-        model.getIsReloading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean isLoading) {
-                swipeContainer.setRefreshing(isLoading);
-            }
-        });
+    private void showVersionDialog(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(UsersActivity.this)
+                .setTitle("Version error")
+                .setMessage("Version of app don't matches with server version. Please upgrade the app")
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    UsersActivity.this.finish();
+                });
 
+        dialogBuilder.show();
     }
 
     @Override
