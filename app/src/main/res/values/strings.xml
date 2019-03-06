@@ -52,5 +52,13 @@
     <string name="sufix">Sufix</string>
     <string name="error_upload_photo_message">Retry uploading photos</string>
     <string name="error_upload_photo_title">Upload photos error</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="upload_photo_activity_label">Uploading photo error</string>
+    <string name="uploading_photo_message">Can\'t upload this photos to server</string>
+    <string name="general_delivery_photos">General delivery photos</string>
+    <string name="defects_photos">Defects photos</string>
+    <string name="diff_photos">Diff photos</string>
+    <string name="delete_all">Delete all</string>
 
 </resources>

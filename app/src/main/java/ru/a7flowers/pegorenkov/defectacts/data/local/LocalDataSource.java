@@ -368,15 +368,27 @@ public class LocalDataSource {
         });
     }
 
-    public List<UploadPhotoEntity> getUploadPhotos(int maxTryNumber){
-        return mDb.uploadPhotoDao().getUploadPhotos(maxTryNumber);
+    public List<UploadPhotoEntity> getUploadPhotos(){
+        return mDb.uploadPhotoDao().getUploadPhotos(UploadPhotoEntity.MAX_TRY_NUMBER);
     }
 
     public void updateUploadPhoto(UploadPhotoEntity entity){
-        mDb.uploadPhotoDao().update(entity);
+        mDb.uploadPhotoDao().updatePhoto(entity);
     }
 
     public void deleteUploadPhoto(UploadPhotoEntity entity){
-        mDb.uploadPhotoDao().deleteUploadPhoto(entity);
+        mDb.uploadPhotoDao().deletePhoto(entity);
+    }
+
+    public LiveData<List<UploadPhotoEntity>> getFailedUploadPhotos() {
+        return mDb.uploadPhotoDao().getFailedUploadPhotos(UploadPhotoEntity.MAX_TRY_NUMBER);
+    }
+
+    public void deleteUploadPhotos(List<UploadPhotoEntity> entities){
+        mDb.uploadPhotoDao().deletePhotos(entities);
+    }
+
+    public void updateUploadPhotos(List<UploadPhotoEntity> entities) {
+        mDb.uploadPhotoDao().updatePhotos(entities);
     }
 }

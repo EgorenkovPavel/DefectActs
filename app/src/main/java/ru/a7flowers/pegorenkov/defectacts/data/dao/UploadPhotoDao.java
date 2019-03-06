@@ -1,5 +1,6 @@
 package ru.a7flowers.pegorenkov.defectacts.data.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -16,13 +17,22 @@ public interface UploadPhotoDao {
     @Query("SELECT * FROM uploadPhotos WHERE try_number < :maxTryNumber")
     List<UploadPhotoEntity> getUploadPhotos(int maxTryNumber);
 
+    @Query("SELECT * FROM uploadPhotos WHERE try_number >= :maxTryNumber")
+    LiveData<List<UploadPhotoEntity>> getFailedUploadPhotos(int maxTryNumber);
+
     @Insert
     void insert(List<UploadPhotoEntity> entities);
 
     @Update
-    void update(UploadPhotoEntity entity);
+    void updatePhoto(UploadPhotoEntity entity);
+
+    @Update
+    void updatePhotos(List<UploadPhotoEntity> entities);
 
     @Delete
-    void deleteUploadPhoto(UploadPhotoEntity entity);
+    void deletePhoto(UploadPhotoEntity entity);
+
+    @Delete
+    void deletePhotos(List<UploadPhotoEntity> entities);
 
 }

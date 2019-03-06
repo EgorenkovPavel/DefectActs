@@ -37,7 +37,7 @@ public class ReasonsActivity extends AppCompatActivity {
         model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(ReasonsViewModel.class);
 
         Button btnOk = findViewById(R.id.btnOk);
-        Button btnCancel = findViewById(R.id.btnCancel);
+        Button btnCancel = findViewById(R.id.btnClear);
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

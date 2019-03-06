@@ -14,6 +14,7 @@ import java.util.List;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import ru.a7flowers.pegorenkov.defectacts.R;
+import ru.a7flowers.pegorenkov.defectacts.UploadPhotoActivity;
 import ru.a7flowers.pegorenkov.defectacts.UsersActivity;
 import ru.a7flowers.pegorenkov.defectacts.data.entities.UploadPhotoEntity;
 import ru.a7flowers.pegorenkov.defectacts.data.local.AppDatabase;
@@ -21,7 +22,6 @@ import ru.a7flowers.pegorenkov.defectacts.data.local.LocalDataSource;
 
 public class UploadWorker extends Worker {
 
-    private static final int MAX_TRY_NUMBER = 5;
     private static final int ERROR_ID = 4354;
     private static final String CHANNEL_ID = "DEFECT_ACTS_ERROR";
 
@@ -41,7 +41,7 @@ public class UploadWorker extends Worker {
         boolean tryAgain = false;
         boolean upLimit = false;
 
-        List<UploadPhotoEntity> entities = localDataSource.getUploadPhotos(MAX_TRY_NUMBER);
+        List<UploadPhotoEntity> entities = localDataSource.getUploadPhotos();
         for (UploadPhotoEntity entity:entities) {
 
             final String userId = entity.getUserId();
@@ -52,16 +52,19 @@ public class UploadWorker extends Worker {
 
             int photoAmount = 0;
             try {
+                photoAmount /=0;
+
                 if (!defectId.isEmpty())
                     photoAmount = networkDataSource.saveDefectPhoto(userId, deliveryId, diffId, path);
                 else if(!diffId.isEmpty())
                     photoAmount = networkDataSource.saveDiffPhoto(userId, deliveryId, diffId, path);
                 else
                     photoAmount = networkDataSource.saveDeliveryPhoto(userId, deliveryId, path);
+
             } catch (Exception e) {
                 entity.incTryNumber();
 
-                if(entity.getTryNumber() == MAX_TRY_NUMBER){
+                if(entity.isMaxTry()){
                     upLimit = true;
                 }else{
                     tryAgain = true;
@@ -85,8 +88,10 @@ public class UploadWorker extends Worker {
         }
 
         if(upLimit){
-            PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0, new Intent(mContext,
-                    UsersActivity.class), 0);
+            Intent i = new Intent(mContext, UploadPhotoActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Notification notification = new NotificationCompat.Builder(mContext, CHANNEL_ID)
                     .setSmallIcon(R.mipmap.ic_launcher) // the status icon

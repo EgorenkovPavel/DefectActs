@@ -395,6 +395,23 @@ public class Repository {
         WorkManager.getInstance().enqueue(uploadWork);
     }
 
+    //UPLOAD PHOTO
+    public LiveData<List<UploadPhotoEntity>> getFailedUploadPhotos(){
+        return mLocalDataSource.getFailedUploadPhotos();
+    }
+
+    public void cancelFailedUploadPhoto(List<UploadPhotoEntity> entities){
+        mLocalDataSource.deleteUploadPhotos(entities);
+    }
+
+    public void retryFailedUploadPhoto(List<UploadPhotoEntity> entities) {
+        for (UploadPhotoEntity entity:entities) {
+            entity.resetTryNumber();
+        }
+        mLocalDataSource.updateUploadPhotos(entities);
+    }
+
+
     //SAVE STATE
     public void saveDefectData(DefectData defectData){
         mDefectData = defectData;

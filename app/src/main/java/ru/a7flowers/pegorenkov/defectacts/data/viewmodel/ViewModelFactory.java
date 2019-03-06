@@ -64,6 +64,8 @@ public class ViewModelFactory extends ViewModelProvider.AndroidViewModelFactory 
             return (T) new DiffViewModel(mApplication, mRepository);
         else if (modelClass == ReasonsViewModel.class)
             return (T) new ReasonsViewModel(mApplication, mRepository);
+        else if (modelClass == UploadPhotoViewModel.class)
+            return (T) new UploadPhotoViewModel(mApplication, mRepository);
 
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }

@@ -8,6 +8,8 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "uploadPhotos")
 public class UploadPhotoEntity {
 
+    public static final int MAX_TRY_NUMBER = 5;
+
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -80,5 +82,25 @@ public class UploadPhotoEntity {
 
     public void incTryNumber(){
         this.tryNumber++;
+    }
+
+    public void resetTryNumber(){
+        this.tryNumber = 0;
+    }
+
+    public boolean isMaxTry(){
+        return tryNumber >= MAX_TRY_NUMBER;
+    }
+
+    public boolean isDeliveryPhoto(){
+        return defectId.isEmpty() && diffId.isEmpty();
+    }
+
+    public boolean isDefectPhoto(){
+        return !defectId.isEmpty() && diffId.isEmpty();
+    }
+
+    public boolean isDiffPhoto(){
+        return defectId.isEmpty() && !diffId.isEmpty();
     }
 }

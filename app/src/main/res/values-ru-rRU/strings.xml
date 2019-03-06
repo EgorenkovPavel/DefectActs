@@ -48,4 +48,12 @@
     <string name="sufix">Суффикс</string>
     <string name="error_upload_photo_message">Повторите попытку отправки фото</string>
     <string name="error_upload_photo_title">Ошибка загрузки фотографий</string>
+    <string name="retry">Повторить</string>
+    <string name="cancel">Отмена</string>
+    <string name="upload_photo_activity_label">Ошибка загрузка фото</string>
+    <string name="uploading_photo_message">Не удалось загрузить фото на сервер</string>
+    <string name="general_delivery_photos">Общие фото по машине</string>
+    <string name="defects_photos">Фото дефектов</string>
+    <string name="diff_photos">Фото пересортов</string>
+    <string name="delete_all">Удалить все</string>
 </resources>
