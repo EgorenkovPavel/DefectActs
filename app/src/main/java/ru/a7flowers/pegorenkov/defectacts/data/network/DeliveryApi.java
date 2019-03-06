@@ -15,6 +15,9 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.User;
 
 public interface DeliveryApi {
 
+    @GET("version")
+    Call<String> getVersion();
+
     @GET("users")
     Call<List<User>> getUsers();
 

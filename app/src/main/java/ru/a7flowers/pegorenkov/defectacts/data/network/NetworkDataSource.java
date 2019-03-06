@@ -3,6 +3,7 @@ package ru.a7flowers.pegorenkov.defectacts.data.network;
 import android.accounts.NetworkErrorException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -99,6 +100,28 @@ public class NetworkDataSource {
 
     public static NetworkDataSource getInstance(){
         return INSTANCE;
+    }
+
+    //VERSION
+
+    public void gerServerVersion(final DataSource.GetVersionCallback callback){
+        Call<String> version = mDeliveryApi.getVersion();
+        version.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
+                String ver = response.body();
+                if(ver == null){
+                    callback.onVersionLoadFailed();
+                }else{
+                    callback.onVersionLoaded(ver);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                callback.onVersionLoadFailed();
+            }
+        });
     }
 
     //USERS

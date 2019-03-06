@@ -11,6 +11,11 @@ import ru.a7flowers.pegorenkov.defectacts.data.network.Good;
 
 public interface DataSource {
 
+    interface GetVersionCallback{
+        void onVersionLoaded(String version);
+        void onVersionLoadFailed();
+    }
+
     interface LoadUsersCallback{
         void onUsersLoaded(List<User> users);
         void onUsersLoadFailed();
