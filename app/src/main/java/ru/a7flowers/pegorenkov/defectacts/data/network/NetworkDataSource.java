@@ -118,7 +118,7 @@ public class NetworkDataSource {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 callback.onVersionLoadFailed();
             }
         });
