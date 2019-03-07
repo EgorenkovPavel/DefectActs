@@ -19,7 +19,7 @@ public class UsersViewModel extends AndroidViewModel {
 
     private Repository mRepository;
 
-    private LiveData<List<User>> mUsers = new MutableLiveData<>();
+    private LiveData<List<User>> mUsers;
 
     private MutableLiveData<Boolean> isReloading = new MutableLiveData<>();
     private MutableLiveData<Boolean> isActualVersion = new MutableLiveData<>();
@@ -38,8 +38,6 @@ public class UsersViewModel extends AndroidViewModel {
                     PackageInfo packageInfo = application.getPackageManager().getPackageInfo(application.getPackageName(), 0);
                     String localVersion = packageInfo.versionName;
                     isActualVersion.postValue(localVersion.equals(serverVersion));
-
-                    if (localVersion.equals(serverVersion)) mUsers = mRepository.getUsers();
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -50,6 +48,8 @@ public class UsersViewModel extends AndroidViewModel {
 
             }
         });
+
+        mUsers = mRepository.getUsers();
     }
 
     public LiveData<List<User>> getUsers() {

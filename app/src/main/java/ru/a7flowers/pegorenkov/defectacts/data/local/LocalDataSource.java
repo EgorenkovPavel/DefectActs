@@ -359,12 +359,10 @@ public class LocalDataSource {
     }
 
     //UPLOAD PHOTOS
-    public void saveUploadPhotos(final List<UploadPhotoEntity> entities){
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.uploadPhotoDao().insert(entities);
-            }
+    public void saveUploadPhotos(final List<UploadPhotoEntity> entities, DataSource.SavePhotoCallback callback){
+        mAppExecutors.discIO().execute(() -> {
+            mDb.uploadPhotoDao().insert(entities);
+            callback.onPhotoSaved();
         });
     }
 

@@ -76,6 +76,10 @@ public interface DataSource {
         void onDefectUploadingFailed();
     }
 
+    interface SavePhotoCallback{
+        void onPhotoSaved();
+    }
+
     interface UploadPhotosCallback{
         void onPhotosUploaded(int photoAmount);
         void onPhotosUploadingFailed();

@@ -156,9 +156,8 @@ public class Repository {
         List<UploadPhotoEntity> entities = new ArrayList<>();
         entities.add(new UploadPhotoEntity(mCurrentUser.getId(), deliveryId, "", "", photoPath));
 
-        mLocalDataSource.saveUploadPhotos(entities);
+        mLocalDataSource.saveUploadPhotos(entities, this::startWorker);
 
-        startWorker();
 //        mNetworkDataSource.saveDeliveryPhoto(mCurrentUser.getId(), deliveryId, photoPath, new DataSource.UploadPhotosCallback() {
 //            @Override
 //            public void onPhotosUploaded(int photoCount) {
@@ -273,9 +272,7 @@ public class Repository {
                 for (String path:photoPaths) {
                     entities.add(new UploadPhotoEntity(mCurrentUser.getId(), defect.getDeliveryId(), defect.getId(), "", path));
                 }
-                mLocalDataSource.saveUploadPhotos(entities);
-
-                startWorker();
+                mLocalDataSource.saveUploadPhotos(entities, ()->startWorker());
 
 //                mNetworkDataSource.saveDefectPhotos(mCurrentUser.getId(), defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
 //                    @Override
@@ -369,8 +366,7 @@ public class Repository {
                 for (String path:photoPaths) {
                     entities.add(new UploadPhotoEntity(mCurrentUser.getId(), diff.getDeliveryId(), "", diff.getId(), path));
                 }
-                mLocalDataSource.saveUploadPhotos(entities);
-                startWorker();
+                mLocalDataSource.saveUploadPhotos(entities, ()->startWorker());
 
 //                mNetworkDataSource.saveDiffPhotos(mCurrentUser.getId(), diff.getDeliveryId(), diff.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
 //                    @Override

@@ -50,7 +50,6 @@ public class ItemActivity extends AppCompatActivity{
     private String mCurrentPhotoPath;
     private Bundle mPhotoParams;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,7 +142,6 @@ public class ItemActivity extends AppCompatActivity{
                 .setMessage(R.string.no_camera_permission)
                 .setPositiveButton(android.R.string.ok, listener)
                 .show();
-
     }
 
     private void startAction(int requestCode){
@@ -195,7 +193,7 @@ public class ItemActivity extends AppCompatActivity{
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
+                ".jpg",   /* suffix */
                 storageDir      /* directory */
         );
 
@@ -216,9 +214,14 @@ public class ItemActivity extends AppCompatActivity{
                     onScanFailed();
                 }
             }
-        }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            deleteLatest();
-            onPhotoTaken(mCurrentPhotoPath, mPhotoParams);
+        }else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
+                deleteLatest();
+                onPhotoTaken(mCurrentPhotoPath, mPhotoParams);
+            }else{
+                File f = new File(mCurrentPhotoPath);
+                f.delete();
+            }
         }
         else {
             super.onActivityResult(requestCode, resultCode, intent);
