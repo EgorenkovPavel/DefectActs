@@ -1,7 +1,6 @@
 package ru.a7flowers.pegorenkov.defectacts.data;
 
 import android.arch.lifecycle.LiveData;
-import android.os.Environment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -400,8 +399,8 @@ public class Repository {
         return mLocalDataSource.getFailedUploadPhotos();
     }
 
-    public void clearFailedUploadPhoto(List<UploadPhotoEntity> entities, DataSource.SavePhotoCallback callback){
-        mLocalDataSource.deleteUploadPhotos(entities, callback);
+    public void clearFailedUploadPhoto(DataSource.SavePhotoCallback callback){
+        mLocalDataSource.clearUploadPhotos(callback);
     }
 
     public void retryFailedUploadPhoto(List<UploadPhotoEntity> entities, DataSource.SavePhotoCallback callback) {
@@ -409,6 +408,10 @@ public class Repository {
             entity.resetTryNumber();
         }
         mLocalDataSource.updateUploadPhotos(entities, callback);
+    }
+
+    public void deleteAllUploadPhoto(DataSource.SavePhotoCallback callback) {
+        mLocalDataSource.deleteAllUploadPhotos(callback);
     }
 
     //SAVE STATE
@@ -427,6 +430,7 @@ public class Repository {
     public void saveDiffData(DiffData mDiffData) {
         this.mDiffData = mDiffData;
     }
+
 
 
     public static class DefectData{

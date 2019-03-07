@@ -377,9 +377,9 @@ public class LocalDataSource {
         return mDb.uploadPhotoDao().getFailedUploadPhotos(UploadPhotoEntity.MAX_TRY_NUMBER);
     }
 
-    public void deleteUploadPhotos(List<UploadPhotoEntity> entities, DataSource.SavePhotoCallback callback){
+    public void clearUploadPhotos(DataSource.SavePhotoCallback callback){
         mAppExecutors.discIO().execute(() -> {
-            mDb.uploadPhotoDao().deletePhotos(entities);
+            mDb.uploadPhotoDao().clearPhotos(UploadPhotoEntity.MAX_TRY_NUMBER);
             callback.onPhotoSaved();
         });
     }
@@ -387,6 +387,13 @@ public class LocalDataSource {
     public void updateUploadPhotos(List<UploadPhotoEntity> entities, DataSource.SavePhotoCallback callback) {
         mAppExecutors.discIO().execute(() -> {
             mDb.uploadPhotoDao().updatePhotos(entities);
+            callback.onPhotoSaved();
+        });
+    }
+
+    public void deleteAllUploadPhotos(DataSource.SavePhotoCallback callback) {
+        mAppExecutors.discIO().execute(() -> {
+            mDb.uploadPhotoDao().deleteAllPhotos();
             callback.onPhotoSaved();
         });
     }

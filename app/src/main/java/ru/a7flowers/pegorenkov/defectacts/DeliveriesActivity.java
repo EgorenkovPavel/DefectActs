@@ -162,4 +162,22 @@ public class DeliveriesActivity extends ItemActivity implements DeliveryAdapter.
         model.saveDeliveryPhoto(deliveryId, photoPath);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.deliveries, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_photos:{
+                Intent i = new Intent(DeliveriesActivity.this, UploadPhotoActivity.class);
+                startActivity(i);
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

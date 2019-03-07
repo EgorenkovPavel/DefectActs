@@ -35,4 +35,10 @@ public interface UploadPhotoDao {
     @Delete
     void deletePhotos(List<UploadPhotoEntity> entities);
 
+    @Query("DELETE FROM uploadPhotos WHERE try_number >= :maxTryNumber")
+    void clearPhotos(int maxTryNumber);
+
+    @Query("DELETE FROM uploadPhotos")
+    void deleteAllPhotos();
+
 }

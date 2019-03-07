@@ -45,7 +45,7 @@ public class UploadPhotoViewModel extends AndroidViewModel {
             f.delete();
         }
 
-        mRepository.clearFailedUploadPhoto(entities, ()->isClose.postValue(true));
+        mRepository.clearFailedUploadPhoto(()->isClose.postValue(true));
     }
 
     public void retryFailedUploadPhoto() {
@@ -53,7 +53,7 @@ public class UploadPhotoViewModel extends AndroidViewModel {
     }
 
     public void deleteAllUploadPhoto() {
-        mRepository.clearFailedUploadPhoto(failedPhotos.getValue(), ()->{
+        mRepository.deleteAllUploadPhoto(()->{
             deleteFiles(Environment.getExternalStorageDirectory() + "/DCIM/Camera");
             deleteFiles(appPhotoDir);
             isClose.postValue(true);
