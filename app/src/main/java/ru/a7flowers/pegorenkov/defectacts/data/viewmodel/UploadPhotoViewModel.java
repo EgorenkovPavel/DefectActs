@@ -39,7 +39,13 @@ public class UploadPhotoViewModel extends AndroidViewModel {
     }
 
     public void clearFailedUploadPhoto(){
-        mRepository.clearFailedUploadPhoto(failedPhotos.getValue(), ()->isClose.postValue(true));
+        List<UploadPhotoEntity> entities = failedPhotos.getValue();
+        for (UploadPhotoEntity entity:entities) {
+            File f = new File(entity.getPhotoPath());
+            f.delete();
+        }
+
+        mRepository.clearFailedUploadPhoto(entities, ()->isClose.postValue(true));
     }
 
     public void retryFailedUploadPhoto() {
