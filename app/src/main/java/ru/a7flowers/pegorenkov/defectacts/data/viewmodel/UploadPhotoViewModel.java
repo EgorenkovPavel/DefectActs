@@ -3,8 +3,10 @@ package ru.a7flowers.pegorenkov.defectacts.data.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 
+import java.io.File;
 import java.util.List;
 
 import ru.a7flowers.pegorenkov.defectacts.data.Repository;
@@ -15,9 +17,13 @@ public class UploadPhotoViewModel extends AndroidViewModel {
     private Repository mRepository;
 
     private LiveData<List<UploadPhotoEntity>> failedPhotos;
+    private SingleLiveEvent<Boolean> isClose = new SingleLiveEvent<>();;
+    private String appPhotoDir;
 
     public UploadPhotoViewModel(@NonNull Application application, Repository repository) {
         super(application);
+
+        appPhotoDir = application.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
 
         mRepository = repository;
 
@@ -28,15 +34,31 @@ public class UploadPhotoViewModel extends AndroidViewModel {
         return failedPhotos;
     }
 
-    public void cancelFailedUploadPhoto(){
-        mRepository.cancelFailedUploadPhoto(failedPhotos.getValue());
+    public SingleLiveEvent<Boolean> isClose() {
+        return isClose;
+    }
+
+    public void clearFailedUploadPhoto(){
+        mRepository.clearFailedUploadPhoto(failedPhotos.getValue(), ()->isClose.postValue(true));
     }
 
     public void retryFailedUploadPhoto() {
-        mRepository.retryFailedUploadPhoto(failedPhotos.getValue());
+        mRepository.retryFailedUploadPhoto(failedPhotos.getValue(), ()->isClose.postValue(true));
     }
 
     public void deleteAllUploadPhoto() {
+        mRepository.clearFailedUploadPhoto(failedPhotos.getValue(), ()->{
+            deleteFiles(Environment.getExternalStorageDirectory() + "/DCIM/Camera");
+            deleteFiles(appPhotoDir);
+            isClose.postValue(true);
+        });
+    }
 
+    private void deleteFiles(String dirPath){
+        File f = new File(dirPath);
+        File[] files = f.listFiles();
+        for (File file:files) {
+            file.delete();
+        }
     }
 }

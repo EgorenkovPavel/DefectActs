@@ -1,6 +1,7 @@
 package ru.a7flowers.pegorenkov.defectacts.data;
 
 import android.arch.lifecycle.LiveData;
+import android.os.Environment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -399,15 +400,15 @@ public class Repository {
         return mLocalDataSource.getFailedUploadPhotos();
     }
 
-    public void cancelFailedUploadPhoto(List<UploadPhotoEntity> entities){
-        mLocalDataSource.deleteUploadPhotos(entities);
+    public void clearFailedUploadPhoto(List<UploadPhotoEntity> entities, DataSource.SavePhotoCallback callback){
+        mLocalDataSource.deleteUploadPhotos(entities, callback);
     }
 
-    public void retryFailedUploadPhoto(List<UploadPhotoEntity> entities) {
+    public void retryFailedUploadPhoto(List<UploadPhotoEntity> entities, DataSource.SavePhotoCallback callback) {
         for (UploadPhotoEntity entity:entities) {
             entity.resetTryNumber();
         }
-        mLocalDataSource.updateUploadPhotos(entities);
+        mLocalDataSource.updateUploadPhotos(entities, callback);
     }
 
     //SAVE STATE

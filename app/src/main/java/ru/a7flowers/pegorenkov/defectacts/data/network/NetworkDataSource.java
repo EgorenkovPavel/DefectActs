@@ -53,13 +53,10 @@ public class NetworkDataSource {
     private AppExecutors mAppExecutors;
     private DeliveryApi mDeliveryApi;
 
-    private CRC32 crc;
-
     private static NetworkSettings mSettings;
 
     private NetworkDataSource() {
         mAppExecutors = AppExecutors.getInstance();
-        crc = new CRC32();
 
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
             @Override
@@ -497,6 +494,7 @@ public class NetworkDataSource {
     }
 
     private long getChecksun(String data) {
+        CRC32 crc = new CRC32();
         crc.update(data.getBytes());
         return crc.getValue();
     }

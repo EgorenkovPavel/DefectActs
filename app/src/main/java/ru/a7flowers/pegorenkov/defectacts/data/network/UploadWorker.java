@@ -52,7 +52,7 @@ public class UploadWorker extends Worker {
 
             int photoAmount = 0;
             try {
-                //photoAmount /=0;
+                photoAmount /=0;
 
                 if (!defectId.isEmpty())
                     photoAmount = networkDataSource.saveDefectPhoto(userId, deliveryId, diffId, path);

@@ -48,6 +48,10 @@ public class UploadPhotoActivity extends AppCompatActivity {
             tvDefectPhoto.setText(String.valueOf(defectPhoto));
             tvDiffPhoto.setText(String.valueOf(diffPhoto));
         });
+
+        model.isClose().observe(this, (close)->{
+            if(close == true) finish();
+        });
     }
 
     private void findViews() {
@@ -60,7 +64,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
         btnDeleteAll = findViewById(R.id.btnDeleteAll);
 
         btnRetry.setOnClickListener(view -> {model.retryFailedUploadPhoto(); finish();});
-        btnClear.setOnClickListener(view -> {model.cancelFailedUploadPhoto(); finish();});
+        btnClear.setOnClickListener(view -> {model.clearFailedUploadPhoto(); finish();});
         btnDeleteAll.setOnClickListener(view -> {model.deleteAllUploadPhoto(); finish();});
     }
 }
