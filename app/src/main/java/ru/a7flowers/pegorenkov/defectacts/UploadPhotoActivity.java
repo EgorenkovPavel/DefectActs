@@ -3,6 +3,7 @@ package ru.a7flowers.pegorenkov.defectacts;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.UploadPhotoViewModel;
 import ru.a7flowers.pegorenkov.defectacts.data.viewmodel.ViewModelFactory;
 
 public class UploadPhotoActivity extends AppCompatActivity {
+
+    public static final int ERROR_ID = 4354;
 
     private UploadPhotoViewModel model;
 
@@ -50,7 +53,12 @@ public class UploadPhotoActivity extends AppCompatActivity {
         });
 
         model.isClose().observe(this, (close)->{
-            if(close == true) finish();
+            if(close == true) {
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(UploadPhotoActivity.this);
+                notificationManager.cancel(ERROR_ID);
+
+                finish();
+            };
         });
     }
 

@@ -148,12 +148,7 @@ public class LocalDataSource {
     }
 
     public void setDeliveryPhotoCount(final String deliveryId, final int photoCount) {
-        mAppExecutors.discIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.deliveryDao().setPhotoCount(deliveryId, photoCount);
-            }
-        });
+        mAppExecutors.discIO().execute(() -> mDb.deliveryDao().setPhotoCount(deliveryId, photoCount));
     }
 
     //GOODS

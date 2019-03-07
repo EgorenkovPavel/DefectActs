@@ -22,7 +22,7 @@ import ru.a7flowers.pegorenkov.defectacts.data.local.LocalDataSource;
 
 public class UploadWorker extends Worker {
 
-    private static final int ERROR_ID = 4354;
+
     private static final String CHANNEL_ID = "DEFECT_ACTS_ERROR";
 
     public UploadWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -105,7 +105,7 @@ public class UploadWorker extends Worker {
                     .build();
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
-            notificationManager.notify(ERROR_ID, notification);
+            notificationManager.notify(UploadPhotoActivity.ERROR_ID, notification);
         }
 
         if (tryAgain)
