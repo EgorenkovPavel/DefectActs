@@ -27,6 +27,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -80,12 +82,7 @@ public class ItemActivity extends AppCompatActivity{
         Builder builder = new Builder(this);
         builder.setMessage(R.string.dialog_back_pressed)
                 .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ItemActivity.super.onBackPressed();
-                    }
-                });
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> ItemActivity.super.onBackPressed());
         return builder.create();
     }
 
@@ -139,11 +136,7 @@ public class ItemActivity extends AppCompatActivity{
             return;
         }
 
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                finish();
-            }
-        };
+        DialogInterface.OnClickListener listener = (dialog, id) -> finish();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Multitracker sample")
@@ -224,6 +217,7 @@ public class ItemActivity extends AppCompatActivity{
                 }
             }
         }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            deleteLatest();
             onPhotoTaken(mCurrentPhotoPath, mPhotoParams);
         }
         else {
@@ -242,14 +236,20 @@ public class ItemActivity extends AppCompatActivity{
             default:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.choose_delivery)
-                        .setAdapter(new DeliveryDialogAdapter(this, selectedGoods), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                onGoodScanned(selectedGoods.get(which));
-                            }
-                        });
+                        .setAdapter(new DeliveryDialogAdapter(this, selectedGoods),
+                                (dialog, which) -> onGoodScanned(selectedGoods.get(which)));
                 builder.create().show();
                 break;
         }
+    }
+
+    private void deleteLatest() {
+        File f = new File(Environment.getExternalStorageDirectory() + "/DCIM/Camera" );
+        File[] files = f.listFiles();
+        Arrays.sort( files, (Comparator<Object>) (o1, o2) -> {
+            return Long.compare(((File) o2).lastModified(), ((File) o1).lastModified());
+        });
+        if(files.length > 0) files[0].delete();
     }
 
     public void onScanFailed() {
