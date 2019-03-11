@@ -1,6 +1,8 @@
 package ru.a7flowers.pegorenkov.defectacts;
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
@@ -95,8 +97,26 @@ public class UploadPhotoActivity extends AppCompatActivity {
         btnClearFailed = findViewById(R.id.btnClearFailed);
 
         btnUploadAll.setOnClickListener(view -> model.uploadAllPhotos());
-        btnClearAll.setOnClickListener(view -> model.clearAllPhotos());
+        btnClearAll.setOnClickListener(view -> showDeleteDialog(()->model.clearAllPhotos()));
         btnUploadFailed.setOnClickListener(view -> model.uploadFailedPhotos());
-        btnClearFailed.setOnClickListener(view -> model.clearFailedPhotos());
+        btnClearFailed.setOnClickListener(view -> showDeleteDialog(()->model.clearFailedPhotos()));
+    }
+
+    private void showDeleteDialog(OnDialogClick onClick){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_photos_dialog_title)
+                .setMessage(R.string.delete_photo_dialog_message)
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    onClick.click();
+                })
+                .setNegativeButton(android.R.string.no, (dialog, which) -> {
+                    dialog.cancel();
+                });
+        builder.show();
+    }
+
+    @FunctionalInterface
+    private interface OnDialogClick{
+        void click();
     }
 }

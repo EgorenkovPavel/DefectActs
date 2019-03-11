@@ -58,4 +58,6 @@
     <string name="delete_all">Удалить все</string>
     <string name="photo_queue_message">В очереди на отправку</string>
     <string name="including_failed">В том числе ошибки</string>
+    <string name="delete_photos_dialog_title">Удаление фото</string>
+    <string name="delete_photo_dialog_message">Вы уверены?</string>
 </resources>

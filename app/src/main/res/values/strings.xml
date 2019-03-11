@@ -62,5 +62,7 @@
     <string name="delete_all">Delete all</string>
     <string name="photo_queue_message">In queue for uploading</string>
     <string name="including_failed">Including failed</string>
+    <string name="delete_photos_dialog_title">Delete photos</string>
+    <string name="delete_photo_dialog_message">Are you sure?</string>
 
 </resources>
