@@ -157,18 +157,6 @@ public class Repository {
         entities.add(new UploadPhotoEntity(mCurrentUser.getId(), deliveryId, "", "", photoPath));
 
         mLocalDataSource.saveUploadPhotos(entities, this::startWorker);
-
-//        mNetworkDataSource.saveDeliveryPhoto(mCurrentUser.getId(), deliveryId, photoPath, new DataSource.UploadPhotosCallback() {
-//            @Override
-//            public void onPhotosUploaded(int photoCount) {
-//                mLocalDataSource.setDeliveryPhotoCount(deliveryId, photoCount);
-//            }
-//
-//            @Override
-//            public void onPhotosUploadingFailed() {
-//
-//            }
-//        });
     }
 
     // GOODS
@@ -273,18 +261,6 @@ public class Repository {
                     entities.add(new UploadPhotoEntity(mCurrentUser.getId(), defect.getDeliveryId(), defect.getId(), "", path));
                 }
                 mLocalDataSource.saveUploadPhotos(entities, ()->startWorker());
-
-//                mNetworkDataSource.saveDefectPhotos(mCurrentUser.getId(), defect.getDeliveryId(), defect.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
-//                    @Override
-//                    public void onPhotosUploaded(int photoCount) {
-//                        mLocalDataSource.setDefectPhotoCount(defect.getDeliveryId(), defect.getId(), photoCount);
-//                    }
-//
-//                    @Override
-//                    public void onPhotosUploadingFailed() {
-//
-//                    }
-//                });
             }
 
             @Override
@@ -344,9 +320,7 @@ public class Repository {
                 }
 
                 @Override
-                public void onDiffsLoadFailed() {
-
-                }
+                public void onDiffsLoadFailed() {}
             });
         }
     }
@@ -367,18 +341,6 @@ public class Repository {
                     entities.add(new UploadPhotoEntity(mCurrentUser.getId(), diff.getDeliveryId(), "", diff.getId(), path));
                 }
                 mLocalDataSource.saveUploadPhotos(entities, ()->startWorker());
-
-//                mNetworkDataSource.saveDiffPhotos(mCurrentUser.getId(), diff.getDeliveryId(), diff.getId(), photoPaths, new DataSource.UploadPhotosCallback() {
-//                    @Override
-//                    public void onPhotosUploaded(int photoAmount) {
-//                        mLocalDataSource.setDiffPhotoCount(diff.getDeliveryId(), diff.getId(), photoCount);
-//                    }
-//
-//                    @Override
-//                    public void onPhotosUploadingFailed() {
-//
-//                    }
-//                });
             }
 
             @Override
@@ -407,7 +369,10 @@ public class Repository {
         for (UploadPhotoEntity entity:entities) {
             entity.resetTryNumber();
         }
-        mLocalDataSource.updateUploadPhotos(entities, callback);
+        mLocalDataSource.updateUploadPhotos(entities, () -> {
+            startWorker();
+            callback.onPhotoSaved();
+        });
     }
 
     public void deleteAllUploadPhoto(DataSource.SavePhotoCallback callback) {

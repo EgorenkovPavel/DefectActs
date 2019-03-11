@@ -27,29 +27,45 @@
     <Button
         android:id="@+id/btnRetry"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="0dp"
         android:background="@color/colorAccent"
         android:text="@string/retry"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/btnClear" />
 
     <Button
         android:id="@+id/btnClear"
-        android:layout_width="85dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="0dp"
         android:background="@color/colorAccent"
         android:text="@string/clear"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnRetry"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/btnDeleteAll" />
+
+    <Button
+        android:id="@+id/btnDeleteAll"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/colorAccent"
+        android:text="@string/delete_all"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnClear"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView"
@@ -120,18 +136,5 @@
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="@+id/textView4"
         tools:text="3" />
-
-    <Button
-        android:id="@+id/btnDeleteAll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        android:background="@color/colorAccent"
-        android:text="@string/delete_all"
-        android:textColor="@android:color/background_light"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnClear"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
