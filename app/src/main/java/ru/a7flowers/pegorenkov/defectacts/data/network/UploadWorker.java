@@ -1,9 +1,13 @@
 package ru.a7flowers.pegorenkov.defectacts.data.network;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -89,6 +93,19 @@ public class UploadWorker extends Worker {
         }
 
         if(upLimit){
+            NotificationManager notification_manager = (NotificationManager) mContext
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                CharSequence name = "Channel Name";
+                String description = "Chanel Description";
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+                mChannel.setDescription(description);
+                mChannel.enableLights(true);
+                mChannel.setLightColor(Color.BLUE);
+                notification_manager.createNotificationChannel(mChannel);
+            }
+
             Intent i = new Intent(mContext, UploadPhotoActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                     | Intent.FLAG_ACTIVITY_CLEAR_TASK);
