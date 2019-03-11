@@ -16,7 +16,8 @@ public class UploadPhotoViewModel extends AndroidViewModel {
 
     private Repository mRepository;
 
-    private LiveData<List<UploadPhotoEntity>> failedPhotos;
+    private LiveData<List<UploadPhotoEntity>> mPhotos;
+    private LiveData<List<UploadPhotoEntity>> mFailedPhotos;
     private SingleLiveEvent<Boolean> isClose = new SingleLiveEvent<>();;
     private String appPhotoDir;
 
@@ -27,37 +28,20 @@ public class UploadPhotoViewModel extends AndroidViewModel {
 
         mRepository = repository;
 
-        failedPhotos = mRepository.getFailedUploadPhotos();
+        mPhotos = mRepository.getAllUploadPhotos();
+        mFailedPhotos = mRepository.getFailedUploadPhotos();
+    }
+
+    public LiveData<List<UploadPhotoEntity>> getPhotos() {
+        return mPhotos;
     }
 
     public LiveData<List<UploadPhotoEntity>> getFailedPhotos() {
-        return failedPhotos;
+        return mFailedPhotos;
     }
 
     public SingleLiveEvent<Boolean> isClose() {
         return isClose;
-    }
-
-    public void clearFailedUploadPhoto(){
-        List<UploadPhotoEntity> entities = failedPhotos.getValue();
-        for (UploadPhotoEntity entity:entities) {
-            File f = new File(entity.getPhotoPath());
-            f.delete();
-        }
-
-        mRepository.clearFailedUploadPhoto(()->isClose.postValue(true));
-    }
-
-    public void retryFailedUploadPhoto() {
-        mRepository.retryFailedUploadPhoto(failedPhotos.getValue(), ()->isClose.postValue(true));
-    }
-
-    public void deleteAllUploadPhoto() {
-        mRepository.deleteAllUploadPhoto(()->{
-            deleteFiles(Environment.getExternalStorageDirectory() + "/DCIM/Camera");
-            deleteFiles(appPhotoDir);
-            isClose.postValue(true);
-        });
     }
 
     private void deleteFiles(String dirPath){
@@ -66,5 +50,30 @@ public class UploadPhotoViewModel extends AndroidViewModel {
         for (File file:files) {
             file.delete();
         }
+    }
+
+    public void uploadAllPhotos() {
+        mRepository.startPhotoUploading();
+        isClose.postValue(true);
+    }
+
+    public void clearAllPhotos() {
+        mRepository.deleteAllUploadPhoto(()->{
+            deleteFiles(appPhotoDir);
+            isClose.postValue(true);
+        });
+    }
+
+    public void uploadFailedPhotos() {
+        mRepository.retryFailedUploadPhoto(mFailedPhotos.getValue(), ()->isClose.postValue(true));
+    }
+
+    public void clearFailedPhotos() {
+        List<UploadPhotoEntity> entities = mFailedPhotos.getValue();
+        for (UploadPhotoEntity entity:entities) {
+            File f = new File(entity.getPhotoPath());
+            f.delete();
+        }
+        mRepository.clearFailedUploadPhoto(()-> isClose.postValue(true));
     }
 }

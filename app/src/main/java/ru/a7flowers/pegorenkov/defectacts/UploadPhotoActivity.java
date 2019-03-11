@@ -7,6 +7,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -21,12 +22,15 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
     private UploadPhotoViewModel model;
 
+    private TextView tvAllPhoto;
+    private TextView tvFailedPhoto;
     private TextView tvDeliveryPhoto;
     private TextView tvDefectPhoto;
     private TextView tvDiffPhoto;
-    private Button btnRetry;
-    private Button btnClear;
-    private Button btnDeleteAll;
+    private ImageButton btnUploadAll;
+    private ImageButton btnClearAll;
+    private ImageButton btnUploadFailed;
+    private ImageButton btnClearFailed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +44,29 @@ public class UploadPhotoActivity extends AppCompatActivity {
         
         model = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(UploadPhotoViewModel.class);
 
+        model.getPhotos().observe(this, (@Nullable List<UploadPhotoEntity> entities)->{
+            int allPhoto = 0;
+            if(entities != null) allPhoto = entities.size();
+            tvAllPhoto.setText(String.valueOf(allPhoto));
+        });
+
         model.getFailedPhotos().observe(this, (@Nullable List<UploadPhotoEntity> entities)->{
+            int failedPhoto = 0;
             int deliveryPhoto = 0;
             int defectPhoto = 0;
             int diffPhoto = 0;
 
-            for (UploadPhotoEntity entity:entities){
-                if (entity.isDeliveryPhoto()) deliveryPhoto++;
-                else if (entity.isDefectPhoto()) defectPhoto++;
-                else if (entity.isDiffPhoto()) diffPhoto++;
+            if(entities != null) {
+                for (UploadPhotoEntity entity : entities) {
+                    failedPhoto++;
+
+                    if (entity.isDeliveryPhoto()) deliveryPhoto++;
+                    else if (entity.isDefectPhoto()) defectPhoto++;
+                    else if (entity.isDiffPhoto()) diffPhoto++;
+                }
             }
 
+            tvFailedPhoto.setText(String.valueOf(failedPhoto));
             tvDeliveryPhoto.setText(String.valueOf(deliveryPhoto));
             tvDefectPhoto.setText(String.valueOf(defectPhoto));
             tvDiffPhoto.setText(String.valueOf(diffPhoto));
@@ -67,16 +83,20 @@ public class UploadPhotoActivity extends AppCompatActivity {
     }
 
     private void findViews() {
+        tvAllPhoto = findViewById(R.id.tvAllPhoto);
+        tvFailedPhoto = findViewById(R.id.tvFailedPhoto);
         tvDeliveryPhoto = findViewById(R.id.tvDeliveryFailedPhoto);
         tvDefectPhoto = findViewById(R.id.tvDefectFailedPhoto);
         tvDiffPhoto = findViewById(R.id.tvDiffFailedPhoto);
 
-        btnRetry = findViewById(R.id.btnRetry);
-        btnClear = findViewById(R.id.btnClear);
-        btnDeleteAll = findViewById(R.id.btnDeleteAll);
+        btnUploadAll = findViewById(R.id.btnUploadAll);
+        btnClearAll = findViewById(R.id.btnClearAll);
+        btnUploadFailed = findViewById(R.id.btnUploadFailed);
+        btnClearFailed = findViewById(R.id.btnClearFailed);
 
-        btnRetry.setOnClickListener(view -> {model.retryFailedUploadPhoto(); finish();});
-        btnClear.setOnClickListener(view -> {model.clearFailedUploadPhoto(); finish();});
-        btnDeleteAll.setOnClickListener(view -> {model.deleteAllUploadPhoto(); finish();});
+        btnUploadAll.setOnClickListener(view -> model.uploadAllPhotos());
+        btnClearAll.setOnClickListener(view -> model.clearAllPhotos());
+        btnUploadFailed.setOnClickListener(view -> model.uploadFailedPhotos());
+        btnClearFailed.setOnClickListener(view -> model.clearFailedPhotos());
     }
 }

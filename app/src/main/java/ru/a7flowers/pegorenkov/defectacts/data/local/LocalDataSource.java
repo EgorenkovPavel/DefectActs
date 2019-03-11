@@ -377,6 +377,10 @@ public class LocalDataSource {
         return mDb.uploadPhotoDao().getFailedUploadPhotos(UploadPhotoEntity.MAX_TRY_NUMBER);
     }
 
+    public LiveData<List<UploadPhotoEntity>> getAllUploadPhotos() {
+        return mDb.uploadPhotoDao().getAllUploadPhotos();
+    }
+
     public void clearUploadPhotos(DataSource.SavePhotoCallback callback){
         mAppExecutors.discIO().execute(() -> {
             mDb.uploadPhotoDao().clearPhotos(UploadPhotoEntity.MAX_TRY_NUMBER);

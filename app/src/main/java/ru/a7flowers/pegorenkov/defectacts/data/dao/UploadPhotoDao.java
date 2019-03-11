@@ -14,6 +14,9 @@ import ru.a7flowers.pegorenkov.defectacts.data.entities.UploadPhotoEntity;
 @Dao
 public interface UploadPhotoDao {
 
+    @Query("SELECT * FROM uploadPhotos")
+    LiveData<List<UploadPhotoEntity>> getAllUploadPhotos();
+
     @Query("SELECT * FROM uploadPhotos WHERE try_number < :maxTryNumber")
     List<UploadPhotoEntity> getUploadPhotos(int maxTryNumber);
 

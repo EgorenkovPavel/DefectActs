@@ -156,7 +156,7 @@ public class Repository {
         List<UploadPhotoEntity> entities = new ArrayList<>();
         entities.add(new UploadPhotoEntity(mCurrentUser.getId(), deliveryId, "", "", photoPath));
 
-        mLocalDataSource.saveUploadPhotos(entities, this::startWorker);
+        mLocalDataSource.saveUploadPhotos(entities, this::startPhotoUploading);
     }
 
     // GOODS
@@ -260,7 +260,7 @@ public class Repository {
                 for (String path:photoPaths) {
                     entities.add(new UploadPhotoEntity(mCurrentUser.getId(), defect.getDeliveryId(), defect.getId(), "", path));
                 }
-                mLocalDataSource.saveUploadPhotos(entities, ()->startWorker());
+                mLocalDataSource.saveUploadPhotos(entities, ()-> startPhotoUploading());
             }
 
             @Override
@@ -340,7 +340,7 @@ public class Repository {
                 for (String path:photoPaths) {
                     entities.add(new UploadPhotoEntity(mCurrentUser.getId(), diff.getDeliveryId(), "", diff.getId(), path));
                 }
-                mLocalDataSource.saveUploadPhotos(entities, ()->startWorker());
+                mLocalDataSource.saveUploadPhotos(entities, ()-> startPhotoUploading());
             }
 
             @Override
@@ -350,13 +350,17 @@ public class Repository {
         });
     }
 
-    private void startWorker() {
+    public void startPhotoUploading() {
         OneTimeWorkRequest uploadWork = new OneTimeWorkRequest.Builder(UploadWorker.class)
                 .build();
         WorkManager.getInstance().enqueue(uploadWork);
     }
 
     //UPLOAD PHOTO
+    public LiveData<List<UploadPhotoEntity>> getAllUploadPhotos(){
+        return mLocalDataSource.getAllUploadPhotos();
+    }
+
     public LiveData<List<UploadPhotoEntity>> getFailedUploadPhotos(){
         return mLocalDataSource.getFailedUploadPhotos();
     }
@@ -370,7 +374,7 @@ public class Repository {
             entity.resetTryNumber();
         }
         mLocalDataSource.updateUploadPhotos(entities, () -> {
-            startWorker();
+            startPhotoUploading();
             callback.onPhotoSaved();
         });
     }
